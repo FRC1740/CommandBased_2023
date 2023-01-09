@@ -28,8 +28,8 @@ public class Robot extends TimedRobot {
   private final CANSparkMax m_leftMotorLeader = new CANSparkMax(3, CANSparkMax.MotorType.kBrushless);
   private final CANSparkMax m_rightMotorLeader = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
   // CRE Do we need these? 
-  //private final CANSparkMax m_leftMotorFollower = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
-  //private final CANSparkMax m_rightMotorFollower = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_leftMotorFollower = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+  private final CANSparkMax m_rightMotorFollower = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
   private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
   private final XboxController m_driver = new XboxController(0);
   private final XboxController m_codriver = new XboxController(1);
@@ -43,8 +43,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    //m_leftMotorb.follow(m_leftMotor);
-    //m_rightMotorb.follow(m_rightMotor);
+    m_leftMotorFollower.follow(m_leftMotorLeader);
+    m_rightMotorFollower.follow(m_rightMotorLeader);
   }
 
   /**
