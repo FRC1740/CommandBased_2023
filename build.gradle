@@ -97,3 +97,27 @@ wpi.java.configureTestTasks(test)
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
 }
+
+task writeBuildProperties() {
+	outputs.upToDateWhen { false }  // never mark as up-to-date to ensure that this gets run every time
+
+
+	doLast {
+        def propFile = new File("${project.rootDir}/src/main/resources/build.properties")
+
+        def prop = new Properties()
+
+        prop.setProperty('build.time', (new Date()).format("yyyy_MM_dd HH:mm:ss"))
+        prop.setProperty('build.computer', InetAddress.getLocalHost().getHostName())
+
+        propFile.createNewFile();
+        prop.store(propFile.newWriter(), null);
+
+        println("task ran")
+    }
+}
+
+processResources {
+	outputs.upToDateWhen { false }  // never mark as up-to-date to ensure that this gets run every time
+	dependsOn("writeBuildProperties")
+}

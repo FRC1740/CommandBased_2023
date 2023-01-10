@@ -1,0 +1,2 @@
+# Ignore the build.properties file that is generated during the build
+build.properties
