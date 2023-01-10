@@ -8,7 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+//import edu.wpi.first.wpilibj2.command.PIDCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,14 +23,30 @@ import edu.wpi.first.wpilibj2.command.Command;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
+
+  // The driver's controller
+  private final XboxController m_driverController = new XboxController(0);
+  private final XboxController m_codriverController = new XboxController(1);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+
+    // Configure default commands
+    // Set the default drive command to split-stick arcade drive
+    m_robotDrive.setDefaultCommand(
+        // A split-stick arcade command, with forward/backward controlled by the left
+        // hand, and turning controlled by the right.
+        new RunCommand(
+            () ->
+                m_robotDrive.arcadeDrive(
+                    -m_driverController.getLeftY(), -m_driverController.getRightX()),
+            m_robotDrive));
+
   }
 
   /**
@@ -34,7 +55,26 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+
+    // if (m_codriver.getAButton()) {
+      /*
+      if (m_codriver.getAButtonPressed()) {
+        m_Command.execute();
+    }  */
+
+    // Drive at half speed when the right bumper is held
+    /* Useful, That!
+    new JoystickButton(m_driver, Button.kR1.value)
+        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
+        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
+    */
+
+    // When codriver button is pressed, toggle the light
+    new JoystickButton(m_codriverController, XboxController.Button.kA.value)
+    .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
