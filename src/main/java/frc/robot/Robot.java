@@ -5,13 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -25,15 +20,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private final CANSparkMax m_leftMotorLeader = new CANSparkMax(3, CANSparkMax.MotorType.kBrushless);
-  private final CANSparkMax m_rightMotorLeader = new CANSparkMax(2, CANSparkMaxLowLevel.MotorType.kBrushless);
-  // CRE Do we need these? 
-  private final CANSparkMax m_leftMotorFollower = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final CANSparkMax m_rightMotorFollower = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
-  private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
-  private final XboxController m_driver = new XboxController(0);
-  private final XboxController m_codriver = new XboxController(1);
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -43,8 +29,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_leftMotorFollower.follow(m_leftMotorLeader);
-    m_rightMotorFollower.follow(m_rightMotorLeader);
   }
 
   /**
@@ -101,14 +85,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // "Mario Cart" Drive Mode
-    m_robotDrive.arcadeDrive(m_driver.getLeftTriggerAxis() - m_driver.getRightTriggerAxis(), -m_driver.getRightX(), true);
-
-    // if (m_codriver.getAButton()) {
-    if (m_codriver.getAButtonPressed()) {
-        m_Command.execute();
-    }
-
   }
 
   @Override
