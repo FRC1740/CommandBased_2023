@@ -44,7 +44,7 @@ public class RobotContainer {
         // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
         new RunCommand(() ->
             m_robotDrive.arcadeDrive(-m_driverController.getRawAxis(Constants.XboxController.kTriggers),
-                  m_driverController.getRawAxis(Constants.XboxController.kRightXAxis)), m_robotDrive));
+                  m_driverController.getRawAxis(Constants.XboxController.kLeftXAxis)), m_robotDrive));
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -61,11 +61,9 @@ public class RobotContainer {
     }  */
 
     // Drive at half speed when the right bumper is held
-    /* Useful, That!
-    new JoystickButton(m_driver, Button.kR1.value)
+    new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
-    */
 
     // When codriver button is pressed, toggle the light
     new JoystickButton(m_codriverController, XboxController.Button.kA.value)
