@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants.DriveConstants;
+import edu.wpi.first.wpilibj.SPI;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -17,12 +18,13 @@ public class DriveSubsystem extends SubsystemBase {
     private final CANSparkMax m_rightMotorLeader = new CANSparkMax(DriveConstants.kRightMotor1Port, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax m_leftMotorFollower = new CANSparkMax(DriveConstants.kLeftMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax m_rightMotorFollower = new CANSparkMax(DriveConstants.kRightMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
-
+    // gyro NavX IMU CRASHIN
+    private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
 
     public DriveSubsystem() {
-
+      
     m_leftMotorFollower.follow(m_leftMotorLeader);
     m_rightMotorFollower.follow(m_rightMotorLeader);  
   }
@@ -43,5 +45,10 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public double getAngle() {
+    System.out.println("gyro angle" + m_gyro.getAngle());
+    return m_gyro.getAngle();
   }
 }
