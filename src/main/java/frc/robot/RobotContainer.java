@@ -39,16 +39,13 @@ public class RobotContainer {
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_robotDrive.setDefaultCommand(
-        // A split-stick arcade command, with forward/backward controlled by the left
-        // hand, and turning controlled by the right.
-        new RunCommand(
-            () ->
-                m_robotDrive.arcadeDrive(
-                    -m_driverController.getLeftY(), -m_driverController.getRightX()),
-            m_robotDrive));
-
+        // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
+        // Triggers are Axis 2; RightStick X is axis 3
+        // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
+        new RunCommand(() ->
+            m_robotDrive.arcadeDrive(-m_driverController.getRawAxis(Constants.XboxController.kTriggers),
+                  m_driverController.getRawAxis(Constants.XboxController.kRightXAxis)), m_robotDrive));
   }
-
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
