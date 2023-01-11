@@ -12,6 +12,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.TurnToAngle;
+import frc.robot.commands.TurnToAngleProfiled;
 //import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj2.command.PIDCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -45,7 +46,7 @@ public class RobotContainer {
         // Triggers are Axis 2; RightStick X is axis 3
         // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
         new RunCommand(() ->
-            m_robotDrive.arcadeDrive(-m_driverController.getRawAxis(Constants.XboxController.kTriggers),
+            m_robotDrive.arcadeDrive(m_driverController.getRawAxis(Constants.XboxController.kRightTrigger) - m_driverController.getRawAxis(Constants.XboxController.kLeftTrigger),
                   m_driverController.getRawAxis(Constants.XboxController.kLeftXAxis)), m_robotDrive));
   }
   /**
@@ -64,8 +65,12 @@ public class RobotContainer {
 
     // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, XboxController.Button.kX.value)
-        .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(5));
-    
+        .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
+
+    // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(1));
+        
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
