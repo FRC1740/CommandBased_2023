@@ -48,6 +48,7 @@ public final class Constants {
         public static final int kCoDriverControllerPort = 1;
     }
     
+    /* Shouldn't need these...
     public static final class XboxController {
         public static final int kLeftXAxis = 0;
         public static final int kLeftYAxis = 1;
@@ -55,5 +56,5 @@ public final class Constants {
         public static final int kRightTrigger = 3;
         public static final int kRightXAxis = 4;
         public static final int kRightYAxis = 5;
-    }
+    } /* */
 }

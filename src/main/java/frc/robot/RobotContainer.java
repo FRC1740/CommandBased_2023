@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import static edu.wpi.first.wpilibj.XboxController.Button;
+
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -46,8 +48,8 @@ public class RobotContainer {
         // Triggers are Axis 2; RightStick X is axis 3
         // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
         new RunCommand(() ->
-            m_robotDrive.arcadeDrive(m_driverController.getRawAxis(Constants.XboxController.kRightTrigger) - m_driverController.getRawAxis(Constants.XboxController.kLeftTrigger),
-                  m_driverController.getRawAxis(Constants.XboxController.kLeftXAxis)), m_robotDrive));
+            m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+                  m_driverController.getLeftY()), m_robotDrive));
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
