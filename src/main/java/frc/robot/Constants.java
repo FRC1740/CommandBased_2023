@@ -18,6 +18,30 @@ public final class Constants {
         public static final int kLeftMotor2Port = 5;
         public static final int kRightMotor1Port = 2;
         public static final int kRightMotor2Port = 4;
+
+        /* CRE Copied from Gyro Drive Example  */
+        public static final int kEncoderCPR = 1024;
+        public static final double kWheelDiameterInches = 6;
+        public static final double kEncoderDistancePerPulse =
+            // Assumes the encoders are directly mounted on the wheel shafts
+            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+    
+        public static final boolean kGyroReversed = false;
+    
+        public static final double kStabilizationP = 1;
+        public static final double kStabilizationI = 0.5;
+        public static final double kStabilizationD = 0;
+    
+        public static final double kTurnP = 1;
+        public static final double kTurnI = 0;
+        public static final double kTurnD = 0;
+    
+        public static final double kMaxTurnRateDegPerS = 100;
+        public static final double kMaxTurnAccelerationDegPerSSquared = 300;
+    
+        public static final double kTurnToleranceDeg = 5;
+        public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
+    
     }
     public static final class OIConstants {
         public static final int kDriverControllerPort = 0;

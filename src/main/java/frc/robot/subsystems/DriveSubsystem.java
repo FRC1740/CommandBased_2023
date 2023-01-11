@@ -29,6 +29,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotorFollower.follow(m_rightMotorLeader);  
   }
 
+  /**
+   * Drives the robot using arcade controls.
+   *
+   * @param fwd the commanded forward movement
+   * @param rot the commanded rotation
+   */
+  
   public void arcadeDrive(double fwd, double rot) {
     m_drive.arcadeDrive(fwd, rot);
   }
@@ -51,4 +58,14 @@ public class DriveSubsystem extends SubsystemBase {
     System.out.println("gyro angle" + m_gyro.getAngle());
     return m_gyro.getAngle();
   }
+
+  /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from 180 to 180
+   */
+  public double getHeading() {
+    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
 }
