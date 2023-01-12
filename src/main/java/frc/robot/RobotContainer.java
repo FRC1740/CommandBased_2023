@@ -49,7 +49,7 @@ public class RobotContainer {
         // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
         new RunCommand(() ->
             m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
-                  m_driverController.getLeftY()), m_robotDrive));
+                  m_driverController.getLeftX(), true), m_robotDrive));
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
@@ -64,10 +64,6 @@ public class RobotContainer {
       if (m_codriver.getAButtonPressed()) {
         m_Command.execute();
     }  */
-
-    // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
-    new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, XboxController.Button.kY.value)

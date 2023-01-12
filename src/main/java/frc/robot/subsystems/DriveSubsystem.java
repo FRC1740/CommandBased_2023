@@ -22,9 +22,7 @@ public class DriveSubsystem extends SubsystemBase {
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
-
     public DriveSubsystem() {
-      
     m_leftMotorFollower.follow(m_leftMotorLeader);
     m_rightMotorFollower.follow(m_rightMotorLeader);  
   }
@@ -36,8 +34,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot the commanded rotation
    */
   
-  public void arcadeDrive(double fwd, double rot) {
-    m_drive.arcadeDrive(fwd, rot);
+  public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
+    m_drive.arcadeDrive(fwd, rot, true);
   }
 
   /**

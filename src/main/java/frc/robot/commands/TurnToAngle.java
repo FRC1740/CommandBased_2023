@@ -9,6 +9,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
+//Original, broken, will violently rotate out of control use Turn to angle profiled not this one, this is the original the profiled is based on
+
 /** A command that will turn the robot to the specified angle. */
 public class TurnToAngle extends PIDCommand {
   /**
@@ -25,7 +27,7 @@ public class TurnToAngle extends PIDCommand {
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
-        output -> drive.arcadeDrive(0, output),
+        output -> drive.arcadeDrive(0, output, false),
         // Require the drive
         drive);
 
