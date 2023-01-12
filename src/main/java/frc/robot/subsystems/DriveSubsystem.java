@@ -61,15 +61,15 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.reset();
 
   }
+
+  public double getRoll(){
+    return m_gyro.getRoll();
+  }
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from 180 to 180
    */
-  public double getRoll() {
-    return m_gyro.getRoll();
-  }
-  
   public double getHeading() {
     return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
