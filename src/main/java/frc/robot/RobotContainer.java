@@ -33,8 +33,8 @@ public class RobotContainer {
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   // The driver's controller
-  private final XboxController m_driverController = new XboxController(0);
-  private final XboxController m_codriverController = new XboxController(1);
+  private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
+  private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -66,7 +66,7 @@ public class RobotContainer {
     }  */
 
     // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
-    new JoystickButton(m_driverController, XboxController.Button.kX.value)
+    new JoystickButton(m_driverController, Button.kX.value)
         .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
