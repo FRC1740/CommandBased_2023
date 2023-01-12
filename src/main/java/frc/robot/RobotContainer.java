@@ -70,8 +70,11 @@ public class RobotContainer {
         .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
-    new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(1));
+    new JoystickButton(m_driverController, XboxController.Button.kY.value)
+        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
+    
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value)
+        .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
         
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value)
@@ -81,7 +84,6 @@ public class RobotContainer {
     // When codriver button is pressed, toggle the light
     new JoystickButton(m_codriverController, XboxController.Button.kA.value)
     .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
-
   }
 
   /**
