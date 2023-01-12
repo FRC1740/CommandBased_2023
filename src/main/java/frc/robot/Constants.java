@@ -38,7 +38,18 @@ public final class Constants {
     
         public static final double kMaxTurnRateDegPerS = 100;
         public static final double kMaxTurnAccelerationDegPerSSquared = 300;
-    
+
+        public static final double kMaxSpeedMetersPerSecond = 10; //Somewhat random number right now
+        public static final double kMaxAccelerationMetersPerSSquared = 25; //Also somewhat random number
+
+        public static final double kLevel = 0; //0 degrees is level
+        public static final double kBalanceToleranceDeg = 0;
+        public static final double kBalanceP = 0.025;
+        public static final double kBalanceI = 0;
+        public static final double kBalanceD = 0;  
+        
+        
+
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
     

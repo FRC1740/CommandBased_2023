@@ -8,6 +8,7 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -64,6 +65,14 @@ public class RobotContainer {
       if (m_codriver.getAButtonPressed()) {
         m_Command.execute();
     }  */
+
+    //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
+    new JoystickButton(m_codriverController, Button.kX.value)
+        .onTrue(new AutoBalancePID(m_robotDrive));
+
+    // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
+    new JoystickButton(m_driverController, Button.kX.value)
+        .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, XboxController.Button.kY.value)
