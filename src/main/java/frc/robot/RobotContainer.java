@@ -16,7 +16,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SignalLEDs;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.TurnToAngle;
+//import frc.robot.commands.TurnToAngle;
 import frc.robot.commands.TurnToAngleProfiled;
 //import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -86,7 +86,7 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
 
     // Signal for a CONE
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_driverController, Button.kY.value)
         .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
         .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
 
