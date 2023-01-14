@@ -13,8 +13,6 @@ package frc.robot;
  * constants are needed, to reduce verbosity.
  */
 
-import java.lang.Math.*;
-
 public final class Constants {
     public static final class ConMath {
 //        public static final double PI = M_PI; // use: import java.lang.Math.*
