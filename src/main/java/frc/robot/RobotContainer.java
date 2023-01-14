@@ -9,9 +9,11 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
+import frc.robot.commands.DriveToDistancePID;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.SignalLEDs;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.TurnToAngle;
@@ -31,6 +33,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  private final SignalLEDs m_signalLEDs = new SignalLEDs();
   private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   // The driver's controller
@@ -66,29 +69,44 @@ public class RobotContainer {
         m_Command.execute();
     }  */
 
-    //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
-    new JoystickButton(m_codriverController, Button.kX.value)
-        .onTrue(new AutoBalancePID(m_robotDrive));
-
-    // Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
+    /*  Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kX.value)
         .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
-
+*/
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
-    new JoystickButton(m_driverController, Button.kY.value)
+    new JoystickButton(m_driverController, Button.kA.value)
         .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
     
+    new JoystickButton(m_driverController, Button.kB.value)
+        .onTrue(new DriveToDistancePID(50, m_robotDrive));
+
+    // Signal for a CUBE
+    new JoystickButton(m_driverController, Button.kX.value)
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+
+    // Signal for a CONE
+    new JoystickButton(m_driverController, Button.kX.value)
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+
     new JoystickButton(m_driverController, Button.kStart.value)
-        .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
-        
+      .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
+
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
 
     // When codriver button is pressed, toggle the light
-    new JoystickButton(m_codriverController, Button.kA.value)
+    new JoystickButton(m_codriverController, Button.kY.value)
     .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
+
+    //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
+    new JoystickButton(m_codriverController, Button.kX.value)
+        .onTrue(new AutoBalancePID(m_robotDrive));
+
+
   }
 
   /**

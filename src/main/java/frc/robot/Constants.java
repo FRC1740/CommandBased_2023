@@ -64,7 +64,10 @@ public final class Constants {
         public static final double kBalanceI = 0;
         public static final double kBalanceD = 0;  
         
-        
+        public static final double kAutoDriveTolerance = 1;
+        public static final double kAutoDriveP = 0.01;
+        public static final double kAutoDriveI = 0;
+        public static final double kAutoDriveD = 0;  
 
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
