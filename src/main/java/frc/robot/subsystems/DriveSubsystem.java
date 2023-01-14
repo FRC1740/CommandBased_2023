@@ -9,8 +9,11 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.kauailabs.navx.frc.AHRS;
+
+import frc.robot.Constants.ConSparkMax;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj.SPI;
+import com.revrobotics.RelativeEncoder;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -18,13 +21,17 @@ public class DriveSubsystem extends SubsystemBase {
     private final CANSparkMax m_rightMotorLeader = new CANSparkMax(DriveConstants.kRightMotor1Port, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax m_leftMotorFollower = new CANSparkMax(DriveConstants.kLeftMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
     private final CANSparkMax m_rightMotorFollower = new CANSparkMax(DriveConstants.kRightMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public final RelativeEncoder m_leftEncoder = m_leftMotorLeader.getEncoder();
+    public final RelativeEncoder m_rightEncoder = m_rightMotorLeader.getEncoder();
     // gyro NavX IMU CRASHIN
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
     public DriveSubsystem() {
-    m_leftMotorFollower.follow(m_leftMotorLeader);
-    m_rightMotorFollower.follow(m_rightMotorLeader);  
+       m_leftMotorFollower.follow(m_leftMotorLeader);
+       m_rightMotorFollower.follow(m_rightMotorLeader);  
+       m_leftEncoder.setPosition(0);
+       m_rightEncoder.setPosition(0);
   }
 
   /**
@@ -59,7 +66,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetGyro() {
     m_gyro.reset();
-
   }
 
   public double getRoll(){
@@ -72,6 +78,28 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getHeading() {
     return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public double inchesToEncoderTicks(double inches) {
+    //Converts Inches into Encoder ticks
+    double encoderTicks = inches / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES * DriveConstants.GEAR_RATIO * ConSparkMax.POSITION_CONVERSION_FACTOR;
+    //System.out.println("tickstoinch" +encoderTicks);
+    return encoderTicks;
+  }
+
+  public double ticksToInches(double ticks) {
+    //Converts Inches into Encoder ticks
+    double inches = ticks / ConSparkMax.POSITION_CONVERSION_FACTOR / DriveConstants.GEAR_RATIO * DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
+    return inches;
+  }
+
+  public double getAverageEncoder(){
+    return m_rightEncoder.getPosition() + m_leftEncoder.getPosition() / 2;
+  }
+
+  public void ResetEncoders() {
+    m_leftEncoder.setPosition(0);
+    m_rightEncoder.setPosition(0);
   }
 
 }
