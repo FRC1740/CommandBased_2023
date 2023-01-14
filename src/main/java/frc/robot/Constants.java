@@ -12,8 +12,24 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
 public final class Constants {
+    public static final class ConMath {
+//        public static final double PI = M_PI; // use: import java.lang.Math.*
+        public static final double INCHES_TO_METERS = .0254; // m/in
+        public static final double MINUTES_TO_SECONDS = 1/60.; // sec/min
+        public static final double RAD_TO_DEG = 180.0/Math.PI;
+        public static final double DEG_TO_RAD = 1/RAD_TO_DEG;
+    }
+
+    public static final class ConSparkMax {
+        public static final double POSITION_CONVERSION_FACTOR = 42.0;
+    }
+        
     public static final class DriveConstants {
+        public static final double GEAR_RATIO = 10.71; // Neo rotates 10.71 times for one rotation of the output
+        public static final double WHEEL_DIAMETER_INCHES = 6.0; // Inches
+        public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI; // Abt 18.85 in.
         public static final int kLeftMotor1Port = 3;
         public static final int kLeftMotor2Port = 5;
         public static final int kRightMotor1Port = 2;
