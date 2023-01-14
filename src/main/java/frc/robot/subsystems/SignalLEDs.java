@@ -32,6 +32,7 @@ public class SignalLEDs extends SubsystemBase {
     m_led.setLength(m_ledBuffer.getLength());
     // Both LED strips MUST Be the same length
     m_mode = mode.CUBE;
+    m_led.start();
   }
 
   @Override
@@ -53,6 +54,7 @@ public class SignalLEDs extends SubsystemBase {
           m_ledBuffer.setRGB(i, 0, 0, 0);
           break;
       }
+      m_led.setData(m_ledBuffer);
     }
   }
   public void Disabled() {
@@ -60,7 +62,6 @@ public class SignalLEDs extends SubsystemBase {
           m_ledBuffer.setRGB(i, 255, 48, 0);
       }
       m_led.setData(m_ledBuffer);
-      // m_ledB.SetData(m_ledBuffer); 
     }    
 
   public void setMode(mode newMode) {
