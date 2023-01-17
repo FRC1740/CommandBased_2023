@@ -14,10 +14,8 @@ import frc.robot.Constants.DriveConstants;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DriveToDistancePID extends ProfiledPIDCommand {
-
   /** Creates a new DriveToDistiancePID. */  
   public DriveToDistancePID(double inches, DriveSubsystem drive) {
-
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -41,13 +39,14 @@ public class DriveToDistancePID extends ProfiledPIDCommand {
     // addRequirements(drive);
     // Configure additional PID options by calling `getController` here.
   }
-  public void initialize(){  
+  public void initialize(){
+
     System.out.println("Ran DriveToDistancePID");
 
   }
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return getController().atGoal();
   }
 }
