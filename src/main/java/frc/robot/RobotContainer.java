@@ -96,11 +96,16 @@ public class RobotContainer {
     new JoystickButton(m_codriverController, Button.kY.value)
     .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
 
-    // Signal for a CUBE when held or cone when released
-    new JoystickButton(m_driverController, Button.kA.value)
+    // Signal for a CUBE when held
+    new JoystickButton(m_codriverController, Button.kA.value)
         .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)));
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
 
+    // Signal for a CONE when held
+    new JoystickButton(m_codriverController, Button.kB.value)
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+        
     /* Signaling may be linked to the specific game piece intake
      * When we deploy the cone intake, signal "Yellow-orange"
      * When we deploy the cube intake, signal "purple"
