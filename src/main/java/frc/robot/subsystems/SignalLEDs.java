@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import frc.robot.Constants.*;
 
 public class SignalLEDs extends SubsystemBase {
 
@@ -24,9 +25,14 @@ public class SignalLEDs extends SubsystemBase {
   };
 
   private mode m_mode;
+  ConSignalLed.gamePiece cube, cone;
 
   /** Creates a new SignalLEDs. */
   public SignalLEDs() {
+    // Set the colors appropriate for each game piece
+    cube = new ConSignalLed.gamePiece(50, 0, 100);
+    cone = new ConSignalLed.gamePiece(100, 50, 0);
+
     m_delay = 30;
     m_led = new AddressableLED(3);
     m_ledBuffer = new AddressableLEDBuffer(kLedLength);
@@ -35,7 +41,7 @@ public class SignalLEDs extends SubsystemBase {
     m_led.setLength(kLedLength);
     
     // Both LED strips MUST Be the same length
-    m_mode = mode.CUBE;
+    m_mode = mode.CONE;
     m_led.start();
     m_led.setData(m_ledBuffer);
   }
@@ -50,13 +56,14 @@ public class SignalLEDs extends SubsystemBase {
   }
 
   private void SolidColor() {
+    // Note Colors are ACTUALLY in RBG order!!!
     for (var i=0; i<kLedLength; i++) {
       switch(m_mode) {
-        case CUBE:
-          m_ledBuffer.setRGB(i, 192, 0, 192);
+        case CUBE: // Purplish (dark magenta)
+          m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen());
           break;
-        case CONE:
-          m_ledBuffer.setRGB(i, 255, 255, 0);
+        case CONE: // Yellow-orange
+          m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());
           break;
         case OFF:
           m_ledBuffer.setRGB(i, 0, 0, 0);
@@ -65,13 +72,16 @@ public class SignalLEDs extends SubsystemBase {
       m_led.setData(m_ledBuffer);
     }
   }
-  public void Disabled() {
+  /* Disabled (orange) is too close to cone color  */
+  /*
+  public void Disabled() { 
       for (var i = 0; i < m_ledBuffer.getLength(); i++) {
           m_ledBuffer.setRGB(i, 255, 48, 0);
       }
       m_led.setData(m_ledBuffer);
-    }    
-
+    }
+    
+  */
   public void setMode(mode newMode) {
     m_mode = newMode;
   }
