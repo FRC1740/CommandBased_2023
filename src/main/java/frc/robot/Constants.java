@@ -22,6 +22,27 @@ public final class Constants {
         public static final double DEG_TO_RAD = 1/RAD_TO_DEG;
     }
 
+
+    public static final class ConSignalLed {
+        public static class gamePiece {
+            int red, green, blue;
+
+            public gamePiece(int r, int g, int b) {
+                red = r;
+                green = g;
+                blue = b;
+            }
+            public int getRed() {
+                return red;
+            }
+            public int getGreen() {
+                return green;
+            }
+            public int getBlue() {
+                return blue;
+            }
+        }
+    }
     public static final class ConSparkMax {
         public static final double POSITION_CONVERSION_FACTOR = 42.0;
     }
@@ -78,13 +99,4 @@ public final class Constants {
         public static final int kCoDriverControllerPort = 1;
     }
     
-    /* Shouldn't need these...
-    public static final class XboxController {
-        public static final int kLeftXAxis = 0;
-        public static final int kLeftYAxis = 1;
-        public static final int kLeftTrigger = 2;
-        public static final int kRightTrigger = 3;
-        public static final int kRightXAxis = 4;
-        public static final int kRightYAxis = 5;
-    } /* */
 }

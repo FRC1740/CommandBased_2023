@@ -66,33 +66,17 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    // if (m_codriver.getAButton()) {
-      /*
-      if (m_codriver.getAButtonPressed()) {
-        m_Command.execute();
-    }  */
+    /* ***************** Driver Contols ************ */
 
-    /*  Turn to 90 degrees when the 'X' button is pressed, with a 5 second timeout
-    new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(new TurnToAngle(90, m_robotDrive).withTimeout(1));
-*/
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kA.value)
         .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
-    
+
+    // Auto-drive distance
     new JoystickButton(m_driverController, Button.kB.value)
         .onTrue(new DriveToDistancePID(50, m_robotDrive));
 
-    // Signal for a CUBE
-    new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
-
-    // Signal for a CONE
-    new JoystickButton(m_driverController, Button.kY.value)
-        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
-
+    // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
       .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
 
@@ -101,15 +85,27 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
 
-    // When codriver button is pressed, toggle the light
-    new JoystickButton(m_codriverController, Button.kY.value)
-    .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
+
+    /* ***************** CO-Driver Contols ************ */
 
     //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
     new JoystickButton(m_codriverController, Button.kX.value)
         .onTrue(new AutoBalancePID(m_robotDrive));
 
+    // When codriver button is pressed, toggle the light
+    new JoystickButton(m_codriverController, Button.kY.value)
+    .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
 
+    // Signal for a CUBE when held or cone when released
+    new JoystickButton(m_driverController, Button.kA.value)
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)));
+
+    /* Signaling may be linked to the specific game piece intake
+     * When we deploy the cone intake, signal "Yellow-orange"
+     * When we deploy the cube intake, signal "purple"
+     * 
+    */
   }
 
   /**
