@@ -9,7 +9,6 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToDistance extends CommandBase {
   /** Creates a new DriveToDistance. */
-  
   private final DriveSubsystem m_Drivesubsystem;
   private double goal = 0;
   private boolean Finished = false;
