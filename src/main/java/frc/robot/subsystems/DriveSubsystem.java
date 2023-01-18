@@ -30,8 +30,6 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem() {
        m_leftMotorFollower.follow(m_leftMotorLeader);
        m_rightMotorFollower.follow(m_rightMotorLeader);  
-       m_leftEncoder.setPosition(0);
-       m_rightEncoder.setPosition(0);
   }
 
   /**
@@ -42,7 +40,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
-    m_drive.arcadeDrive(fwd, rot, true);
+    m_drive.arcadeDrive(fwd, rot, squaredInput);
   }
 
   /**
@@ -82,7 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double inchesToEncoderTicks(double inches) {
     //Converts Inches into Encoder ticks
-    double encoderTicks = inches / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES * DriveConstants.GEAR_RATIO * ConSparkMax.POSITION_CONVERSION_FACTOR;
+    double encoderTicks = (inches / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES) * DriveConstants.GEAR_RATIO * ConSparkMax.POSITION_CONVERSION_FACTOR;
     //System.out.println("tickstoinch" +encoderTicks);
     return encoderTicks;
   }
