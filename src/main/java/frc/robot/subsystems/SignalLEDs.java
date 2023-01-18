@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.*;
+import frc.robot.Constants.*;
 
 public class SignalLEDs extends SubsystemBase {
 
@@ -26,9 +27,14 @@ public class SignalLEDs extends SubsystemBase {
 
   private mode m_mode;
   ConSignalLed.gamePiece cube, cone;
+  ConSignalLed.gamePiece cube, cone;
 
   /** Creates a new SignalLEDs. */
   public SignalLEDs() {
+    // Set the colors appropriate for each game piece
+    cube = new ConSignalLed.gamePiece(50, 0, 100);
+    cone = new ConSignalLed.gamePiece(100, 50, 0);
+
     // Set the colors appropriate for each game piece
     cube = new ConSignalLed.gamePiece(50, 0, 100);
     cone = new ConSignalLed.gamePiece(100, 50, 0);
@@ -40,7 +46,7 @@ public class SignalLEDs extends SubsystemBase {
     m_led.setLength(m_ledBuffer.getLength());
     
     // Both LED strips MUST Be the same length
-    m_mode = mode.OFF;
+    m_mode = mode.CONE;
     m_led.start();
     m_led.setData(m_ledBuffer);
   }
@@ -56,11 +62,15 @@ public class SignalLEDs extends SubsystemBase {
 
   private void SolidColor() {
     // Note Colors are ACTUALLY in RBG order!!!
-    for (var i=0; i<m_ledBuffer.getLength(); i++) {
+    for (var i=0; i<kLedLength; i++) {
       switch(m_mode) {
         case CUBE: // Purplish (dark magenta)
           m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen());
+        case CUBE: // Purplish (dark magenta)
+          m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen());
           break;
+        case CONE: // Yellow-orange
+          m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());
         case CONE: // Yellow-orange
           m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());
           break;
@@ -74,12 +84,15 @@ public class SignalLEDs extends SubsystemBase {
   /* Disabled (orange) is too close to cone color  */
   /*
   public void Disabled() { 
+  /* Disabled (orange) is too close to cone color  */
+  /*
+  public void Disabled() { 
       for (var i = 0; i < m_ledBuffer.getLength(); i++) {
           m_ledBuffer.setRGB(i, 255, 48, 0);
       }
       m_led.setData(m_ledBuffer);
     }
-
+    
   */
   public void setMode(mode newMode) {
     m_mode = newMode;
