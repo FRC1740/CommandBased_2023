@@ -10,11 +10,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistancePID;
-import frc.robot.commands.ExampleCommand;
+//import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.subsystems.SignalLEDs;
+import frc.robot.subsystems.Manipulator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 //import frc.robot.commands.TurnToAngle;
@@ -35,9 +36,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final SignalLEDs m_signalLEDs = new SignalLEDs();
+  private final Manipulator m_manipulator = new Manipulator();
   private final Command m_autoCommand = new DriveToDistance(36, m_robotDrive);
-  
-
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
@@ -97,14 +97,22 @@ public class RobotContainer {
     .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
 
     // Signal for a CUBE when held
+    // new JoystickButton(m_codriverController, Button.kA.value)
+    //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
+    //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+    
+    // // Signal for a CONE when held
+    // new JoystickButton(m_codriverController, Button.kB.value)
+    //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
+    //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+    
+    // Solenoid test
     new JoystickButton(m_codriverController, Button.kA.value)
-        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+        .onTrue(new InstantCommand(() -> m_manipulator.Extend()));
 
     // Signal for a CONE when held
     new JoystickButton(m_codriverController, Button.kB.value)
-        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+        .onTrue(new InstantCommand(() -> m_manipulator.Retract()));
         
     /* Signaling may be linked to the specific game piece intake
      * When we deploy the cone intake, signal "Yellow-orange"
