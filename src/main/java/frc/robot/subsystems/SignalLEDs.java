@@ -37,11 +37,10 @@ public class SignalLEDs extends SubsystemBase {
     m_led = new AddressableLED(3);
     m_ledBuffer = new AddressableLEDBuffer(kLedLength);
     // Length is expensive to set, so only set it once, then just update data
-    // m_led.setLength(m_ledBuffer.getLength());
-    m_led.setLength(kLedLength);
+    m_led.setLength(m_ledBuffer.getLength());
     
     // Both LED strips MUST Be the same length
-    m_mode = mode.CONE;
+    m_mode = mode.OFF;
     m_led.start();
     m_led.setData(m_ledBuffer);
   }
@@ -49,15 +48,15 @@ public class SignalLEDs extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SolidColor(); // place this call inside the if statement if things bog down
     if (--m_delay == 0) {
-      SolidColor();
       m_delay = 30;
     }
   }
 
   private void SolidColor() {
     // Note Colors are ACTUALLY in RBG order!!!
-    for (var i=0; i<kLedLength; i++) {
+    for (var i=0; i<m_ledBuffer.getLength(); i++) {
       switch(m_mode) {
         case CUBE: // Purplish (dark magenta)
           m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen());
@@ -80,7 +79,7 @@ public class SignalLEDs extends SubsystemBase {
       }
       m_led.setData(m_ledBuffer);
     }
-    
+
   */
   public void setMode(mode newMode) {
     m_mode = newMode;
