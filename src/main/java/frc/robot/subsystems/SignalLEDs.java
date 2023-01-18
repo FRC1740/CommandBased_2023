@@ -15,6 +15,7 @@ public class SignalLEDs extends SubsystemBase {
   // Must be a PWM header, not MXP or DIO
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
+  private int m_delay;
 
   public enum mode {
     CUBE,
@@ -26,23 +27,30 @@ public class SignalLEDs extends SubsystemBase {
 
   /** Creates a new SignalLEDs. */
   public SignalLEDs() {
+    m_delay = 30;
     m_led = new AddressableLED(3);
     m_ledBuffer = new AddressableLEDBuffer(kLedLength);
     // Length is expensive to set, so only set it once, then just update data
-    m_led.setLength(m_ledBuffer.getLength());
+    // m_led.setLength(m_ledBuffer.getLength());
+    m_led.setLength(kLedLength);
+    
     // Both LED strips MUST Be the same length
     m_mode = mode.CUBE;
     m_led.start();
+    m_led.setData(m_ledBuffer);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SolidColor();
+    if (--m_delay == 0) {
+      SolidColor();
+      m_delay = 30;
+    }
   }
 
   private void SolidColor() {
-    for (var i=0; i<m_ledBuffer.getLength(); i++) {
+    for (var i=0; i<kLedLength; i++) {
       switch(m_mode) {
         case CUBE:
           m_ledBuffer.setRGB(i, 192, 0, 192);
@@ -53,7 +61,7 @@ public class SignalLEDs extends SubsystemBase {
         case OFF:
           m_ledBuffer.setRGB(i, 0, 0, 0);
           break;
-      }
+      } 
       m_led.setData(m_ledBuffer);
     }
   }
