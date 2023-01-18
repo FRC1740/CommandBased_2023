@@ -43,8 +43,7 @@ public class SignalLEDs extends SubsystemBase {
     m_led = new AddressableLED(3);
     m_ledBuffer = new AddressableLEDBuffer(kLedLength);
     // Length is expensive to set, so only set it once, then just update data
-    // m_led.setLength(m_ledBuffer.getLength());
-    m_led.setLength(kLedLength);
+    m_led.setLength(m_ledBuffer.getLength());
     
     // Both LED strips MUST Be the same length
     m_mode = mode.CONE;
@@ -55,8 +54,8 @@ public class SignalLEDs extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SolidColor(); // place this call inside the if statement if things bog down
     if (--m_delay == 0) {
-      SolidColor();
       m_delay = 30;
     }
   }
