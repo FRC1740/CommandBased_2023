@@ -67,15 +67,19 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     /* ***************** Driver Contols ************ */
+    /* ***************** Driver Contols ************ */
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kA.value)
         .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
 
     // Auto-drive distance
+
+    // Auto-drive distance
     new JoystickButton(m_driverController, Button.kB.value)
         .onTrue(new DriveToDistanceProfiledPID(50, m_robotDrive));
 
+    // Manually rsest the gyro
     // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
       .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
@@ -88,6 +92,8 @@ public class RobotContainer {
 
     /* ***************** CO-Driver Contols ************ */
 
+    /* ***************** CO-Driver Contols ************ */
+
     //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
     new JoystickButton(m_codriverController, Button.kX.value)
         .onTrue(new AutoBalancePID(m_robotDrive));
@@ -96,16 +102,11 @@ public class RobotContainer {
     new JoystickButton(m_codriverController, Button.kY.value)
     .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
 
-    // Signal for a CUBE when held
-    new JoystickButton(m_codriverController, Button.kA.value)
+    // Signal for a CUBE when held or cone when released
+    new JoystickButton(m_driverController, Button.kA.value)
         .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)));
 
-    // Signal for a CONE when held
-    new JoystickButton(m_codriverController, Button.kB.value)
-        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
-        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
-        
     /* Signaling may be linked to the specific game piece intake
      * When we deploy the cone intake, signal "Yellow-orange"
      * When we deploy the cube intake, signal "purple"
