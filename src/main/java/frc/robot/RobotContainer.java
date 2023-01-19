@@ -14,7 +14,7 @@ import frc.robot.commands.DriveToDistancePID;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.commands.DriveToDistance;
-import frc.robot.subsystems.SignalLEDs;
+import frc.robot.subsystems.Manipulator.LedMode;
 import frc.robot.subsystems.Manipulator;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,7 +35,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  private final SignalLEDs m_signalLEDs = new SignalLEDs();
   private final Manipulator m_manipulator = new Manipulator();
   private final Command m_autoCommand = new DriveToDistance(36, m_robotDrive);
 
@@ -108,11 +107,13 @@ public class RobotContainer {
     
     // Solenoid test
     new JoystickButton(m_codriverController, Button.kA.value)
-        .onTrue(new InstantCommand(() -> m_manipulator.Extend()));
+        .onTrue(new InstantCommand(() -> m_manipulator.Extend(LedMode.CUBE)))
+        .onFalse(new InstantCommand(() -> m_manipulator.Retract()));
 
     // Signal for a CONE when held
     new JoystickButton(m_codriverController, Button.kB.value)
-        .onTrue(new InstantCommand(() -> m_manipulator.Retract()));
+      .onTrue(new InstantCommand(() -> m_manipulator.Extend(LedMode.CONE)))
+      .onFalse(new InstantCommand(() -> m_manipulator.Retract()));
         
     /* Signaling may be linked to the specific game piece intake
      * When we deploy the cone intake, signal "Yellow-orange"
