@@ -85,6 +85,16 @@ public class DriveSubsystem extends SubsystemBase {
     return encoderTicks;
   }
 
+  public double getRightEncoderInches(){
+    return m_rightEncoder.getPosition() * DriveConstants.INCHES_PER_TICK; 
+  }
+  public double getLeftEncoderInches(){
+    return m_leftEncoder.getPosition() * DriveConstants.INCHES_PER_TICK; 
+  }
+  public double getAverageEncoderInches(){
+    return (getRightEncoderInches() + getLeftEncoderInches())/2;
+  }
+
   public double ticksToInches(double ticks) {
     //Converts Inches into Encoder ticks
     double inches = ticks / ConSparkMax.POSITION_CONVERSION_FACTOR / DriveConstants.GEAR_RATIO * DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;

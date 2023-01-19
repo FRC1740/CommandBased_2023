@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToDistance extends CommandBase {
@@ -25,7 +26,7 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void initialize() {
     Finished = false;
-    goal = m_Drivesubsystem.inchesToEncoderTicks(targetInches) + m_Drivesubsystem.getAverageEncoder();
+    goal = targetInches + m_Drivesubsystem.getAverageEncoderInches();
     System.out.println("goal " + goal);
     System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
   }
@@ -34,9 +35,9 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void execute() {
     while (!Finished){
-      m_Drivesubsystem.arcadeDrive(0.5, 0, false);
-      if(m_Drivesubsystem.getAverageEncoder() >= goal){
-      Finished = true;
+      m_Drivesubsystem.arcadeDrive(0.1, 0, false);
+      if(m_Drivesubsystem.getAverageEncoderInches() >= goal){
+        Finished = true;
       }
     }
   }
