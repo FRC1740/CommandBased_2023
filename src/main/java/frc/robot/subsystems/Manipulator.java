@@ -43,17 +43,17 @@ public class Manipulator extends SubsystemBase {
     // Set the colors appropriate for each game piece
     cube = new ConSignalLed.gamePiece(50, 0, 100);
     cone = new ConSignalLed.gamePiece(100, 50, 0);
+
     m_currentPixel = 0;
     m_kittDelta = 1;
-
     m_delay = 50; // Include a delay during Peridoc() if too processor intensive
-    m_led = new AddressableLED(0);
+    m_led = new AddressableLED(kLedPwmPort);
     m_ledBuffer = new AddressableLEDBuffer(kLedLength);
     // Length is expensive to set, so only set it once, then just update data
     m_led.setLength(m_ledBuffer.getLength());
     
     // Both LED strips MUST Be the same length
-    m_mode = LedMode.OFF;
+    m_mode = LedMode.CUBE;
     m_led.start();
     m_led.setData(m_ledBuffer);
   }
@@ -86,7 +86,7 @@ public class Manipulator extends SubsystemBase {
           m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());
           break;
         case KITT: 
-          Kitt();
+          Kitt(); // Cylon Pattern
           break;
         case OFF:
           m_ledBuffer.setRGB(i, 0, 0, 0);
