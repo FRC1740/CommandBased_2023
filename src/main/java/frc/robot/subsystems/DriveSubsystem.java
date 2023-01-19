@@ -17,14 +17,14 @@ import com.revrobotics.RelativeEncoder;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drivetrain. */
-    private final CANSparkMax m_leftMotorLeader = new CANSparkMax(DriveConstants.kLeftMotor1Port, CANSparkMax.MotorType.kBrushless);
-    private final CANSparkMax m_rightMotorLeader = new CANSparkMax(DriveConstants.kRightMotor1Port, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private final CANSparkMax m_leftMotorFollower = new CANSparkMax(DriveConstants.kLeftMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
-    private final CANSparkMax m_rightMotorFollower = new CANSparkMax(DriveConstants.kRightMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
-    public final RelativeEncoder m_leftEncoder = m_leftMotorLeader.getEncoder();
-    public final RelativeEncoder m_rightEncoder = m_rightMotorLeader.getEncoder();
+    private static final CANSparkMax m_leftMotorLeader = new CANSparkMax(DriveConstants.kLeftMotor1Port, CANSparkMax.MotorType.kBrushless);
+    private static final CANSparkMax m_rightMotorLeader = new CANSparkMax(DriveConstants.kRightMotor1Port, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax m_leftMotorFollower = new CANSparkMax(DriveConstants.kLeftMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
+    private static final CANSparkMax m_rightMotorFollower = new CANSparkMax(DriveConstants.kRightMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
+    public static final RelativeEncoder m_leftEncoder = m_leftMotorLeader.getEncoder();
+    public static final RelativeEncoder m_rightEncoder = m_rightMotorLeader.getEncoder();
     // gyro NavX IMU CRASHIN
-    private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+    private static final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
     public DriveSubsystem() {
@@ -105,7 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
     return m_rightEncoder.getPosition() + m_leftEncoder.getPosition() / 2;
   }
 
-  public void ResetEncoders() {
+  public static void ResetEncoders() {
     m_leftEncoder.setPosition(0);
     m_rightEncoder.setPosition(0);
   }

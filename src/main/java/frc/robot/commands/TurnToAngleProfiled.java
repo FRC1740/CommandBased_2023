@@ -12,6 +12,8 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 
 /** A command that will turn the robot to the specified angle using a motion profile. */
 public class TurnToAngleProfiled extends ProfiledPIDCommand {
+  private DriveSubsystem m_drive;
+
   /**
    * Turns to robot to the specified angle using a motion profile.
    *
@@ -21,7 +23,6 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
   public TurnToAngleProfiled(double targetAngleDegrees, DriveSubsystem drive) {
     
     super(
-
         new ProfiledPIDController(
             DriveConstants.kTurnP,
             DriveConstants.kTurnI,
@@ -44,6 +45,13 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+        m_drive = drive;
+  }
+
+  @Override
+  public void initialize() {
+    super.initialize();
+    m_drive.resetGyro();
   }
 
   @Override

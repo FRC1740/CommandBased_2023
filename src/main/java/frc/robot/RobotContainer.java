@@ -9,6 +9,7 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
+import frc.robot.commands.AutoDriveSequential;
 import frc.robot.commands.DriveToDistancePID;
 //import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;
@@ -36,7 +37,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   public final Manipulator m_manipulator = new Manipulator();
-  private final Command m_autoCommand = new DriveToDistance(120, m_robotDrive);
+  private final Command m_autoCommand = new AutoDriveSequential(m_robotDrive);
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
@@ -69,7 +70,7 @@ public class RobotContainer {
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
     new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(new TurnToAngleProfiled(-90, m_robotDrive).withTimeout(5));
+        .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
 
     // Auto-drive distance
     new JoystickButton(m_driverController, Button.kB.value)
