@@ -36,7 +36,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final Manipulator m_manipulator = new Manipulator();
-  private final Command m_autoCommand = new DriveToDistance(36, m_robotDrive);
+  private final Command m_autoCommand = new DriveToDistance(120, m_robotDrive);
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
