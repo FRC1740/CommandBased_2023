@@ -34,7 +34,7 @@ public class SignalLEDs extends SubsystemBase {
     cone = new ConSignalLed.gamePiece(100, 50, 0);
 
     m_delay = 30;
-    m_led = new AddressableLED(3);
+    m_led = new AddressableLED(4);
     m_ledBuffer = new AddressableLEDBuffer(kLedLength);
     // Length is expensive to set, so only set it once, then just update data
     m_led.setLength(m_ledBuffer.getLength());
