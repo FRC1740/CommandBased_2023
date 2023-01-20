@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.AutoDriveSequential;
+<<<<<<< HEAD
 import frc.robot.commands.DriveToDistance;
+=======
+import frc.robot.commands.DriveToDistancePID;
+>>>>>>> ae6d521 (Cleaned Up Warning Messages)
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.commands.DriveToDistance;
 import frc.robot.subsystems.Manipulator.LedMode;
 import frc.robot.subsystems.Manipulator;
 import edu.wpi.first.wpilibj2.command.Command;
