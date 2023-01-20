@@ -96,6 +96,8 @@ public final class Constants {
 
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
+
+        public static final double kDriveCorrectionP = .01;
     
     }
     public static final class OIConstants {
