@@ -73,9 +73,9 @@ public final class Constants {
         public static final double kStabilizationI = 0.5;
         public static final double kStabilizationD = 0;
         //Less than .5 not .25 more than .01 .08 too high .0605 dead on
-        public static final double kTurnP = 0.0363;
-        public static final double kTurnI = 0.201;
-        public static final double kTurnD = 0.0027;
+        public static final double kTurnP = 0.005;
+        public static final double kTurnI = 0.00;
+        public static final double kTurnD = 0.0;
     
         public static final double kMaxTurnRateDegPerS = 100;
         public static final double kMaxTurnAccelerationDegPerSSquared = 300;
