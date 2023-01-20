@@ -7,10 +7,11 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.AutoDriveSequential;
-import frc.robot.commands.DriveToDistancePID;
+import frc.robot.commands.DriveToDistance;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Manipulator.LedMode;
@@ -69,7 +70,7 @@ public class RobotContainer {
 
     // Auto-drive distance
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(new DriveToDistancePID(50, m_robotDrive));
+        .onTrue(new DriveToDistance(-50, m_robotDrive));
 
     // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
@@ -85,7 +86,7 @@ public class RobotContainer {
 
     //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
     new JoystickButton(m_codriverController, Button.kX.value)
-        .onTrue(new AutoBalancePID(m_robotDrive));
+        .onTrue(new AutoBalancePID(m_robotDrive, m_codriverController));
 
     // When codriver button is pressed, toggle the light
     new JoystickButton(m_codriverController, Button.kY.value)

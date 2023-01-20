@@ -34,10 +34,21 @@ public class DriveToDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    while (!Finished){
-      m_Drivesubsystem.arcadeDrive(0.1, 0, false);
-      if(m_Drivesubsystem.getAverageEncoderInches() >= goal){
-        Finished = true;
+    if(goal < m_Drivesubsystem.getAverageEncoderInches()){
+      //backwards
+      while (!Finished){
+        m_Drivesubsystem.arcadeDrive(-0.1, 0, false);
+        if(m_Drivesubsystem.getAverageEncoderInches() <= goal){
+          Finished = true;
+        }
+      }
+    }else{
+      //forwards
+      while (!Finished){
+        m_Drivesubsystem.arcadeDrive(0.1, 0, false);
+        if(m_Drivesubsystem.getAverageEncoderInches() >= goal){
+          Finished = true;
+        }
       }
     }
   }
