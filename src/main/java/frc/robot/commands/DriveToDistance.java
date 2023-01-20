@@ -15,6 +15,8 @@ public class DriveToDistance extends CommandBase {
   private double goal = 0;
   private boolean Finished = false;
   private int targetInches = 0;
+  private double heading = 0;
+  private double error = 0;
   public DriveToDistance(int inches, DriveSubsystem drive) {
     m_Drivesubsystem = drive;
     targetInches = inches;
@@ -26,6 +28,7 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void initialize() {
     Finished = false;
+    heading = m_Drivesubsystem.getAngle();
     goal = targetInches + m_Drivesubsystem.getAverageEncoderInches();
     System.out.println("goal " + goal);
     System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
@@ -37,7 +40,8 @@ public class DriveToDistance extends CommandBase {
     if(goal < m_Drivesubsystem.getAverageEncoderInches()){
       //backwards
       while (!Finished){
-        m_Drivesubsystem.arcadeDrive(-0.1, 0, false);
+        error = heading - m_Drivesubsystem.getAngle();
+        m_Drivesubsystem.arcadeDrive(-0.3, DriveConstants.kDriveCorrectionP * error, false);
         if(m_Drivesubsystem.getAverageEncoderInches() <= goal){
           Finished = true;
         }
@@ -45,7 +49,8 @@ public class DriveToDistance extends CommandBase {
     }else{
       //forwards
       while (!Finished){
-        m_Drivesubsystem.arcadeDrive(0.1, 0, false);
+        error = heading - m_Drivesubsystem.getAngle();
+        m_Drivesubsystem.arcadeDrive(0.3, DriveConstants.kDriveCorrectionP * error, false);
         if(m_Drivesubsystem.getAverageEncoderInches() >= goal){
           Finished = true;
         }
