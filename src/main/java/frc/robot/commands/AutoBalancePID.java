@@ -10,7 +10,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -18,7 +17,6 @@ import frc.robot.Constants.DriveConstants;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoBalancePID extends ProfiledPIDCommand {
   /** Creates a new AutoBalancePID. */
-  private DriveSubsystem m_drive;
   private XboxController m_codriverController;
   public AutoBalancePID(DriveSubsystem drive, XboxController coDriveController) {
     super(
@@ -42,7 +40,6 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     // Configure additional PID options by calling `getController` here.
   getController()
       .setTolerance(DriveConstants.kBalanceToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
-      m_drive = drive;
   m_codriverController = coDriveController;
   }
   @Override
@@ -59,7 +56,6 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
     return getController().atGoal();
   }
 }
