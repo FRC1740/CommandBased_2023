@@ -7,7 +7,6 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.AutoDriveSequential;
@@ -70,7 +69,7 @@ public class RobotContainer {
 
     // Auto-drive distance
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(new DriveToDistance(240, m_robotDrive));
+        .onTrue(new DriveToDistance(-240, m_robotDrive));
 
     // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
