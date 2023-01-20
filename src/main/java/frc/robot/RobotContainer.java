@@ -7,15 +7,9 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
-import frc.robot.commands.AutoDriveSequential;
-<<<<<<< HEAD
 import frc.robot.commands.DriveToDistance;
-=======
-import frc.robot.commands.DriveToDistancePID;
->>>>>>> ae6d521 (Cleaned Up Warning Messages)
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Manipulator.LedMode;
@@ -36,13 +30,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-<<<<<<< HEAD
   protected final Manipulator m_manipulator = new Manipulator();
   private final Command m_autoCommand = new DriveToDistance(36, m_robotDrive);
-=======
-  public final Manipulator m_manipulator = new Manipulator();
-  private final Command m_autoCommand = new DriveToDistance(120, m_robotDrive);
->>>>>>> b867b28 (Made Manipulator object public so its visible to Robot.java)
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
