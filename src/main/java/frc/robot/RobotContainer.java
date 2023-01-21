@@ -30,7 +30,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  protected final Claw m_manipulator = new Claw();
+  protected final Claw m_Claw = new Claw();
   private final Command m_autoCommand = new DriveToDistance(36, m_robotDrive);
 
   // The driver's controller
@@ -102,13 +102,13 @@ public class RobotContainer {
     
     // Solenoid test
     new JoystickButton(m_codriverController, Button.kA.value)
-        .onTrue(new InstantCommand(() -> m_manipulator.Extend(LedMode.CUBE)))
-        .onFalse(new InstantCommand(() -> m_manipulator.Retract()));
+        .onTrue(new InstantCommand(() -> m_Claw.Extend(LedMode.CUBE)))
+        .onFalse(new InstantCommand(() -> m_Claw.Retract()));
 
     // Signal for a CONE when held
     new JoystickButton(m_codriverController, Button.kB.value)
-      .onTrue(new InstantCommand(() -> m_manipulator.Extend(LedMode.CONE)))
-      .onFalse(new InstantCommand(() -> m_manipulator.Retract()));
+      .onTrue(new InstantCommand(() -> m_Claw.Extend(LedMode.CONE)))
+      .onFalse(new InstantCommand(() -> m_Claw.Retract()));
         
     /* Signaling may be linked to the specific game piece intake
      * When we deploy the cone intake, signal "Yellow-orange"
