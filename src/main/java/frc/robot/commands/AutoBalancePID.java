@@ -18,6 +18,9 @@ import frc.robot.Constants.DriveConstants;
 public class AutoBalancePID extends ProfiledPIDCommand {
   /** Creates a new AutoBalancePID. */
   private XboxController m_codriverController;
+  private DriveSubsystem m_drive;
+  private double initEncoderPos;
+
   public AutoBalancePID(DriveSubsystem drive, XboxController coDriveController) {
     super(
         // The ProfiledPIDController used by the command
@@ -40,6 +43,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     // Configure additional PID options by calling `getController` here.
   getController()
       .setTolerance(DriveConstants.kBalanceToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+      m_drive = drive;
   m_codriverController = coDriveController;
   }
   @Override
@@ -47,15 +51,22 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     m_codriverController.setRumble(RumbleType.kBothRumble, 0);
   }
 
+
   @Override
   public void initialize() {
     super.initialize();
+    initEncoderPos = Math.abs(m_drive.getAverageEncoderInches());
     m_codriverController.setRumble(RumbleType.kBothRumble, 1);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().atGoal();
+    //28 is max inches traveled to avoid flying off the ramp
+    if(getController().atGoal()||(initEncoderPos + 38) < Math.abs(m_drive.getAverageEncoderInches())){
+     return true;
+    }else{
+     return false;
+    }
   }
 }

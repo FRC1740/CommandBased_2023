@@ -84,8 +84,8 @@ public final class Constants {
         public static final double kMaxAccelerationMetersPerSSquared = 25; //Also somewhat random number
 
         public static final double kLevel = 0; //0 degrees is level
-        public static final double kBalanceToleranceDeg = 2;
-        public static final double kBalanceP = 0.005;
+        public static final double kBalanceToleranceDeg = 1.5;
+        public static final double kBalanceP = 0.006;//0.01
         public static final double kBalanceI = 0;
         public static final double kBalanceD = 0;  
         
