@@ -15,12 +15,14 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants.*;
+import frc.constants.ClawConstants;
 import com.revrobotics.CANSparkMax;
 
 public class Claw extends SubsystemBase {
-  DoubleSolenoid GrabberSolenoid;
-  CANSparkMax IntakeMotor;
+  DoubleSolenoid m_grabberSolenoid;
+  CANSparkMax m_intakeMotor;
 
   public static final int kLedLength = 13;
   public static final int kLedPwmPort = 3;
@@ -41,11 +43,12 @@ public class Claw extends SubsystemBase {
   ConSignalLed.gamePiece cube, cone;
   private int m_currentPixel;
   private int m_kittDelta;
+  private Timer m_timer;
 
   /** Creates a new Manipulator. */
   public Claw() {
-    GrabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
-    IntakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
+    m_grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
+    m_intakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
     // Set the colors appropriate for each game piece
     cube = new ConSignalLed.gamePiece(50, 0, 100);
     cone = new ConSignalLed.gamePiece(100, 50, 0);
@@ -72,41 +75,72 @@ public class Claw extends SubsystemBase {
   public void Toggle() {
     switch(m_mode) {
       case CUBE: // We're currently set for a cube
-        GrabberSolenoid.set(kReverse);
+        m_grabberSolenoid.set(kReverse);
         m_mode = LedMode.CONE;
-        // FIXME: We also want to run the intake motor here
         break;
       case CONE: // We're currently set for a cone
-        GrabberSolenoid.set(kForward);
+        m_grabberSolenoid.set(kForward);
         m_mode = LedMode.CUBE;
-        // FIXME: We also want to run the intake motor here
         default:
         break;
     }
   }
 
-  public void Grab(LedMode cubeOrCone) {
-    m_mode = cubeOrCone;
-    GrabberSolenoid.set(kForward);
+  public void Close() { // Close to grab a cone
+    m_grabberSolenoid.set(kForward); 
+  }
+  public void Open() { // Open to release a cone or intake a cube
+    m_grabberSolenoid.set(kReverse); 
+  }
+  
+  private void IntakeCube() {
+      // Ensure Claw is "open"
+      Open();
+      m_intakeMotor.set(ClawConstants.InjectCubeSpeed);
   }
 
-  public void Release() {
-    GrabberSolenoid.set(kReverse);
-    m_mode = LedMode.RED;
+  private void EjectCube() {
+    m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
   }
 
-  public void IntakeCube() {}
-  public void IntakeCone() {}
-  public void EjectCube() {}
-  public void EJectCone() {}
+  public void GrabOrReleaseCube() {
+    if (m_mode == LedMode.CUBE) { // EJECT Cube
+      EjectCube(); 
+      m_mode = LedMode.OFF;
+    }
+    else {   // INJECT Cube
+      IntakeCube();
+      m_mode = LedMode.CUBE;
+    }
+  }
 
-  // FIXME: I believe CUBE/CONE is just FWD/REV on the Intake motor
+  private void IntakeCone() {
+    m_intakeMotor.set(ClawConstants.InjectConeSpeed);
+    Close();
+  }
+
+  private void EjectCone() {
+    Open();
+    m_intakeMotor.set(0.0); // May need to remove this and use the shutdown timer (See Periodic())
+  }
+
+  public void GrabOrReleaseCone() {
+    if (m_mode == LedMode.CONE) { // Drop Cone
+      EjectCone();
+      m_mode = LedMode.OFF;
+    }
+    else { // Inject Cone
+      IntakeCone();
+      m_mode = LedMode.CONE;
+    }
+  }
+
   public void setIntakeSpeed(double speed) {
-    IntakeMotor.set(speed);
+    m_intakeMotor.set(speed);
   }
   
   public void stopIntake() {
-    IntakeMotor.set(0.0);
+    m_intakeMotor.set(0.0);
   }
 
   public void setMode(LedMode newMode) {
@@ -170,6 +204,10 @@ public class Claw extends SubsystemBase {
     if (--m_delay == 0) {
       m_delay = 50;
       System.out.println(m_mode);
+    }
+    // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
+    if (m_mode != LedMode.CUBE && m_timer.get() > ClawConstants.ShutdownDelay) {
+      m_intakeMotor.set(0.0);
     }
   }
 }
