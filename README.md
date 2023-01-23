@@ -15,7 +15,7 @@ FRC Robot 2023 Java Code: Command-Based framework
 #### Claw
 * Pneumatic Actuator for open/close
 * 1x SparkMax controlled Neo 550 motor for intake/eject gamepiece
-* LED Signal Lights (PWM)
+* PWM controlled LED light strip
 
 #### ExampleSubsystem
 * Spike relay test light (on/off)
@@ -25,6 +25,7 @@ FRC Robot 2023 Java Code: Command-Based framework
 * SparkMax controlled intake/eject motor
 
 #### SignalLED
+* PWM controlled LED light strip
 ### Commands
 * AutoBalancePID: Balance based on "roll" axis (NavX Orientation is sideways)
 * DriveToDistance: Drive an arbitrary distance

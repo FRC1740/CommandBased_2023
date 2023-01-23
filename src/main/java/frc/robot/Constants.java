@@ -72,6 +72,12 @@ public final class Constants {
         public static final int kLowNodePostion = 4; // WAG 
         public static final int kSubStationPosition = 75; // WAG
     }
+
+    public static final class ClawConstants {
+        public static final int kPneumaticPortA = 0;
+        public static final int kPneumaticPortB = 1;
+        public static final int IntakeMotorCANID = 9;
+    }
     public static final class DriveConstants {
         public static final double GEAR_RATIO = 10.71; // Neo rotates 10.71 times for one rotation of the output
         public static final double WHEEL_DIAMETER_INCHES = 6.0; // Inches
@@ -88,9 +94,10 @@ public final class Constants {
         /* CRE Copied from Gyro Drive Example  */
         public static final int kEncoderCPR = 1024;
         public static final double kWheelDiameterInches = 6;
-        public static final double kEncoderDistancePerPulse =
-            // Assumes the encoders are directly mounted on the wheel shafts
-            (kWheelDiameterInches * Math.PI) / (double) kEncoderCPR;
+
+        // Assumes the encoders are directly mounted on the wheel shafts
+        public static final double kEncoderDistancePerPulse = kWheelDiameterInches * Math.PI / (double)kEncoderCPR;
+
     
         public static final boolean kGyroReversed = false;
     

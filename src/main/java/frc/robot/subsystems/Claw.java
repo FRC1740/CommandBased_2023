@@ -16,9 +16,12 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants.*;
+import com.revrobotics.CANSparkMax;
 
 public class Claw extends SubsystemBase {
-  DoubleSolenoid Intake;  
+  DoubleSolenoid GrabberSolenoid;
+  CANSparkMax IntakeMotor;
+
   public static final int kLedLength = 13;
   public static final int kLedPwmPort = 3;
   // Must be a PWM header, not MXP or DIO
@@ -30,6 +33,7 @@ public class Claw extends SubsystemBase {
     CUBE,
     CONE,
     KITT,
+    RED,
     OFF,
   };    
 
@@ -40,7 +44,8 @@ public class Claw extends SubsystemBase {
 
   /** Creates a new Manipulator. */
   public Claw() {
-    Intake = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    GrabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
+    IntakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
     // Set the colors appropriate for each game piece
     cube = new ConSignalLed.gamePiece(50, 0, 100);
     cone = new ConSignalLed.gamePiece(100, 50, 0);
@@ -59,17 +64,49 @@ public class Claw extends SubsystemBase {
     m_led.setData(m_ledBuffer);
   }
 
-  // These next two methods are temporary just to test peumatics.
   // The actual robot may have TWO separate mechanisms for cone/cube
   // selected by the drive team via OI input TBD
-  public void Extend(LedMode cubeOrCone) {
-    Intake.set(kForward);
-    m_mode = cubeOrCone;
+  // NOTE: The Grab() and Release() methods may do different things depending on the 
+  // gamepiece mode (cube/cone)
+
+  public void Toggle() {
+    switch(m_mode) {
+      case CUBE: // We're currently set for a cube
+        GrabberSolenoid.set(kReverse);
+        m_mode = LedMode.CONE;
+        // FIXME: We also want to run the intake motor here
+        break;
+      case CONE: // We're currently set for a cone
+        GrabberSolenoid.set(kForward);
+        m_mode = LedMode.CUBE;
+        // FIXME: We also want to run the intake motor here
+        default:
+        break;
+    }
   }
 
-  public void Retract() {
-    Intake.set(kReverse);
-    m_mode = LedMode.OFF;
+  public void Grab(LedMode cubeOrCone) {
+    m_mode = cubeOrCone;
+    GrabberSolenoid.set(kForward);
+  }
+
+  public void Release() {
+    GrabberSolenoid.set(kReverse);
+    m_mode = LedMode.RED;
+  }
+
+  public void IntakeCube() {}
+  public void IntakeCone() {}
+  public void EjectCube() {}
+  public void EJectCone() {}
+
+  // FIXME: I believe CUBE/CONE is just FWD/REV on the Intake motor
+  public void setIntakeSpeed(double speed) {
+    IntakeMotor.set(speed);
+  }
+  
+  public void stopIntake() {
+    IntakeMotor.set(0.0);
   }
 
   public void setMode(LedMode newMode) {
@@ -81,16 +118,19 @@ public class Claw extends SubsystemBase {
     for (var i=0; i<m_ledBuffer.getLength(); i++) {
       switch(m_mode) {
         case CUBE: // Purplish (dark magenta)
-          m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen());
+          m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen()); // Note: RBG for our LEDs
           break;
         case CONE: // Yellow-orange
-          m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());
+          m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());  // Note: RBG for our LEDs
+          break;
+        case RED: // Error mode
+          m_ledBuffer.setRGB(i, 255, 0, 0);  // Note: RBG for our LEDs
           break;
         case KITT: 
           Kitt(); // Cylon Pattern
           break;
         case OFF:
-          m_ledBuffer.setRGB(i, 0, 0, 0);
+          m_ledBuffer.setRGB(i, 0, 0, 0);  // Note: RBG for our LEDs
           break;
       } 
       m_led.setData(m_ledBuffer);
