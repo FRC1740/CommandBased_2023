@@ -129,7 +129,12 @@ public final class Constants {
         public static final double kTurnToleranceDeg = 5;
         public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
 
-        public static final double kDriveCorrectionP = .01;
+        public static final double kDriveCorrectionP = .01; //coefficient for course correction in autoDrive commands
+
+        public static final double kDriveToChargeStationPower = .4; //power for drive to charge station command
+
+        public static final double kDriveToDistancePower = 0.3; //power for drive to distance command
+
     
     }
     public static final class OIConstants {
