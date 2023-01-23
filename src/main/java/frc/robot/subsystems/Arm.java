@@ -49,4 +49,16 @@ public class Arm extends SubsystemBase {
     m_extensionEncoder.setPosition(0.0);
   }
 
+  public void stopRotation() {
+    m_rotationLeader.set(0.0);
+  }
+
+  public void stopExtension() {
+    m_extensionMotor.set(0.0);
+  }
+
+  public void stopAll() {
+    stopRotation();
+    stopExtension();
+  }
 }
