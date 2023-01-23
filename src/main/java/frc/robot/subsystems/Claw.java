@@ -92,56 +92,6 @@ public class Claw extends SubsystemBase {
   public void Open() { // Open to release a cone or intake a cube
     m_grabberSolenoid.set(kReverse); 
   }
-  
-  private void IntakeCube() {
-      // Ensure Claw is "open"
-      Open();
-      m_intakeMotor.set(ClawConstants.InjectCubeSpeed);
-  }
-
-  private void EjectCube() {
-    m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
-  }
-
-  public void GrabOrReleaseCube() {
-    if (m_mode == LedMode.CUBE) { // EJECT Cube
-      EjectCube(); 
-      m_mode = LedMode.OFF;
-    }
-    else {   // INJECT Cube
-      IntakeCube();
-      m_mode = LedMode.CUBE;
-    }
-  }
-
-  private void IntakeCone() {
-    m_intakeMotor.set(ClawConstants.InjectConeSpeed);
-    Close();
-  }
-
-  private void EjectCone() {
-    Open();
-    m_intakeMotor.set(0.0); // May need to remove this and use the shutdown timer (See Periodic())
-  }
-
-  public void GrabOrReleaseCone() {
-    if (m_mode == LedMode.CONE) { // Drop Cone
-      EjectCone();
-      m_mode = LedMode.OFF;
-    }
-    else { // Inject Cone
-      IntakeCone();
-      m_mode = LedMode.CONE;
-    }
-  }
-
-  public void setIntakeSpeed(double speed) {
-    m_intakeMotor.set(speed);
-  }
-  
-  public void stopIntake() {
-    m_intakeMotor.set(0.0);
-  }
 
   public void setMode(LedMode newMode) {
     m_mode = newMode;

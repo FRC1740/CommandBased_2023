@@ -100,13 +100,14 @@ public class RobotContainer {
     //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
     //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
     
+    /*
     new JoystickButton(m_codriverController, Button.kA.value)
       .toggleOnTrue(new InstantCommand(() -> m_Claw.GrabOrReleaseCube()));
 
     // Signal for a CONE when held
     new JoystickButton(m_codriverController, Button.kB.value)
       .toggleOnTrue(new InstantCommand(() -> m_Claw.GrabOrReleaseCone()));
-      
+     */
   }
 
   /**
