@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.DriveOnAndBalanceChargeStation;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Claw.LedMode;
@@ -31,11 +32,13 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   protected final Claw m_Claw = new Claw();
-  private final Command m_autoCommand = new DriveToDistance(36, m_robotDrive);
-
+  
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
   private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
+  
+  // auto command
+  private final Command m_autoCommand = new DriveOnAndBalanceChargeStation(m_robotDrive, m_codriverController);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
