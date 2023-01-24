@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 
@@ -21,7 +21,7 @@ public class TurnToAngle extends PIDCommand {
    */
   public TurnToAngle(double targetAngleDegrees, DriveSubsystem drive) {
     super(
-        new PIDController(DriveConstants.kTurnP, DriveConstants.kTurnI, DriveConstants.kTurnD),
+        new PIDController(AutoConstants.kTurnP, AutoConstants.kTurnI, AutoConstants.kTurnD),
         // Close loop on heading
         drive::getHeading,
         // Set reference to target
@@ -36,7 +36,7 @@ public class TurnToAngle extends PIDCommand {
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
-        .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+        .setTolerance(AutoConstants.kTurnToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
   }
 
   @Override

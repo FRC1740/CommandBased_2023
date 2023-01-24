@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 
@@ -24,12 +24,12 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
     
     super(
         new ProfiledPIDController(
-            DriveConstants.kTurnP,
-            DriveConstants.kTurnI,
-            DriveConstants.kTurnD,
+            AutoConstants.kTurnP,
+            AutoConstants.kTurnI,
+            AutoConstants.kTurnD,
             new TrapezoidProfile.Constraints(
-                DriveConstants.kMaxTurnRateDegPerS,
-                DriveConstants.kMaxTurnAccelerationDegPerSSquared)),
+                AutoConstants.kMaxTurnRateDegPerS,
+                AutoConstants.kMaxTurnAccelerationDegPerSSquared)),
         // Close loop on heading
         drive::getHeading,
         // Set reference to target
@@ -44,7 +44,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
-        .setTolerance(DriveConstants.kTurnToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+        .setTolerance(AutoConstants.kTurnToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
         m_drive = drive;
   }
 

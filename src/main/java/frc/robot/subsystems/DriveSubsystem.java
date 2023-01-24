@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants.ConSparkMax;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.DriveConstants;
 import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
 
