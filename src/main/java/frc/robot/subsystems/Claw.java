@@ -71,7 +71,41 @@ public class Claw extends SubsystemBase {
   // selected by the drive team via OI input TBD
   // NOTE: The Grab() and Release() methods may do different things depending on the 
   // gamepiece mode (cube/cone)
+  public void IntakeCube() {
+    m_intakeMotor.set(ClawConstants.InjectCubeSpeed);
+    m_mode = LedMode.CUBE;
+  }
+  public void EjectCube() {
+    m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
+    m_mode = LedMode.OFF;
+  }
+  public void GrabCone() {
+    m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
+    m_mode = LedMode.CONE;
+  }
+  public void DropCone() {
+    m_intakeMotor.set(0.0);
+    m_grabberSolenoid.set(kForward);
+    m_mode = LedMode.OFF;
+  }
 
+  public void GrabOrReleaseCone() {
+    if (m_mode == LedMode.OFF) {
+      GrabCone();
+    }
+    else {
+      DropCone();
+    }
+  }
+  public void GrabOrReleaseCube() {
+    if (m_mode == LedMode.OFF) {
+      IntakeCube();
+    }
+    else {
+      EjectCube();
+    }
+
+  }
   public void Toggle() {
     switch(m_mode) {
       case CUBE: // We're currently set for a cube
