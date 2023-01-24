@@ -10,7 +10,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.AutoConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -28,23 +28,23 @@ public class AutoBalancePID extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            DriveConstants.kBalanceP,
-            DriveConstants.kBalanceI,
-            DriveConstants.kBalanceD,
+            AutoConstants.kBalanceP,
+            AutoConstants.kBalanceI,
+            AutoConstants.kBalanceD,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(0, 0)),
         // This should return the measurement
         drive::getRoll,
         // This should return the goal (can also be a constant)
-        DriveConstants.kLevel,
+        AutoConstants.kLevel,
         // This uses the output
-        (output, setpoint) -> drive.arcadeDrive(-output, DriveConstants.kDriveCorrectionP * error, false),
+        (output, setpoint) -> drive.arcadeDrive(-output, AutoConstants.kDriveCorrectionP * error, false),
         drive
         );
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
   getController()
-      .setTolerance(DriveConstants.kBalanceToleranceDeg, DriveConstants.kTurnRateToleranceDegPerS);
+      .setTolerance(AutoConstants.kBalanceToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
       m_drive = drive;
   m_codriverController = coDriveController;
   }

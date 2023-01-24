@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.AutoConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,9 +20,9 @@ public class DriveToDistancePID extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            DriveConstants.kAutoDriveP,
-            DriveConstants.kAutoDriveI,
-            DriveConstants.kAutoDriveD,
+            AutoConstants.kAutoDriveP,
+            AutoConstants.kAutoDriveI,
+            AutoConstants.kAutoDriveD,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(.5, .5)),
         // This should return the measurement
