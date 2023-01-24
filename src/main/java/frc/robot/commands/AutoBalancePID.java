@@ -20,6 +20,8 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   private XboxController m_codriverController;
   private DriveSubsystem m_drive;
   private double initEncoderPos;
+  private double heading;
+  private static double error = 0;
 
   public AutoBalancePID(DriveSubsystem drive, XboxController coDriveController) {
     super(
@@ -36,7 +38,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
         // This should return the goal (can also be a constant)
         DriveConstants.kLevel,
         // This uses the output
-        (output, setpoint) -> drive.arcadeDrive(-output, 0, false),
+        (output, setpoint) -> drive.arcadeDrive(-output, DriveConstants.kDriveCorrectionP * error, false),
         drive
         );
     // Use addRequirements() here to declare subsystem dependencies.
@@ -55,15 +57,20 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   @Override
   public void initialize() {
     super.initialize();
+    heading = m_drive.getAngle();
     initEncoderPos = Math.abs(m_drive.getAverageEncoderInches());
     m_codriverController.setRumble(RumbleType.kBothRumble, 1);
   }
-
+  public void execute(){
+    super.execute();
+    error = heading - m_drive.getAngle();
+  }
+  
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     //28 is max inches traveled to avoid flying off the ramp
-    if(getController().atGoal()||(initEncoderPos + 38) < Math.abs(m_drive.getAverageEncoderInches())){
+    if(getController().atGoal()/*||(initEncoderPos + 38) < Math.abs(m_drive.getAverageEncoderInches())*/){
      return true;
     }else{
      return false;

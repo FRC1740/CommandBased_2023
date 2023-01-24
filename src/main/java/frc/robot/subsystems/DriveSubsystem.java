@@ -54,11 +54,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println("Rok:" + getRoll());
     // This method will be called once per scheduler run
   }
 
   public double getAngle() {
-    System.out.println("gyro angle" + m_gyro.getAngle());
+    //System.out.println("gyro angle" + m_gyro.getAngle());
     return m_gyro.getAngle();
   }
 
