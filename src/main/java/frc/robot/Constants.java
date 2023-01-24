@@ -77,6 +77,10 @@ public final class Constants {
         public static final int kPneumaticPortA = 0;
         public static final int kPneumaticPortB = 1;
         public static final int IntakeMotorCANID = 9;
+        public static final double InjectCubeSpeed = .3; // WAG
+        public static final double EjectCubeSpeed = -InjectCubeSpeed;
+        public static final double InjectConeSpeed = .3; // WAG
+        public static final double ShutdownDelay = 1.0;
     }
     public static final class DriveConstants {
         public static final double GEAR_RATIO = 10.71; // Neo rotates 10.71 times for one rotation of the output

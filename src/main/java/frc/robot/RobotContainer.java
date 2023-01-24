@@ -103,27 +103,14 @@ public class RobotContainer {
     //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
     //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
     
-    // Solenoid test
     /*
     new JoystickButton(m_codriverController, Button.kA.value)
-        .onTrue(new InstantCommand(() -> m_Claw.Grab(LedMode.CUBE)))
-        .onFalse(new InstantCommand(() -> m_Claw.Release()));
+      .toggleOnTrue(new InstantCommand(() -> m_Claw.GrabOrReleaseCube()));
 
     // Signal for a CONE when held
     new JoystickButton(m_codriverController, Button.kB.value)
-      .onTrue(new InstantCommand(() -> m_Claw.Grab(LedMode.CONE)))
-      .onFalse(new InstantCommand(() -> m_Claw.Release()));
-    */
-
-    // I believe the claw has two positions One for a CUBE, one for a CONE
-    new JoystickButton(m_codriverController, Button.kA.value)
-      .toggleOnTrue(new InstantCommand(() -> m_Claw.Toggle()));
-    
-    /* Signaling may be linked to the specific game piece intake
-     * When we deploy the cone intake, signal "Yellow-orange"
-     * When we deploy the cube intake, signal "purple"
-     * 
-    */
+      .toggleOnTrue(new InstantCommand(() -> m_Claw.GrabOrReleaseCone()));
+     */
   }
 
   /**
