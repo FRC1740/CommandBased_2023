@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToDistance extends CommandBase {
@@ -40,10 +40,10 @@ public class DriveToDistance extends CommandBase {
   public void execute() {
     if(goal < m_Drivesubsystem.getAverageEncoderInches()){
       error = heading - m_Drivesubsystem.getAngle();
-      m_Drivesubsystem.arcadeDrive(-DriveConstants.kDriveToDistancePower, DriveConstants.kDriveCorrectionP * error, false);
+      m_Drivesubsystem.arcadeDrive(-AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * error, false);
     }else{
       error = heading - m_Drivesubsystem.getAngle();
-      m_Drivesubsystem.arcadeDrive(DriveConstants.kDriveToDistancePower, DriveConstants.kDriveCorrectionP * error, false);
+      m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * error, false);
     }
     if(m_Drivesubsystem.getAverageEncoderInches() >= goal - .1 && m_Drivesubsystem.getAverageEncoderInches() <= goal + .1 ){
       Finished = true;
