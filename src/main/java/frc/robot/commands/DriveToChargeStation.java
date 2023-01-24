@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveConstants;
+import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToChargeStation extends CommandBase {
@@ -41,7 +41,7 @@ public class DriveToChargeStation extends CommandBase {
   public void execute() {
     if(m_Drivesubsystem.getRoll() >= startingRoll - 9 && m_Drivesubsystem.getRoll() <= startingRoll + 9 ){
        error = heading - m_Drivesubsystem.getAngle();
-      m_Drivesubsystem.arcadeDrive(DriveConstants.kDriveToChargeStationPower, DriveConstants.kDriveCorrectionP * error, false);
+      m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToChargeStationPower, AutoConstants.kDriveCorrectionP * error, false);
     }else{
       Finished = true;
     }
