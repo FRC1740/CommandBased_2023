@@ -80,7 +80,8 @@ public class Claw extends SubsystemBase {
     m_mode = LedMode.OFF;
   }
   public void GrabCone() {
-    m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
+    m_intakeMotor.set(ClawConstants.InjectConeSpeed);
+    m_grabberSolenoid.set(kReverse);
     m_mode = LedMode.CONE;
   }
   public void DropCone() {
