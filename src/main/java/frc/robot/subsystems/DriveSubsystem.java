@@ -54,7 +54,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println("Rok:" + getRoll());
     // This method will be called once per scheduler run
   }
 
