@@ -4,30 +4,40 @@
 
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase {
   /** Creates a new LimeLight. */
+  NetworkTable table;
+  double tx;
+  double ty;
+  double ta;
+
   public LimeLight() {
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry ta = table.getEntry("ta");
+    table = NetworkTableInstance.getDefault().getTable("limelight");
+    tx = table.getEntry("tx").getDouble(0.0);
+    ty = table.getEntry("ty").getDouble(0.0);
+    ta = table.getEntry("ta").getDouble(0.0);
 
 //read values periodically
-    double x = tx.getDouble(0.0);
-    double y = ty.getDouble(0.0);
-    double area = ta.getDouble(0.0);
 
-//post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+  }
+  public double getXdeviation(){
+    return table.getEntry("tx").getDouble(0.0);
+  }
+  public double getYdeviation(){
+    return table.getEntry("ty").getDouble(0.0);
   }
 
+  public void enableVisionProcessing(){
+    table.getEntry("camMode").setNumber(0);
+  }
+  public void enableDriverCamera(){
+    table.getEntry("ledMode").setNumber(1);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
