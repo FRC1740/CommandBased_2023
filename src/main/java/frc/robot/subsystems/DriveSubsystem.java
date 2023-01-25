@@ -29,45 +29,12 @@ public class DriveSubsystem extends SubsystemBase {
     private final CANSparkMax m_rightMotorFollower = new CANSparkMax(DriveConstants.kRightMotor2Port, CANSparkMaxLowLevel.MotorType.kBrushless);
     public final RelativeEncoder m_leftEncoder = m_leftMotorLeader.getEncoder();
     public final RelativeEncoder m_leftEncoderFollower = m_leftMotorFollower.getEncoder();
-    public final RelativeEncoder m_leftEncoderFollower = m_leftMotorFollower.getEncoder();
     public final RelativeEncoder m_rightEncoder = m_rightMotorLeader.getEncoder();
-    public final RelativeEncoder m_rightEncoderFollower = m_rightMotorFollower.getEncoder();
     public final RelativeEncoder m_rightEncoderFollower = m_rightMotorFollower.getEncoder();
     // gyro NavX IMU CRASHIN
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
-
-    // Used to grab an instance of the global network tables
-    NetworkTableInstance inst;
-    NetworkTable m_nt;
-    Shuffleboard m_sb;
-
-    // Shuffleboard DriveTrain entries
-    // Create and get reference to SB tab
-    ShuffleboardTab m_sbt_DriveTrain;
-  
-    GenericEntry m_nte_Testing;
-  
-    // Autonomous Variables
-    GenericEntry m_nte_a_DriveDelay;
-    GenericEntry m_nte_b_DriveDistance;
-    GenericEntry m_nte_c_DriveTurnAngle;
-    GenericEntry m_nte_autoDriveMode;
-
-    // Encoders/PID Feedback sensors
-    GenericEntry m_nte_LeftEncoder;
-    GenericEntry m_nte_RightEncoder;
-    GenericEntry m_nte_IMU_ZAngle;
-    GenericEntry m_nte_IMU_PitchAngle; // USES IMU ROLL AXIS!!!
-
-    // PID Tuning
-    GenericEntry m_nte_DriveSpeedFilter;
-    GenericEntry m_nte_DriveRotationFilter;
-
-    // Create widget for non-linear input
-    GenericEntry m_nte_InputExponent;
-    
 
     // Used to grab an instance of the global network tables
     NetworkTableInstance inst;
@@ -187,11 +154,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_nte_IMU_ZAngle.setDouble(getAngle());
     m_nte_IMU_PitchAngle.setDouble(getRoll());
     }
-    m_nte_LeftEncoder.setDouble(getAverageLeftEncoders());
-    m_nte_RightEncoder.setDouble(getAverageRightEncoders());
-    m_nte_IMU_ZAngle.setDouble(getAngle());
-    m_nte_IMU_PitchAngle.setDouble(getRoll());
-    }
 
   public double getAngle() {
     //System.out.println("gyro angle" + m_gyro.getAngle());
@@ -229,36 +191,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
   public double getAverageEncoderInches(){
     return (getRightEncoderInches() + getLeftEncoderInches())/2;
-  }
-
-    // Used by AutoDriveDistance
-  public void resetEncoders() {
-    m_rightEncoder.setPosition(0.0);
-    m_leftEncoder.setPosition(0.0);
-    m_rightEncoderFollower.setPosition(0.0);
-    m_leftEncoderFollower.setPosition(0.0);
-  }
-
-  // Account for two encoders per side
-  public double getRightDistanceInches() {
-    return (getAverageRightEncoders() * DriveConstants.INCHES_PER_TICK);
-  }
-
-  public double getLeftDistanceInches() {
-    return (getAverageLeftEncoders() * DriveConstants.INCHES_PER_TICK);
-  }
-
-  // Used by AutoDriveDistance
-  public double getAverageDistanceInches() {
-    return ((getLeftDistanceInches() + getRightDistanceInches()) / 2.0);
-  }
-
-  public double getAverageLeftEncoders() {
-    return (m_leftEncoder.getPosition() + m_leftEncoderFollower.getPosition() ) / 2.0;
-  }
-
-  public double getAverageRightEncoders() {
-    return (m_rightEncoder.getPosition() + m_rightEncoderFollower.getPosition() ) / 2.0;
   }
 
     // Used by AutoDriveDistance
