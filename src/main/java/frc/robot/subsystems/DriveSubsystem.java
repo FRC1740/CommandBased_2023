@@ -12,11 +12,9 @@ import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Constants.ConSparkMax;
 import frc.constants.DriveConstants;
+import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.*;
@@ -71,9 +69,9 @@ public class DriveSubsystem extends SubsystemBase {
       m_rightMotorFollower.follow(m_rightMotorLeader);  
 
       inst = NetworkTableInstance.getDefault();
-      m_nt = inst.getTable("drivetrain");
+      m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
       // Create and get reference to SB tab
-      m_sbt_DriveTrain = Shuffleboard.getTab("DriveTrain");
+      m_sbt_DriveTrain = Shuffleboard.getTab(ShuffleboardConstants.DriveTrainTab);
       
       // get a topic from a NetworkTableInstance
       // the topic name in this case is the full name
@@ -91,12 +89,11 @@ public class DriveSubsystem extends SubsystemBase {
       // Create widgets for digital filter lengths
       m_nte_DriveSpeedFilter = m_sbt_DriveTrain.addPersistent("Drive Speed Filter", 10.0)
             .withSize(2, 1).withPosition(0, 0).getEntry();
-  
       m_nte_DriveRotationFilter = m_sbt_DriveTrain.addPersistent("Drive Rotation Filter", 5.0)
             .withSize(2, 1).withPosition(0, 1).getEntry();
-  
       // Create widget for non-linear input
-      m_nte_InputExponent = m_sbt_DriveTrain.addPersistent("Input Exponent", 1.0)        .withSize(1, 1).withPosition(0, 2).getEntry();
+      m_nte_InputExponent = m_sbt_DriveTrain.addPersistent("Input Exponent", 1.0)
+              .withSize(1, 1).withPosition(0, 2).getEntry();
   
       // Create widgets for AutoDrive
       m_nte_a_DriveDelay     = m_sbt_DriveTrain.addPersistent("Drive Delay", .5)
@@ -104,7 +101,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_nte_b_DriveDistance  = m_sbt_DriveTrain.addPersistent("Drive Distance", 48)
             .withSize(1, 1).withPosition(3, 1).getEntry();
       m_nte_c_DriveTurnAngle = m_sbt_DriveTrain.addPersistent("Turn Angle", 0.0)
-            .withSize(1, 1).withPosition(3, 2).getEntry();
+            .withSize(1, 1).withPosition(3, 2).getEntry();            
       m_nte_autoDriveMode    = m_sbt_DriveTrain.addPersistent("AutoDrive Mode", 2)
             .withSize(1, 1).withPosition(3, 3).getEntry();
 
@@ -123,7 +120,6 @@ public class DriveSubsystem extends SubsystemBase {
   
       m_nte_IMU_PitchAngle = m_sbt_DriveTrain.addPersistent("IMU Pitch", 0.0)
                 .withSize(2,1).withPosition(4,3).getEntry();
-
   }
 
   /**

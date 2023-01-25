@@ -46,8 +46,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    inst = NetworkTableInstance.getDefault();
-    m_nt = inst.getTable("Robot");
+//    inst = NetworkTableInstance.getDefault();
+//    m_nt = inst.getTable(ShuffleboardConstants.RobotTab);
     // Create and get reference to SB tab
 
     m_sbt_Robot = Shuffleboard.getTab(ShuffleboardConstants.RobotTab);
@@ -55,10 +55,10 @@ public class Robot extends TimedRobot {
 
     // Create widget for code version
 
-    m_nte_BuildTime = m_sbt_Robot.add("Build Time", RobotProperties.getTime())
+    m_nte_BuildTime = m_sbt_Robot.addPersistent("Build Time", RobotProperties.getTime())
           .withSize(3, 1).withPosition(0, 0).getEntry();
 
-    m_nte_BuildComputer = m_sbt_Robot.add("Build Computer", RobotProperties.getComputer())
+    m_nte_BuildComputer = m_sbt_Robot.addPersistent("Build Computer", RobotProperties.getComputer())
           .withSize(3, 1).withPosition(0, 1).getEntry();
   }
 

@@ -14,8 +14,8 @@ import frc.robot.commands.DriveOnAndBalanceChargeStation;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Claw.LedMode;
 import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.TurnToAngleProfiled;
@@ -35,7 +35,8 @@ public class RobotContainer {
   private final LimeLight m_limelight = new LimeLight();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   protected final Claw m_Claw = new Claw();
-  
+  protected final Arm m_Arm = new Arm();
+
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
   private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
