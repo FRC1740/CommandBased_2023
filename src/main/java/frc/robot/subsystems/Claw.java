@@ -62,7 +62,7 @@ public class Claw extends SubsystemBase {
     m_led.setLength(m_ledBuffer.getLength());
     
     // Both LED strips MUST Be the same length
-    m_mode = LedMode.CUBE;
+    setMode(LedMode.CUBE); // FIXME: Must match the solenoid @ startup
     m_led.start();
     m_led.setData(m_ledBuffer);
   }
@@ -73,25 +73,25 @@ public class Claw extends SubsystemBase {
   // gamepiece mode (cube/cone)
   public void IntakeCube() {
     m_intakeMotor.set(ClawConstants.InjectCubeSpeed);
-    m_mode = LedMode.CUBE;
+    setMode(LedMode.CUBE);
   }
   public void EjectCube() {
     m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
-    m_mode = LedMode.OFF;
+    setMode(LedMode.OFF);
   }
   public void GrabCone() {
     m_intakeMotor.set(ClawConstants.InjectConeSpeed);
     m_grabberSolenoid.set(kReverse);
-    m_mode = LedMode.CONE;
+    setMode(LedMode.CONE);
   }
   public void DropCone() {
     m_intakeMotor.set(0.0);
     m_grabberSolenoid.set(kForward);
-    m_mode = LedMode.OFF;
+    setMode(LedMode.OFF);
   }
 
   public void GrabOrReleaseCone() {
-    if (m_mode == LedMode.OFF) {
+    if (getMode() == LedMode.OFF) {
       GrabCone();
     }
     else {
@@ -99,7 +99,7 @@ public class Claw extends SubsystemBase {
     }
   }
   public void GrabOrReleaseCube() {
-    if (m_mode == LedMode.OFF) {
+    if (getMode() == LedMode.OFF) {
       IntakeCube();
     }
     else {
@@ -111,27 +111,30 @@ public class Claw extends SubsystemBase {
     switch(m_mode) {
       case CUBE: // We're currently set for a cube
         m_grabberSolenoid.set(kReverse);
-        m_mode = LedMode.CONE;
+        setMode(LedMode.CONE);
         break;
       case CONE: // We're currently set for a cone
         m_grabberSolenoid.set(kForward);
-        m_mode = LedMode.CUBE;
+        setMode(LedMode.CUBE);
         default:
         break;
     }
   }
 
-  public void Close() { // Close to grab a cone
+  private void Close() { // Close to grab a cone
     m_grabberSolenoid.set(kForward); 
-  }
-  public void Open() { // Open to release a cone or intake a cube
+    }
+  private void Open() { // Open to release a cone or intake a cube
     m_grabberSolenoid.set(kReverse); 
   }
 
-  public void setMode(LedMode newMode) {
+  private void setMode(LedMode newMode) {
     m_mode = newMode;
+    System.out.println(m_mode);
   }
-
+  private LedMode getMode() {
+    return m_mode;
+  }
   private void ShowLedPattern() {
     // Note Colors are ACTUALLY in RBG order!!!
     for (var i=0; i<m_ledBuffer.getLength(); i++) {
@@ -188,7 +191,6 @@ public class Claw extends SubsystemBase {
     ShowLedPattern();
     if (--m_delay == 0) {
       m_delay = 50;
-      System.out.println(m_mode);
     }
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
     if (m_mode != LedMode.CUBE && m_timer.get() > ClawConstants.ShutdownDelay) {

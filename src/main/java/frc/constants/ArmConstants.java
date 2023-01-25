@@ -1,10 +1,21 @@
 package frc.constants;
+import frc.robot.Constants.ConSparkMax;
 
 public class ArmConstants {
     
     public static final int kRotationLeaderMotorPort = 6;
     public static final int kRotationFollowerMotorPort = 7;
     public static final int kExtensionMotorPort = 8;
+
+    // Arm Rotation Constants
+    public static final double kArmRotationGearRatio = 20; // FIXME
+    public static final double kArmRotationTicksToDegrees = ConSparkMax.POSITION_CONVERSION_FACTOR / kArmRotationGearRatio / 360;
+
+    // Arm Extension Constants
+    public static final double kArmExtensionGearRatio = 20; // FIXME
+    public static final double kArmExtensionOutputDiameterInches = 4; // FIXME
+    public static final double kArmExtensionTicksPerRotationOutput = ConSparkMax.POSITION_CONVERSION_FACTOR / kArmExtensionGearRatio;
+    public static final double kArmExtensionTicksToInches = kArmExtensionTicksPerRotationOutput * Math.PI * kArmExtensionOutputDiameterInches;
 
     /*
         * All Angles based on Horizontal = 0
@@ -15,15 +26,15 @@ public class ArmConstants {
         * Human player maybe same as mid-node (close)
         */
     public static final int kStowedAngle = 0;
-    public static final int kHighNodeAngle = 71; // WAG
-    public static final int kMidNodeAngle = 75; // WAG
-    public static final int kLowNodeAngle = 134; // WAG
-    public static final int kSubStationAngle = 75; // WAG
+    public static final int kHighNodeAngle = 71; // FIXME
+    public static final int kMidNodeAngle = 75; // FIXME
+    public static final int kLowNodeAngle = 134; // FIXME
+    public static final int kSubStationAngle = 75; // FIXME
 
     public static final int kStowedPosition = 0;
-    public static final int kHighNodePosition = 4; // WAG
-    public static final int kMidNodePosition = 28; // WAG
-    public static final int kLowNodePostion = 4; // WAG 
-    public static final int kSubStationPosition = 75; // WAG
+    public static final int kHighNodePosition = 4; // FIXME
+    public static final int kMidNodePosition = 28; // FIXME
+    public static final int kLowNodePosition = 4; // FIXME 
+    public static final int kSubStationPosition = 75; // FIXME
         
 }
