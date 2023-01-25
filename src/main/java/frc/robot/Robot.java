@@ -7,6 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.networktables.*;
+import frc.constants.ShuffleboardConstants;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -18,6 +23,19 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  // Used to grab an instance of the global network tables
+  NetworkTableInstance inst;
+  NetworkTable m_nt;
+  Shuffleboard m_sb;
+
+  // Shuffleboard DriveTrain entries
+  // Create and get reference to SB tab
+  ShuffleboardTab m_sbt_Robot;
+
+  // Encoders/PID Feedback sensors
+  GenericEntry m_nte_BuildTime;
+  GenericEntry m_nte_BuildComputer;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -27,6 +45,21 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+
+    inst = NetworkTableInstance.getDefault();
+    m_nt = inst.getTable("Robot");
+    // Create and get reference to SB tab
+
+    m_sbt_Robot = Shuffleboard.getTab(ShuffleboardConstants.RobotTab);
+    // See https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/shuffleboard/layouts-with-code/using-tabs.html
+
+    // Create widget for code version
+
+    m_nte_BuildTime = m_sbt_Robot.add("Build Time", RobotProperties.getTime())
+          .withSize(3, 1).withPosition(0, 0).getEntry();
+
+    m_nte_BuildComputer = m_sbt_Robot.add("Build Computer", RobotProperties.getComputer())
+          .withSize(3, 1).withPosition(0, 1).getEntry();
   }
 
   /**
