@@ -34,9 +34,31 @@ public class LimeLight extends SubsystemBase {
 
   public void enableVisionProcessing(){
     table.getEntry("camMode").setNumber(0);
+    System.out.println("Vision processing enabled");
   }
   public void enableDriverCamera(){
+    table.getEntry("camMode").setNumber(1);
+  }
+
+  public double getCamMode(){
+    return table.getEntry("camMode").getDouble(0);
+  }
+  //Toggle led on and off
+  public void toggleLED(){
+   if (table.getEntry("ledMode").getDouble(0) == 1){
+    table.getEntry("ledMode").setNumber(3);
+   }else{
     table.getEntry("ledMode").setNumber(1);
+   }
+  }
+
+
+  public void targetMidNode(){
+    table.getEntry("pipeline").setNumber(0);
+  }
+
+  public void targetHighNode(){
+    table.getEntry("pipeline").setNumber(1);
   }
   @Override
   public void periodic() {

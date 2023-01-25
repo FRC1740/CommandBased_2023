@@ -41,13 +41,22 @@ public class VisionAlign extends ProfiledPIDCommand {
 
   @Override
   public void initialize() {
-    super.initialize();
+    System.out.println("initialized");
+    m_LimeLight.targetMidNode();
     m_LimeLight.enableVisionProcessing();
+    super.initialize();
+    
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    super.end(interrupted);
+    m_LimeLight.enableDriverCamera();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return getController().atGoal();
+    return false;
   }
 }
