@@ -81,6 +81,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kStart.value)
       .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
 
+    new JoystickButton(m_driverController, Button.kY.value)
+      .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
+
+
     // Drive at half speed when the right bumper is held
     new JoystickButton(m_driverController, Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
