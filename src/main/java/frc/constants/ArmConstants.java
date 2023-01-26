@@ -8,14 +8,15 @@ public class ArmConstants {
     public static final int kExtensionMotorPort = 8;
 
     // Arm Rotation Constants
-    public static final double kArmRotationGearRatio = 20; // FIXME
-    public static final double kArmRotationTicksToDegrees = ConSparkMax.POSITION_CONVERSION_FACTOR / kArmRotationGearRatio / 360;
-
+    public static final double kArmRotationGearRatio = 240; // FIXME: Gear ratio may change
+    public static final double kArmRotationTicksToDegrees = ConSparkMax.POSITION_CONVERSION_FACTOR * kArmRotationGearRatio / 360;
     // Arm Extension Constants
-    public static final double kArmExtensionGearRatio = 20; // FIXME
-    public static final double kArmExtensionOutputDiameterInches = 4; // FIXME
-    public static final double kArmExtensionTicksPerRotationOutput = ConSparkMax.POSITION_CONVERSION_FACTOR / kArmExtensionGearRatio;
-    public static final double kArmExtensionTicksToInches = kArmExtensionTicksPerRotationOutput * Math.PI * kArmExtensionOutputDiameterInches;
+    public static final double kArmExtensionGearRatio = 25; // FIXME: Gear ratio may change
+    // One rotation of the output = 1.5 inches of extension
+    public static final double kArmExtensionRotationToLinearDistance = 1.5;
+    // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
+    public static final double kArmExtensionTicksPerRotationOutput = ConSparkMax.POSITION_CONVERSION_FACTOR * kArmExtensionGearRatio;
+    public static final double kArmExtensionTicksToInches = kArmExtensionTicksPerRotationOutput / kArmExtensionRotationToLinearDistance;
 
     /*
         * All Angles based on Horizontal = 0
@@ -26,15 +27,15 @@ public class ArmConstants {
         * Human player maybe same as mid-node (close)
         */
     public static final int kStowedAngle = 0;
-    public static final int kHighNodeAngle = 71; // FIXME
-    public static final int kMidNodeAngle = 75; // FIXME
-    public static final int kLowNodeAngle = 134; // FIXME
-    public static final int kSubStationAngle = 75; // FIXME
+    public static final int kHighNodeAngle = 71; // FIXME: Pseudo-wild guess at node angle
+    public static final int kMidNodeAngle = 75;  // These values came from CAD and will likely
+    public static final int kLowNodeAngle = 134; // change once the arm is installed on the robot
+    public static final int kSubStationAngle = 75; 
 
-    public static final int kStowedPosition = 0;
-    public static final int kHighNodePosition = 4; // FIXME
-    public static final int kMidNodePosition = 28; // FIXME
-    public static final int kLowNodePosition = 4; // FIXME 
-    public static final int kSubStationPosition = 75; // FIXME
+    public static final int kStowedPosition = 0;    // FIXME: Pseudo-wild guess at node distance
+    public static final int kHighNodePosition = 4;  // These values came from CAD and will likely
+    public static final int kMidNodePosition = 28;  // change once the arm is installed on the robot
+    public static final int kLowNodePosition = 4;  
+    public static final int kSubStationPosition = 75; 
         
 }

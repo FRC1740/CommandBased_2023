@@ -88,12 +88,20 @@ public class Arm extends SubsystemBase {
     m_rotationLeader.set(speed);
   }
 
-  public double getAngle() {
+  public double getRotationEncoder() {
     return m_rotationEncoder.getPosition();
   }
 
-  public double getExtension() {
+  public double getRotationAngle() {
+    return getRotationEncoder() * ArmConstants.kArmRotationTicksToDegrees;
+  }
+
+  public double getExtensionEncoder() {
     return m_extensionEncoder.getPosition();
+  }
+
+  public double getExtensionDistanceInches() {
+    return getExtensionEncoder() * ArmConstants.kArmExtensionTicksToInches;
   }
 
   public void resetRotationEncoder() {
