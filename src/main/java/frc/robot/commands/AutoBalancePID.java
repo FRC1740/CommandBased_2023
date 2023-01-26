@@ -19,7 +19,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   /** Creates a new AutoBalancePID. */
   private XboxController m_codriverController;
   private DriveSubsystem m_drive;
-  private double initEncoderPos;
+  //private double initEncoderPos;
   private double heading;
   private static double error = 0;
 
@@ -58,7 +58,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   public void initialize() {
     super.initialize();
     heading = m_drive.getAngle();
-    initEncoderPos = Math.abs(m_drive.getAverageEncoderInches());
+    //initEncoderPos = Math.abs(m_drive.getAverageEncoderInches());
     m_codriverController.setRumble(RumbleType.kBothRumble, 1);
   }
   public void execute(){
