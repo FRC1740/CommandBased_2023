@@ -24,9 +24,9 @@ public class Arm extends SubsystemBase {
   private final RelativeEncoder m_extensionEncoder;
 
   // Used to grab an instance of the global network tables
-  NetworkTableInstance inst;
-  NetworkTable m_nt;
-  Shuffleboard m_sb;
+  // NetworkTableInstance inst;
+  // NetworkTable m_nt;
+  // Shuffleboard m_sb;
 
   // Shuffleboard DriveTrain entries
   // Create and get reference to SB tab
