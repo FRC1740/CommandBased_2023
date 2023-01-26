@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.io.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -181,7 +180,8 @@ public class Claw extends SubsystemBase {
     return m_clawMode;
   }
   private String getModeString() {
-    return m_clawMode.toString();
+    // return m_clawMode.toString();
+    return m_clawMode.name();
   }
   // private void ShowLedPattern() {
   //   // Note Colors are ACTUALLY in RBG order!!!
