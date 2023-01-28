@@ -36,17 +36,10 @@ public class VisionAlign extends ProfiledPIDCommand {
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
+    getController().setTolerance(0.3);
     m_LimeLight = limeLight;
   }
 
-  @Override
-  public void initialize() {
-    System.out.println("initialized");
-    m_LimeLight.targetMidNode();
-    m_LimeLight.enableVisionProcessing();
-    super.initialize();
-    
-  }
 
   @Override
   public void end(boolean interrupted) {
@@ -57,6 +50,6 @@ public class VisionAlign extends ProfiledPIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return getController().atGoal();
   }
 }

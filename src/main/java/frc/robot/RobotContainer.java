@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.DriveOnAndBalanceChargeStation;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
@@ -104,7 +105,7 @@ public class RobotContainer {
 
     // When codriver button is pressed, toggle the light
     new JoystickButton(m_codriverController, Button.kY.value)
-    .onTrue(new InstantCommand(()-> m_exampleSubsystem.toggle()));
+    .onTrue(new InstantCommand(()-> m_limelight.toggleLED()));
 
     // Signal for a CUBE when held
     // new JoystickButton(m_codriverController, Button.kA.value)
