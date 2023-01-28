@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +35,7 @@ public class LimeLight extends SubsystemBase {
 
   public void enableVisionProcessing(){
     table.getEntry("camMode").setNumber(0);
+    table.getEntry("ledMode").setNumber(3);
     System.out.println("Vision processing enabled");
   }
   public void enableDriverCamera(){
@@ -51,7 +54,12 @@ public class LimeLight extends SubsystemBase {
    }
   }
 
-
+  //Returns true if Limelight is in vision processing mode
+  public BooleanSupplier isVisionProcessing(){
+    BooleanSupplier camMode = () -> table.getEntry("camMode").getDouble(1) == 0;
+    return camMode;
+    
+  }
   public void targetMidNode(){
     table.getEntry("pipeline").setNumber(0);
   }
