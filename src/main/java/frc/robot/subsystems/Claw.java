@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.Timer;
 import frc.constants.ClawConstants;
 //import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.revrobotics.RelativeEncoder;
+// import com.revrobotics.RelativeEncoder;
 import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -63,7 +63,7 @@ public class Claw extends SubsystemBase {
 
   // Parameters Passed from DS via Shuffleboard
   private GenericEntry m_nte_ClawMode;
-  private GenericEntry m_nte_IntakeSpeed;
+  // private GenericEntry m_nte_IntakeSpeed;
   private GenericEntry m_nte_IntakeCurrent;
 
   /** Creates a new Manipulator. */
@@ -111,7 +111,7 @@ public class Claw extends SubsystemBase {
   // NOTE: The Grab() and Release() methods may do different things depending on the 
   // gamepiece mode (cube/cone)
   public void intakeCube() {
-    m_intakeMotor.set(ClawConstants.InjectCubeSpeed);
+    m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
     setMode(ClawMode.CUBE);
   }
   public void ejectCube() {
@@ -243,8 +243,12 @@ public class Claw extends SubsystemBase {
     //   m_delay = 50;
     // }
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
-    if (m_clawMode != ClawMode.CUBE && m_timer.get() > ClawConstants.ShutdownDelay) {
-      m_intakeMotor.set(0.0);
+    if (m_timer.get() > ClawConstants.ShutdownDelay) {
+      if (m_clawMode == ClawMode.CUBE) {
+        m_intakeMotor.set(ClawConstants.InjectCubeLowSpeed);
+      } else {
+        m_intakeMotor.set(0.0);
+      }
     }
     // m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
     m_nte_IntakeCurrent.setDouble(getIntakeCurrent());

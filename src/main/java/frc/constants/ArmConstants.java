@@ -8,10 +8,10 @@ public class ArmConstants {
     public static final int kExtensionMotorPort = 8;
 
     // Arm Rotation Constants
-    public static final double kArmRotationGearRatio = 240; // FIXME: Gear ratio may change
+    public static final double kArmRotationGearRatio = 144; // Gear boxes 4x3x3, Sprockets 64/16 = 4 total 4x3x3x4 = 144
     public static final double kArmRotationTicksToDegrees = ConSparkMax.POSITION_CONVERSION_FACTOR * kArmRotationGearRatio / 360;
     // Arm Extension Constants
-    public static final double kArmExtensionGearRatio = 25; // FIXME: Gear ratio may change
+    public static final double kArmExtensionGearRatio = 25; // FIXME: Extension Gear ratio may change
     // One rotation of the output = 1.5 inches of extension
     public static final double kArmExtensionRotationToLinearDistance = 1.5;
     // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
