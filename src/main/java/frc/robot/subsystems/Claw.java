@@ -17,7 +17,8 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 // import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Timer;
 import frc.constants.ClawConstants;
-import com.revrobotics.CANSparkMax;
+//import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.RelativeEncoder;
 import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -26,8 +27,8 @@ import edu.wpi.first.networktables.*;
 
 public class Claw extends SubsystemBase {
   private final DoubleSolenoid m_grabberSolenoid;
-  private final CANSparkMax m_intakeMotor;
-  private final RelativeEncoder m_intakeEncoder;
+  private final WPI_TalonSRX m_intakeMotor; // One Talon controlling TWO bag motors (hardwired)
+  // private final RelativeEncoder m_intakeEncoder;
 
   // public static final int kLedLength = 13;
   // public static final int kLedPwmPort = 3;
@@ -68,8 +69,12 @@ public class Claw extends SubsystemBase {
   /** Creates a new Manipulator. */
   public Claw() {
     m_grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
-    m_intakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
-    m_intakeEncoder = m_intakeMotor.getEncoder();
+    // m_intakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
+    m_intakeMotor = new WPI_TalonSRX(ClawConstants.IntakeMotorCANID);
+    m_intakeMotor.configPeakCurrentLimit(ClawConstants.IntakePeakCurrentLimit, 10); // Amps, timeout (msec)
+    m_intakeMotor.configPeakCurrentDuration(ClawConstants.IntakePeakDurationLimit, 10); // msec, timeout
+    m_intakeMotor.configContinuousCurrentLimit(ClawConstants.IntakeContinuousCurrentLimit, 10); // Amps, timeout
+    // m_intakeEncoder = m_intakeMotor.getEncoder();
     // Set the colors appropriate for each game piece
     // cube = new ConSignalLed.gamePiece(50, 0, 100);
     // cone = new ConSignalLed.gamePiece(100, 50, 0);
@@ -82,8 +87,8 @@ public class Claw extends SubsystemBase {
     // Create Widges for CURRENT Arm Position & Angle
     m_nte_ClawMode = m_sbt_Claw.addPersistent("Claw Mode", getModeString())
           .withSize(2, 1).withPosition(0, 0).getEntry();
-    m_nte_IntakeSpeed = m_sbt_Claw.addPersistent("Intake Speed", getIntakeSpeed())
-          .withSize(2, 1).withPosition(0, 1).getEntry();
+    // m_nte_IntakeSpeed = m_sbt_Claw.addPersistent("Intake Speed", getIntakeSpeed())
+    //       .withSize(2, 1).withPosition(0, 1).getEntry();
     m_nte_IntakeCurrent = m_sbt_Claw.addPersistent("Intake Current", getIntakeCurrent())
           .withSize(2, 1).withPosition(0, 2).getEntry();
 
@@ -165,11 +170,8 @@ public class Claw extends SubsystemBase {
   public void setIntakeSpeed(double speed) {
     m_intakeMotor.set(speed);
   }
-  public double getIntakeSpeed() {
-    return m_intakeEncoder.getVelocity();
-  }
   public double getIntakeCurrent() {
-    return m_intakeMotor.getOutputCurrent();
+    return m_intakeMotor.getStatorCurrent();
   }
   private void setMode(ClawMode newMode) {
     m_clawMode = newMode;
@@ -244,7 +246,7 @@ public class Claw extends SubsystemBase {
     if (m_clawMode != ClawMode.CUBE && m_timer.get() > ClawConstants.ShutdownDelay) {
       m_intakeMotor.set(0.0);
     }
-    m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
+    // m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
     m_nte_IntakeCurrent.setDouble(getIntakeCurrent());
   }
 }
