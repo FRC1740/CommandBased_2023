@@ -43,7 +43,7 @@ public final class Constants {
         }
     }
     public static final class ConSparkMax {
-        public static final double POSITION_CONVERSION_FACTOR = 42.0;
+
     }
     
     public static final class DriveConstants {

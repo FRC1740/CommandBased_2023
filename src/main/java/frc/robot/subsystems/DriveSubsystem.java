@@ -10,13 +10,13 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.kauailabs.navx.frc.AHRS;
 
-import frc.robot.Constants.ConSparkMax;
 import frc.constants.DriveConstants;
 import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -67,6 +67,16 @@ public class DriveSubsystem extends SubsystemBase {
     public DriveSubsystem() {
       m_leftMotorFollower.follow(m_leftMotorLeader);
       m_rightMotorFollower.follow(m_rightMotorLeader);  
+
+      m_leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
+      m_leftEncoderFollower.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
+      m_rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
+      m_rightEncoderFollower.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
+
+      m_leftMotorLeader.burnFlash();
+      m_leftMotorFollower.burnFlash();
+      m_rightMotorLeader.burnFlash();
+      m_rightMotorFollower.burnFlash();
 
       inst = NetworkTableInstance.getDefault();
       m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
@@ -172,21 +182,14 @@ public class DriveSubsystem extends SubsystemBase {
     return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public double inchesToEncoderTicks(double inches) {
-    //Converts Inches into Encoder ticks
-    double encoderTicks = (inches / DriveConstants.WHEEL_CIRCUMFERENCE_INCHES) * DriveConstants.GEAR_RATIO * ConSparkMax.POSITION_CONVERSION_FACTOR;
-    //System.out.println("tickstoinch" +encoderTicks);
-    return encoderTicks;
+  public double getRightEncoderMeters(){
+    return m_rightEncoder.getPosition(); 
   }
-
-  public double getRightEncoderInches(){
-    return m_rightEncoder.getPosition() * DriveConstants.INCHES_PER_TICK; 
+  public double getLeftEncoderMeters(){
+    return m_leftEncoder.getPosition(); 
   }
-  public double getLeftEncoderInches(){
-    return m_leftEncoder.getPosition() * DriveConstants.INCHES_PER_TICK; 
-  }
-  public double getAverageEncoderInches(){
-    return (getRightEncoderInches() + getLeftEncoderInches())/2;
+  public double getAverageEncoderMeters(){
+    return (getRightEncoderMeters() + getLeftEncoderMeters())/2;
   }
 
     // Used by AutoDriveDistance
@@ -199,11 +202,11 @@ public class DriveSubsystem extends SubsystemBase {
 
   // Account for two encoders per side
   public double getRightDistanceInches() {
-    return (getAverageRightEncoders() * DriveConstants.INCHES_PER_TICK);
+    return Units.metersToInches(getAverageRightEncoders());
   }
 
   public double getLeftDistanceInches() {
-    return (getAverageLeftEncoders() * DriveConstants.INCHES_PER_TICK);
+    return Units.metersToInches(getAverageLeftEncoders());
   }
 
   // Used by AutoDriveDistance
@@ -217,12 +220,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   public double getAverageRightEncoders() {
     return (m_rightEncoder.getPosition() + m_rightEncoderFollower.getPosition() ) / 2.0;
-  }
-
-  public double ticksToInches(double ticks) {
-    //Converts Inches into Encoder ticks
-    double inches = ticks / ConSparkMax.POSITION_CONVERSION_FACTOR / DriveConstants.GEAR_RATIO * DriveConstants.WHEEL_CIRCUMFERENCE_INCHES;
-    return inches;
   }
 
   public double getAverageEncoder(){
