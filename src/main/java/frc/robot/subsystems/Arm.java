@@ -50,6 +50,8 @@ public class Arm extends SubsystemBase {
     m_rotationEncoder = m_rotationLeader.getEncoder();
     m_extensionEncoder = m_extensionMotor.getEncoder();
 
+    m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
+    m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
     // inst = NetworkTableInstance.getDefault();
     // m_nt = inst.getTable(ShuffleboardConstants.ArmTab);
     
@@ -93,7 +95,7 @@ public class Arm extends SubsystemBase {
   }
 
   public double getRotationAngle() {
-    return getRotationEncoder() * ArmConstants.kArmRotationTicksToDegrees;
+    return getRotationEncoder();
   }
 
   public double getExtensionEncoder() {
@@ -101,7 +103,7 @@ public class Arm extends SubsystemBase {
   }
 
   public double getExtensionDistanceInches() {
-    return getExtensionEncoder() * ArmConstants.kArmExtensionTicksToInches;
+    return getExtensionEncoder();
   }
 
   public void resetRotationEncoder() {
@@ -136,11 +138,11 @@ public class Arm extends SubsystemBase {
 
   // Convert Encoder ticks to inches
   private double getArmExtensionInches() {
-    return getArmExtensionEncoder() * ArmConstants.kArmExtensionTicksToInches;
+    return getArmExtensionEncoder();
   }
   // Convert Encoder ticks to degrees 
   private double getArmRotationDegrees() {
-    return getArmRotationEncoder() * ArmConstants.kArmRotationTicksToDegrees;
+    return getArmRotationEncoder();
   }
 
   @Override

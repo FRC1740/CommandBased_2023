@@ -15,7 +15,7 @@ import frc.constants.AutoConstants;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class DriveToDistancePID extends ProfiledPIDCommand {
   /** Creates a new DriveToDistiancePID. */  
-  public DriveToDistancePID(double inches, DriveSubsystem drive) {
+  public DriveToDistancePID(double meters, DriveSubsystem drive) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -26,9 +26,9 @@ public class DriveToDistancePID extends ProfiledPIDCommand {
             // The motion profile constraints
             new TrapezoidProfile.Constraints(.5, .5)),
         // This should return the measurement
-        () -> drive.getAverageEncoder(),
+        () -> drive.getAverageEncoderMeters(),
         // This should return the goal (can also be a constant)
-        drive.inchesToEncoderTicks(inches),
+        meters,
         // This uses the output
         (output, setpoint) -> drive.arcadeDrive(output, 0, false), 
 

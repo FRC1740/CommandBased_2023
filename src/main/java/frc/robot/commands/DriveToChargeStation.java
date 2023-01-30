@@ -12,10 +12,8 @@ public class DriveToChargeStation extends CommandBase {
   /** Creates a new DriveToDistance. */
   
   private final DriveSubsystem m_Drivesubsystem;
-  private double goal = 0;
   private double startingRoll = 0;
   private boolean Finished = false;
-  private int targetInches = 0;
   private double heading = 0;
   private double error = 0;
 
@@ -31,8 +29,6 @@ public class DriveToChargeStation extends CommandBase {
     Finished = false;
     startingRoll = m_Drivesubsystem.getRoll();
     heading = m_Drivesubsystem.getAngle();
-    goal = targetInches + m_Drivesubsystem.getAverageEncoderInches();
-    System.out.println("goal " + goal);
     System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
   }
 

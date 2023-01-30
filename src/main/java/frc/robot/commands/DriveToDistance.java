@@ -14,13 +14,13 @@ public class DriveToDistance extends CommandBase {
   private final DriveSubsystem m_Drivesubsystem;
   private double goal = 0;
   private boolean Finished = false;
-  private int targetInches = 0;
+  private double targetMeters = 0;
   private double heading = 0;
   private double error = 0;
 
-  public DriveToDistance(int inches, DriveSubsystem drive) {
+  public DriveToDistance(double meters, DriveSubsystem drive) {
     m_Drivesubsystem = drive;
-    targetInches = inches;
+    targetMeters = meters;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,7 +30,7 @@ public class DriveToDistance extends CommandBase {
   public void initialize() {
     Finished = false;
     heading = m_Drivesubsystem.getAngle();
-    goal = targetInches + m_Drivesubsystem.getAverageEncoderInches();
+    goal = targetMeters + m_Drivesubsystem.getAverageEncoderMeters();
     System.out.println("goal " + goal);
     System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
   }
@@ -39,12 +39,12 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void execute() {
     error = heading - m_Drivesubsystem.getAngle();
-    if(goal < m_Drivesubsystem.getAverageEncoderInches()){
+    if(goal < m_Drivesubsystem.getAverageEncoderMeters()){
       m_Drivesubsystem.arcadeDrive(-AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * error, false);
     }else{
       m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * error, false);
     }
-    if(m_Drivesubsystem.getAverageEncoderInches() >= goal - .1 && m_Drivesubsystem.getAverageEncoderInches() <= goal + .1 ){
+    if(m_Drivesubsystem.getAverageEncoderMeters() >= goal - .1 && m_Drivesubsystem.getAverageEncoderMeters() <= goal + .1 ){
       Finished = true;
     }
   }
