@@ -15,8 +15,9 @@ public class SignalLEDs extends SubsystemBase {
   public enum LedMode {
     CUBE,
     CONE,
-    KITT,
     RED,
+    BLUE,
+    KITT,
     OFF,
   };
 
@@ -45,7 +46,7 @@ public class SignalLEDs extends SubsystemBase {
   public static final int kLedPwmPortB = 4;
 
   // Common to all strings
-  public static final int kRefreshEvery = 30;
+  public static final int kRefreshEvery = 2;
   ConSignalLed.gamePiece cube, cone;  // Stores RGB triplets
 
   // Encapsulate the details for each physical LED string here
@@ -69,11 +70,13 @@ public class SignalLEDs extends SubsystemBase {
       // Length is expensive to set, so only set it once, then just update data
       m_led.setLength(length);
       
+      m_direction = 1;
+      m_currentPixel = 0;
       m_ledMode = LedMode.OFF;
       m_defaultMode = LedMode.OFF;
       m_led.start();
       m_led.setData(m_ledBuffer);
-      System.out.println("Members"+m_port+" "+m_length+" "+m_delay+" "+m_ledMode+" "+m_direction+" "+m_currentPixel);
+      System.out.println("Members "+m_port+" "+m_length+" "+m_delay+" "+m_ledMode+" "+m_direction+" "+m_currentPixel);
     }
   }
 
@@ -105,51 +108,53 @@ public class SignalLEDs extends SubsystemBase {
 
   private void ShowLedPattern(LedHwString hwString) {
     // Note Colors are ACTUALLY in RBG order!!!
-    for (var i=0; i<hwString.m_ledBuffer.getLength(); i++) {
-      switch(hwString.m_ledMode) {
+    for (var i=0; i<hwString.m_length; i++) {
+      switch (hwString.m_ledMode) {
         case CUBE: // Purplish (dark magenta)
-        hwString.m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen()); // Note: RBG for our LEDs
+          hwString.m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen()); // Note: RBG for our LEDs
           break;
         case CONE: // Yellow-orange
-        hwString.m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());  // Note: RBG for our LEDs
+          hwString.m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());  // Note: RBG for our LEDs
           break;
-        case RED: // Error mode
-        hwString.m_ledBuffer.setRGB(i, 255, 0, 0);  // Note: RBG for our LEDs
-          return;
+        case RED:
+          hwString.m_ledBuffer.setRGB(i, 255, 0, 0);  // Note: RBG for our LEDs
+          break;
+        case BLUE:
+          hwString.m_ledBuffer.setRGB(i, 0, 255, 0);  // Note: RBG for our LEDs
+          break;
         case KITT: 
-          Kitt(); // Cylon Pattern
-          break;
+          Kitt(hwString); // Cylon Pattern
+          return;
         case OFF:
-        hwString.m_ledBuffer.setRGB(i, 0, 0, 0);  // Note: RBG for our LEDs
+          hwString.m_ledBuffer.setRGB(i, 0, 0, 0);  // Note: RBG for our LEDs
           break;
       } 
-      hwString.m_led.setData(hwString.m_ledBuffer);
     }
+    hwString.m_led.setData(hwString.m_ledBuffer);
   }
 
-  public void Kitt() { 
-  //   for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-  //     Color c = m_ledBuffer.getLED(i);
-  //     int r = (int)Math.round(c.red * 255);
-  //     int g = (int)Math.round(c.green * 255);
-  //     int b = (int)Math.round(c.blue * 255);
+  public void Kitt(LedHwString hwString) { 
+    for (int i = 0; i < hwString.m_length; i++) {
+      Color c = hwString.m_ledBuffer.getLED(i);
+      int r = (int)Math.round(c.red * 255);
+      int g = (int)Math.round(c.green * 255);
+      int b = (int)Math.round(c.blue * 255);
 
-  //     if (r >= 10) r -= 10; else r = 0;
-  //     if (g >= 20) g -= 20; else g = 0;
-  //     if (b >= 20) b -= 20; else b = 0;
-  //     m_ledBuffer.setRGB(i, r, b, g);
-  //   }
-  //   m_ledBuffer.setRGB(m_currentPixel, 64, 64, 64);
-  //   m_led.setData(m_ledBuffer);
-  //   // m_ledB.setData(m_ledBuffer);
+      if (r >= 10) r -= 10; else r = 0;
+      if (g >= 20) g -= 20; else g = 0;
+      if (b >= 20) b -= 20; else b = 0;
+      hwString.m_ledBuffer.setRGB(i, r, b, g);
+    }
+    hwString.m_ledBuffer.setRGB(hwString.m_currentPixel, 64, 64, 64);
+    hwString.m_led.setData(hwString.m_ledBuffer);
 
-  //   m_currentPixel += m_kittDelta;
-  //   if ((m_currentPixel <= 0) || (m_currentPixel >= kLedLength - 1)) {
-  //     // Ensure valid even when switching modes
-  //     if (m_currentPixel < 0) m_currentPixel = 0;
-  //     if (m_currentPixel > kLedLength - 1) m_currentPixel = kLedLength - 1;
-  //     m_kittDelta = -m_kittDelta;
-  //   }
+    hwString.m_currentPixel += hwString.m_direction;
+    if ((hwString.m_currentPixel <= 0) || (hwString.m_currentPixel >= hwString.m_length - 1)) {
+      // Ensure valid even when switching modes
+      if (hwString.m_currentPixel < 0) hwString.m_currentPixel = 0;
+      if (hwString.m_currentPixel > hwString.m_length - 1) hwString.m_currentPixel = hwString.m_length - 1;
+      hwString.m_direction = -hwString.m_direction;
+    }
   }
 
   @Override
@@ -211,6 +216,5 @@ public class SignalLEDs extends SubsystemBase {
       // No HW strings
       break;
     }
-    // m_ledMode = newMode;
   }
 }

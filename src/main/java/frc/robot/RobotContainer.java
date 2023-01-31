@@ -137,3 +137,37 @@ public class RobotContainer {
     return m_autoCommand;
   }
 }
+
+//   package frc.robot;
+//   import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+//   import edu.wpi.first.wpilibj2.command.Command;
+//   import edu.wpi.first.wpilibj2.command.InstantCommand;
+//   import frc.robot.subsystems.SignalLEDs;
+  
+//   public class RobotContainer {
+//     private final SignalLEDs m_signalLEDs = new SignalLEDs();
+//     private final CommandXboxController m_driverController = new CommandXboxController(Constants.OIConstants.kDriverControllerPort);
+//     private final Command m_autoCommand = null;
+//     public RobotContainer() {
+//       configureButtonBindings();
+//     }
+//     private void configureButtonBindings() {
+//       m_driverController.a()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.b()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.x()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.y()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.back().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.BLUE,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.start().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.KITT,SignalLEDs.LedPreference.MAIN,true)));
+//     }
+  
+//   public Command getAutonomousCommand() {
+//     return m_autoCommand;
+//   }
+// }
