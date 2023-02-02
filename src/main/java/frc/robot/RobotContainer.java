@@ -42,6 +42,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -61,6 +62,7 @@ public class RobotContainer {
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
   private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
+  private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
   
   SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
@@ -76,11 +78,11 @@ public class RobotContainer {
     // Configure default commands
     // Set the default drive command to split-stick arcade drivem_robotDrive
     m_robotDrive.setDefaultCommand(
-        // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
-        // Triggers are Axis 2; RightStick X is axis 3
-        // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
-        new RunCommand(() ->
-            m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+      // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
+      // Triggers are Axis 2; RightStick X is axis 3
+      // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
+      new RunCommand(() ->
+          m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
                   m_driverController.getLeftX(), true), m_robotDrive));
 
     m_AutoChooser.addOption("curvy path", followPath("deploy/pathplanner/generatedJSON/Curvy Path.wpilib.json", true));
@@ -121,6 +123,9 @@ public class RobotContainer {
     } else {
       return ramseteCommand;
     }
+
+    m_Arm.setDefaultCommand( new RunCommand(() ->
+          m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
 
   }
   /**
@@ -198,3 +203,37 @@ public class RobotContainer {
     return m_autoCommand;
   }
 }
+
+//   package frc.robot;
+//   import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+//   import edu.wpi.first.wpilibj2.command.Command;
+//   import edu.wpi.first.wpilibj2.command.InstantCommand;
+//   import frc.robot.subsystems.SignalLEDs;
+  
+//   public class RobotContainer {
+//     private final SignalLEDs m_signalLEDs = new SignalLEDs();
+//     private final CommandXboxController m_driverController = new CommandXboxController(Constants.OIConstants.kDriverControllerPort);
+//     private final Command m_autoCommand = null;
+//     public RobotContainer() {
+//       configureButtonBindings();
+//     }
+//     private void configureButtonBindings() {
+//       m_driverController.a()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.b()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.x()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.y()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.back().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.BLUE,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.start().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.KITT,SignalLEDs.LedPreference.MAIN,true)));
+//     }
+  
+//   public Command getAutonomousCommand() {
+//     return m_autoCommand;
+//   }
+// }
