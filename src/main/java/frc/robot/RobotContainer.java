@@ -24,6 +24,7 @@ import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.AprilTagAlign;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -43,6 +44,7 @@ public class RobotContainer {
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
   private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
+  private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
   
   // auto command
   private final Command m_autoCommand = new DriveOnAndBalanceChargeStation(m_robotDrive, m_codriverController);
@@ -55,12 +57,15 @@ public class RobotContainer {
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_robotDrive.setDefaultCommand(
-        // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
-        // Triggers are Axis 2; RightStick X is axis 3
-        // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
-        new RunCommand(() ->
-            m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+      // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
+      // Triggers are Axis 2; RightStick X is axis 3
+      // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
+      new RunCommand(() ->
+          m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
                   m_driverController.getLeftX(), true), m_robotDrive));
+    m_Arm.setDefaultCommand( new RunCommand(() ->
+          m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
+
   }
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
