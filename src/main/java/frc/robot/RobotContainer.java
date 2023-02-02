@@ -91,8 +91,12 @@ public class RobotContainer {
     
     m_AutoChooser.addOption("Short Straight path", followPath("deploy/pathplanner/generatedJSON/Short_Straight_Path.wpilib.json",true));
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
+
+    m_Arm.setDefaultCommand( new RunCommand(() -> m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
+
   }
 
+    
   public Command followPath(String filename, boolean resetOdometry) {
     Trajectory trajectory;
 
@@ -123,11 +127,7 @@ public class RobotContainer {
     } else {
       return ramseteCommand;
     }
-
-    m_Arm.setDefaultCommand( new RunCommand(() ->
-          m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
-
-  }
+}
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
