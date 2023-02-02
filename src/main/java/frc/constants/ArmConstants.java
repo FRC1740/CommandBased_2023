@@ -9,7 +9,7 @@ public class ArmConstants {
 
     // Arm Rotation Constants
     public static final double kArmRotationGearRatio = 144; // Gear boxes 4x3x3, Sprockets 64/16 = 4 total 4x3x3x4 = 144
-    public static final double ARM_ROTATION_POSITION_CONVERSION_FACTOR = kArmRotationGearRatio/360; //Encoder output in degrees the arm rotates
+    public static final double ARM_ROTATION_POSITION_CONVERSION_FACTOR = 360/kArmRotationGearRatio; //Encoder output in degrees the arm rotates
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 1.5 inches of extension
