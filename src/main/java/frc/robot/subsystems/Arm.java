@@ -21,6 +21,7 @@ public class Arm extends SubsystemBase {
   private final CANSparkMax m_rotationFollower = new CANSparkMax(ArmConstants.kRotationFollowerMotorPort, CANSparkMax.MotorType.kBrushless);
   private final CANSparkMax m_extensionMotor = new CANSparkMax(ArmConstants.kExtensionMotorPort, CANSparkMax.MotorType.kBrushless);
   private final RelativeEncoder m_rotationEncoder;
+  private final RelativeEncoder m_rotationFollowerEncoder;
   private final RelativeEncoder m_extensionEncoder;
 
   // Used to grab an instance of the global network tables
@@ -45,13 +46,22 @@ public class Arm extends SubsystemBase {
   GenericEntry m_nte_LowNodeExtension;
 
   public Arm() {
-    /** Creates a new Arm. */  
-    m_rotationFollower.follow(m_rotationLeader);
+    /** Creates a new Arm. */
+    // Follower motor direction is inverted
+    m_rotationFollower.follow(m_rotationLeader, true);
     m_rotationEncoder = m_rotationLeader.getEncoder();
+    m_rotationFollowerEncoder = m_rotationFollower.getEncoder();
     m_extensionEncoder = m_extensionMotor.getEncoder();
 
+    // Reset encoders to Zero position for starting configuration
+    m_rotationEncoder.setPosition(0.0);
+    m_extensionEncoder.setPosition(0.0);
+
     m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
+    m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
+    m_rotationLeader.burnFlash();
+    m_rotationFollower.burnFlash();
     // inst = NetworkTableInstance.getDefault();
     // m_nt = inst.getTable(ShuffleboardConstants.ArmTab);
     
