@@ -1,4 +1,5 @@
 package frc.constants;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units; // Only needed for ConSparkMaX
 
 public class DriveConstants {
@@ -7,7 +8,7 @@ public class DriveConstants {
     public static final double WHEEL_DIAMETER_INCHES = 6.0; // Inches
     public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI; // Abt 18.85 in.
     public static final double DRIVE_POSITION_CONVERSION_FACTOR = Units.inchesToMeters(WHEEL_CIRCUMFERENCE_INCHES)/GEAR_RATIO; //Encoder output in meters the robot travels
-
+    public static final double VELOCITY_CONVERSION_FACTOR = DRIVE_POSITION_CONVERSION_FACTOR/60; //encoders return velocity in meters per second
     //public static final double TICKS_PER_WHEEL_REVOLUTION = ConSparkMax.DRIVE_POSITION_CONVERSION_FACTOR;
     //public static final double TICKS_PER_INCH = TICKS_PER_WHEEL_REVOLUTION / WHEEL_CIRCUMFERENCE_INCHES;
     //public static final double INCHES_PER_TICK = WHEEL_CIRCUMFERENCE_INCHES / TICKS_PER_WHEEL_REVOLUTION;
@@ -22,9 +23,26 @@ public class DriveConstants {
     public static final double kWheelDiameterInches = 6;
 
     // Assumes the encoders are directly mounted on the wheel shafts
-    public static final double kEncoderDistancePerPulse = kWheelDiameterInches * Math.PI / (double)kEncoderCPR;
+    public static final double kEncoderDistancePerPulse = DRIVE_POSITION_CONVERSION_FACTOR / (double)kEncoderCPR; 
 
+    //sysid constants
+    public static final double ks = 0.23145; //Value for testbed
+    public static final double kv = 6.1654; //Value for testbed
+    public static final double ka = 1.9428; //Value for testbed
+    public static final double kPDriveVel = 1.026; //Value for testbed
+
+    public static final double kTrackWidthMeters = Units.inchesToMeters(22); //22in. for testbot, 18 in. for actual robot
+    public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
+
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+
+    // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
 
     public static final boolean kGyroReversed = false;
+
+
 
 }

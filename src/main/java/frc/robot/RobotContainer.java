@@ -3,6 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
+import java.nio.file.Path;
+import java.io.IOException;
+
+
 import static edu.wpi.first.wpilibj.XboxController.Button;
 
 
@@ -24,6 +29,19 @@ import frc.robot.commands.TurnToAngleProfiled;
 import frc.robot.commands.AprilTagAlign;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import frc.constants.DriveConstants;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
@@ -46,16 +64,19 @@ public class RobotContainer {
   private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
   private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
   
-  // auto command
-  private final Command m_autoCommand = new DriveOnAndBalanceChargeStation(m_robotDrive, m_codriverController);
+  SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
+  // auto command
+  private final Command m_autoCommand = followPath("deploy/pathplanner/generatedJSON/Short_Straight_Path.wpilib.json", true);
+
+  
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
     // Configure default commands
-    // Set the default drive command to split-stick arcade drive
+    // Set the default drive command to split-stick arcade drivem_robotDrive
     m_robotDrive.setDefaultCommand(
       // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
       // Triggers are Axis 2; RightStick X is axis 3
@@ -63,6 +84,46 @@ public class RobotContainer {
       new RunCommand(() ->
           m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
                   m_driverController.getLeftX(), true), m_robotDrive));
+
+    m_AutoChooser.addOption("curvy path", followPath("deploy/pathplanner/generatedJSON/Curvy Path.wpilib.json", true));
+    
+    m_AutoChooser.addOption("straight", followPath("deploy/pathplanner/generatedJSON/Straight path.wpilib.json", true));
+    
+    m_AutoChooser.addOption("Short Straight path", followPath("deploy/pathplanner/generatedJSON/Short_Straight_Path.wpilib.json",true));
+    Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
+  }
+
+  public Command followPath(String filename, boolean resetOdometry) {
+    Trajectory trajectory;
+
+    try {
+      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(filename);
+      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+    } catch (IOException exception) {
+      DriverStation.reportError("Unable to open trajectory " + filename, exception.getStackTrace());
+      System.out.println("Unable to read from file " + filename);
+      return new InstantCommand();
+    }
+
+    RamseteCommand ramseteCommand = new RamseteCommand(
+      trajectory,
+      m_robotDrive::getPose,
+      new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
+      new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+      DriveConstants.kDriveKinematics,
+      m_robotDrive::getWheelSpeeds,
+      new PIDController(DriveConstants.kPDriveVel, 0, 0),
+      new PIDController(DriveConstants.kPDriveVel, 0, 0),
+      m_robotDrive::tankDriveVolts,
+      m_robotDrive);
+
+    if (resetOdometry) {
+      return new SequentialCommandGroup(
+          new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), ramseteCommand);
+    } else {
+      return ramseteCommand;
+    }
+
     m_Arm.setDefaultCommand( new RunCommand(() ->
           m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
 

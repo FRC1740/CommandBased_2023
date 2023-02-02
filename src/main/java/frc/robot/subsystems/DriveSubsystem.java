@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.constants.DriveConstants;
@@ -16,6 +17,9 @@ import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 
@@ -33,6 +37,8 @@ public class DriveSubsystem extends SubsystemBase {
     private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
     // The robot's drive
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
+
+    private final DifferentialDriveOdometry m_odometry;
 
     // Used to grab an instance of the global network tables
     NetworkTableInstance inst;
@@ -73,10 +79,21 @@ public class DriveSubsystem extends SubsystemBase {
       m_rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_rightEncoderFollower.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
 
+      m_leftEncoder.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
+      m_leftEncoderFollower.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
+      m_rightEncoder.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
+      m_rightEncoderFollower.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
+
       m_leftMotorLeader.burnFlash();
       m_leftMotorFollower.burnFlash();
       m_rightMotorLeader.burnFlash();
       m_rightMotorFollower.burnFlash();
+      
+      m_gyro.reset();
+      m_gyro.calibrate();
+      resetEncoders();
+
+      m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 
       inst = NetworkTableInstance.getDefault();
       m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
@@ -144,6 +161,18 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
+  *    * Controls the left and right sides of the drive directly with voltages.
+  *
+  * @param leftVolts the commanded left output
+  * @param rightVolts the commanded right output
+  */
+  public void tankDriveVolts(double leftVolts, double rightVolts){
+    m_leftMotorLeader.setVoltage(leftVolts);
+    m_rightMotorLeader.setVoltage(rightVolts);
+    m_drive.feed();
+  }
+  
+  /**
   * Sets the max output of the drive. Useful for scaling the drive to drive more slowly.
   *
   * @param maxOutput the maximum output to which the drive will be constrained
@@ -155,12 +184,22 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_odometry.update(m_gyro.getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+
     m_nte_LeftEncoder.setDouble(getAverageLeftEncoders());
     m_nte_RightEncoder.setDouble(getAverageRightEncoders());
     m_nte_IMU_ZAngle.setDouble(getAngle());
     m_nte_IMU_PitchAngle.setDouble(getRoll());
     }
 
+  public Pose2d getPose(){
+    return m_odometry.getPoseMeters();
+  }
+
+  public void resetOdometry(Pose2d pose){
+    resetEncoders();
+    m_odometry.resetPosition(m_gyro.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
+  }
   public double getAngle() {
     //System.out.println("gyro angle" + m_gyro.getAngle());
     return m_gyro.getAngle();
@@ -179,9 +218,12 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from 180 to 180
    */
   public double getHeading() {
-    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return m_gyro.getRotation2d().getDegrees();
   }
 
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
+  }
   public double getRightEncoderMeters(){
     return m_rightEncoder.getPosition(); 
   }
