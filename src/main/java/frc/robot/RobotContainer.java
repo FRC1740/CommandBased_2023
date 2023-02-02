@@ -4,8 +4,10 @@
 
 package frc.robot;
 
-import java.nio.file.Path;
-import java.io.IOException;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 
 
 import static edu.wpi.first.wpilibj.XboxController.Button;
@@ -34,14 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
+
 import frc.constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -69,7 +64,7 @@ public class RobotContainer {
   SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
   // auto command
-  private final Command m_autoCommand = followPath("deploy/pathplanner/generatedJSON/Short_Straight_Path.wpilib.json", true);
+  private Command m_autoCommand = m_AutoChooser.getSelected();
 
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -87,49 +82,27 @@ public class RobotContainer {
           m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
                   m_driverController.getLeftX(), true), m_robotDrive));
 
-    m_AutoChooser.addOption("curvy path", followPath("deploy/pathplanner/generatedJSON/Curvy Path.wpilib.json", true));
+    m_Arm.setDefaultCommand( new RunCommand(() ->
+    m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
     
-    m_AutoChooser.addOption("straight", followPath("deploy/pathplanner/generatedJSON/Straight path.wpilib.json", true));
+    m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path", 
+    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
+    true));
     
-    m_AutoChooser.addOption("Short Straight path", followPath("deploy/pathplanner/generatedJSON/Short_Straight_Path.wpilib.json",true));
+    m_AutoChooser.addOption("straight", m_robotDrive.FollowPath(PathPlanner.loadPath("Straight path", 
+    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
+    true));
+    
+    m_AutoChooser.addOption("Short Straight path", m_robotDrive.FollowPath(PathPlanner.loadPath("Short_Straight_Path", 
+    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
+    true));
+
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
 
     m_Arm.setDefaultCommand( new RunCommand(() -> m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
 
   }
 
-    
-  public Command followPath(String filename, boolean resetOdometry) {
-    Trajectory trajectory;
-
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(filename);
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (IOException exception) {
-      DriverStation.reportError("Unable to open trajectory " + filename, exception.getStackTrace());
-      System.out.println("Unable to read from file " + filename);
-      return new InstantCommand();
-    }
-
-    RamseteCommand ramseteCommand = new RamseteCommand(
-      trajectory,
-      m_robotDrive::getPose,
-      new RamseteController(DriveConstants.kRamseteB, DriveConstants.kRamseteZeta),
-      new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
-      DriveConstants.kDriveKinematics,
-      m_robotDrive::getWheelSpeeds,
-      new PIDController(DriveConstants.kPDriveVel, 0, 0),
-      new PIDController(DriveConstants.kPDriveVel, 0, 0),
-      m_robotDrive::tankDriveVolts,
-      m_robotDrive);
-
-    if (resetOdometry) {
-      return new SequentialCommandGroup(
-          new InstantCommand(() -> m_robotDrive.resetOdometry(trajectory.getInitialPose())), ramseteCommand);
-    } else {
-      return ramseteCommand;
-    }
-}
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -218,7 +191,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+    return m_AutoChooser.getSelected();
   }
 }
 
