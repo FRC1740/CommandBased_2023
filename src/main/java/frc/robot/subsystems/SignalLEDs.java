@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants.*;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class SignalLEDs extends SubsystemBase {
 
@@ -18,6 +20,7 @@ public class SignalLEDs extends SubsystemBase {
     RED,
     BLUE,
     KITT,
+    ALLIANCE, // Show alliance color (Red/Blue/Green if unavailable)
     OFF,
   };
 
@@ -82,6 +85,7 @@ public class SignalLEDs extends SubsystemBase {
 
   private int m_delay;  // Time between update refreshes
   private LedHwString[] m_hwStrings;
+  Alliance m_alliance;
 
   /** Create new SignalLED(s) */
   public SignalLEDs() {
@@ -104,31 +108,50 @@ public class SignalLEDs extends SubsystemBase {
       m_hwStrings[0] = new LedHwString(kLedPwmPortA, kLedLengthA);
       m_hwStrings[1] = new LedHwString(kLedPwmPortB, kLedLengthB);
     }
+
+    m_alliance = DriverStation.getAlliance();
   }
 
   private void ShowLedPattern(LedHwString hwString) {
     // Note Colors are ACTUALLY in RBG order!!!
+    int r=0, g=0, b=0; // Default to "OFF"
+    switch (hwString.m_ledMode) {
+      case CUBE: // Purplish (dark magenta)
+        r=cube.getRed();
+        b=cube.getBlue();
+        g=cube.getGreen(); // Note: RBG for our LEDs
+        break;
+      case CONE: // Yellow-orange
+        r=cone.getRed();
+        b=cone.getBlue();
+        g=cone.getGreen(); 
+        break;
+      case RED:
+        r=255; b=0; g=0;  // Note: RBG for our LEDs
+        break;
+      case BLUE:
+        r=0; b=255; g=0;  // Note: RBG for our LEDs
+        break;
+      case ALLIANCE: 
+        if (m_alliance == Alliance.Red) {
+          r=255; g=0; b=0;
+        } 
+        else if (m_alliance == Alliance.Blue) {
+          r=0; g=0; b=255;
+        }
+        else { // Default to green if Alliance N/A
+          r=0; g=255; b=0;
+        }
+        break;
+      case KITT: 
+        Kitt(hwString); // Cylon Pattern
+        return;
+      case OFF:
+      default:
+        break;
+    } 
     for (var i=0; i<hwString.m_length; i++) {
-      switch (hwString.m_ledMode) {
-        case CUBE: // Purplish (dark magenta)
-          hwString.m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen()); // Note: RBG for our LEDs
-          break;
-        case CONE: // Yellow-orange
-          hwString.m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());  // Note: RBG for our LEDs
-          break;
-        case RED:
-          hwString.m_ledBuffer.setRGB(i, 255, 0, 0);  // Note: RBG for our LEDs
-          break;
-        case BLUE:
-          hwString.m_ledBuffer.setRGB(i, 0, 255, 0);  // Note: RBG for our LEDs
-          break;
-        case KITT: 
-          Kitt(hwString); // Cylon Pattern
-          return;
-        case OFF:
-          hwString.m_ledBuffer.setRGB(i, 0, 0, 0);  // Note: RBG for our LEDs
-          break;
-      } 
+      hwString.m_ledBuffer.setRGB(i, r, b, g);  // Note: RBG for our LEDs
     }
     hwString.m_led.setData(hwString.m_ledBuffer);
   }
