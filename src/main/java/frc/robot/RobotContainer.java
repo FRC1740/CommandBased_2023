@@ -17,12 +17,14 @@ import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.DriveOnAndBalanceChargeStation;
+import frc.robot.commands.RotateArmToAngle;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Claw;
+//import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Arm;
+import frc.constants.ArmConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.TurnToAngleProfiled;
@@ -56,7 +58,7 @@ public class RobotContainer {
   private final LimeLight m_limelight = new LimeLight();
   private final PhotonVision m_photonVision = new PhotonVision();
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  protected final Claw m_Claw = new Claw();
+  //protected final Claw m_Claw = new Claw();
   protected final Arm m_Arm = new Arm();
 
   // The driver's controller
@@ -160,20 +162,36 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
 
 
-        new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_driverController, Button.kX.value)
         .onTrue(new AprilTagAlign(m_robotDrive, m_photonVision));
         
     /* ***************** CO-Driver Contols ************ */
 
     //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
+    // new JoystickButton(m_codriverController, Button.kX.value)
+    //     .onTrue(new AutoBalancePID(m_robotDrive, m_codriverController));
+
+    // // When codriver button is pressed, toggle the light
+    // new JoystickButton(m_codriverController, Button.kY.value)
+    // .onTrue(new InstantCommand(()-> m_limelight.toggleLED()));
+
+    new JoystickButton(m_codriverController, Button.kA.value)
+      .onTrue(new RotateArmToAngle(ArmConstants.kHighNodeAngle, m_Arm)
+      .withTimeout(1.5));
+
+    new JoystickButton(m_codriverController, Button.kB.value)
+      .onTrue(new RotateArmToAngle(ArmConstants.kStowedAngle, m_Arm)
+      .withTimeout(1.5));
+
     new JoystickButton(m_codriverController, Button.kX.value)
-        .onTrue(new AutoBalancePID(m_robotDrive, m_codriverController));
+      .onTrue(new RotateArmToAngle(ArmConstants.kMidNodeAngle, m_Arm)
+      .withTimeout(1.5));
 
-    // When codriver button is pressed, toggle the light
     new JoystickButton(m_codriverController, Button.kY.value)
-    .onTrue(new InstantCommand(()-> m_limelight.toggleLED()));
-
-    // Signal for a CUBE when held
+      .onTrue(new RotateArmToAngle(ArmConstants.kLowNodeAngle, m_Arm)
+      .withTimeout(1.5));
+      
+      // Signal for a CUBE when held
     // new JoystickButton(m_codriverController, Button.kA.value)
     //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
     //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));

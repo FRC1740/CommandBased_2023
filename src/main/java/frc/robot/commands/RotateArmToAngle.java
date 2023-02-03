@@ -16,7 +16,7 @@ public class RotateArmToAngle extends PIDCommand {
   public RotateArmToAngle(double angle, Arm arm) {
     super(
         // The controller that the command will use
-        new PIDController(0, 0, 0),
+        new PIDController(.01, 0, 0),
         // This should return the measurement
         () -> arm.getRotationAngle(),
         // This should return the setpoint (can also be a constant)
