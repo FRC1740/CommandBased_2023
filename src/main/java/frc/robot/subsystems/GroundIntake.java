@@ -56,7 +56,7 @@ public class GroundIntake extends SubsystemBase {
   }
 
   public double getIntakeVelocity() {
-    return m_intakeEncoder.getVelocity() / GroundIntakeConstants.kIntakeGearRatio;
+    return m_intakeEncoder.getVelocity(); // GroundIntakeConstants.kIntakeGearRatio;
   }
 
   public void setIntakeSpeed(double speed) {
