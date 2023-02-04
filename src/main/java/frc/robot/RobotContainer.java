@@ -214,12 +214,28 @@ public class RobotContainer {
 //         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE,SignalLEDs.LedPreference.MAIN,false)))
 //         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
 //       m_driverController.x()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)));
 //       m_driverController.y()
 //         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,true)));
 //       m_driverController.back().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.BLUE,SignalLEDs.LedPreference.MAIN,true)));
 //       m_driverController.start().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.KITT,SignalLEDs.LedPreference.MAIN,true)));
+
+//       m_driverController.leftBumper()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.ALLIANCE,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.leftTrigger()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.GREEN,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.leftStick()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.rightBumper()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.rightTrigger()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COUNTDOWN,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.rightStick()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
 //     }
   
 //   public Command getAutonomousCommand() {
