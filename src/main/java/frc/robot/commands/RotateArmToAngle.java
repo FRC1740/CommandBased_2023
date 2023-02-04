@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.subsystems.Arm;
+import frc.constants.ArmTunable;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -16,7 +17,10 @@ public class RotateArmToAngle extends PIDCommand {
   public RotateArmToAngle(double angle, Arm arm) {
     super(
         // The controller that the command will use
-        new PIDController(.01, 0, 0),
+        new PIDController(
+          ArmTunable.getRotateP(),
+          ArmTunable.getRotateI(),
+          ArmTunable.getRotateD()),
         // This should return the measurement
         () -> arm.getRotationAngle(),
         // This should return the setpoint (can also be a constant)
@@ -34,4 +38,14 @@ public class RotateArmToAngle extends PIDCommand {
   public boolean isFinished() {
     return false;
   }
+
+  @Override
+  public void execute() {
+    PIDController controller = getController();
+    controller.setP(ArmTunable.getRotateP());
+    controller.setI(ArmTunable.getRotateI());
+    controller.setD(ArmTunable.getRotateD());
+    super.execute();
+  }
+    
 }
