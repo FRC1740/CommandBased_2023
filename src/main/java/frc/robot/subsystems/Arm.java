@@ -23,6 +23,7 @@ public class Arm extends SubsystemBase {
   private final RelativeEncoder m_rotationEncoder;
   private final RelativeEncoder m_rotationFollowerEncoder;
   private final RelativeEncoder m_extensionEncoder;
+  protected double m_setpoint;
 
   // Used to grab an instance of the global network tables
   // NetworkTableInstance inst;
@@ -47,6 +48,8 @@ public class Arm extends SubsystemBase {
 
   public Arm() {
     /** Creates a new Arm. */
+    // The target angle for PID rotation control
+    m_setpoint = ArmConstants.kStowedAngle;
     // Follower motor direction is inverted
     m_rotationFollower.follow(m_rotationLeader, true);
     m_rotationEncoder = m_rotationLeader.getEncoder();
@@ -92,6 +95,10 @@ public class Arm extends SubsystemBase {
               
   }
 
+  public void setSetpoint(double angle) {
+    m_setpoint = angle;
+  }
+  
   public void Extend(double speed) {
     m_extensionMotor.set(speed);
   }
