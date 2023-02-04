@@ -90,7 +90,7 @@ public class SignalLEDs extends SubsystemBase {
   private int m_secondsTick;
   private LedHwString[] m_hwStrings;
   private Alliance m_alliance;
-  private double m_matchTime;
+  private int m_matchTime;
 
   /** Create new SignalLED(s) */
   public SignalLEDs() {
@@ -210,12 +210,11 @@ public void Colonels(LedHwString hwString) {
   }
 
 public void Countdown(LedHwString hwString) {
-    System.out.println(m_matchTime);
-    if ((m_matchTime < 0.0) || (m_matchTime > 15.0)) return;
-    int last = (int)(m_matchTime * (double) hwString.m_length / 15.0);
+    if ((m_matchTime < 0) || (m_matchTime > 15)) return;
+    int last = m_matchTime * hwString.m_length / 15;
     if (last < 0) last = 0;
     if (last > hwString.m_length - 1) last = hwString.m_length - 1;
-    System.out.println("last " + last);
+    // System.out.println("last " + last);
     for (int i = 0; i < hwString.m_length; i++) {
       if (i >= last) {
         hwString.m_ledBuffer.setRGB(i, 0, 0, 0);
@@ -237,7 +236,7 @@ public void Countdown(LedHwString hwString) {
       m_secondsTick = 50;  // Assuming standard 20ms rate
       // Recommended to repeat getting alliance value to avoid missing a change
       m_alliance = DriverStation.getAlliance();
-      m_matchTime = DriverStation.getMatchTime();
+      m_matchTime = (int)(DriverStation.getMatchTime() + 0.5);
 
     }
   }
