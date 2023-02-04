@@ -4,12 +4,18 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import frc.constants.DriveConstants;
 import frc.constants.ShuffleboardConstants;
@@ -17,7 +23,12 @@ import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
@@ -93,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_gyro.calibrate();
       resetEncoders();
 
-      m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+      m_odometry = new DifferentialDriveOdometry(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 
       inst = NetworkTableInstance.getDefault();
       m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
@@ -184,7 +195,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_odometry.update(m_gyro.getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+    m_odometry.update(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 
     m_nte_LeftEncoder.setDouble(getAverageLeftEncoders());
     m_nte_RightEncoder.setDouble(getAverageRightEncoders());
@@ -197,12 +208,22 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose){
+    resetGyro();
     resetEncoders();
-    m_odometry.resetPosition(m_gyro.getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
+    m_odometry.resetPosition(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
+
   public double getAngle() {
     //System.out.println("gyro angle" + m_gyro.getAngle());
     return m_gyro.getAngle();
+  }
+  
+  public Rotation2d getRotation2d(){
+    return Rotation2d.fromDegrees(m_gyro.getAngle());
+  }
+
+  public DifferentialDriveKinematics getDriveKinematics(){
+    return DriveConstants.kDriveKinematics;
   }
 
   public void resetGyro() {
@@ -273,4 +294,26 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightEncoder.setPosition(0);
   }
 
+  public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) {
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        //Reset odometry for the first path ran during auto
+        if(isFirstPath){
+          this.resetOdometry(trajectory.getInitialPose());
+        }
+      }),
+      new PPRamseteCommand(
+        trajectory, 
+        this::getPose,
+        new RamseteController(),
+        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+        DriveConstants.kDriveKinematics,
+        this::getWheelSpeeds,
+        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        this::tankDriveVolts,
+        false,
+        this)
+    );
+  }
 }
