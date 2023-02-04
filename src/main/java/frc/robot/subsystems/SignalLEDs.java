@@ -18,9 +18,11 @@ public class SignalLEDs extends SubsystemBase {
     CUBE,
     CONE,
     RED,
+    GREEN,
+    ALLIANCE, // Show alliance color (Red/Blue/Green if unavailable)
     BLUE,
     KITT,
-    ALLIANCE, // Show alliance color (Red/Blue/Green if unavailable)
+    COLONELS,
     OFF,
   };
 
@@ -79,11 +81,12 @@ public class SignalLEDs extends SubsystemBase {
       m_defaultMode = LedMode.OFF;
       m_led.start();
       m_led.setData(m_ledBuffer);
-      System.out.println("Members "+m_port+" "+m_length+" "+m_delay+" "+m_ledMode+" "+m_direction+" "+m_currentPixel);
+      // System.out.println("Members "+m_port+" "+m_length+" "+m_delay+" "+m_ledMode+" "+m_direction+" "+m_currentPixel);
     }
   }
 
   private int m_delay;  // Time between update refreshes
+  private int m_secondsTick;
   private LedHwString[] m_hwStrings;
   Alliance m_alliance;
 
@@ -94,6 +97,7 @@ public class SignalLEDs extends SubsystemBase {
     cone = new ConSignalLed.gamePiece(100, 50, 0);
 
     m_delay = kRefreshEvery;
+    m_secondsTick = 0;
 
     // Create the strings, based on hardware
     if (m_hwConfig == LedHwConfig.OFF) return;
@@ -108,8 +112,6 @@ public class SignalLEDs extends SubsystemBase {
       m_hwStrings[0] = new LedHwString(kLedPwmPortA, kLedLengthA);
       m_hwStrings[1] = new LedHwString(kLedPwmPortB, kLedLengthB);
     }
-
-    m_alliance = DriverStation.getAlliance();
   }
 
   private void ShowLedPattern(LedHwString hwString) {
@@ -129,7 +131,10 @@ public class SignalLEDs extends SubsystemBase {
       case RED:
         r=255; b=0; g=0;  // Note: RBG for our LEDs
         break;
-      case BLUE:
+      case GREEN:
+        r=0; b=0; g=255;  // Note: RBG for our LEDs
+        break;
+        case BLUE:
         r=0; b=255; g=0;  // Note: RBG for our LEDs
         break;
       case ALLIANCE: 
@@ -145,6 +150,9 @@ public class SignalLEDs extends SubsystemBase {
         break;
       case KITT: 
         Kitt(hwString); // Cylon Pattern
+        return;
+      case COLONELS: 
+        Colonels(hwString);
         return;
       case OFF:
       default:
@@ -180,12 +188,33 @@ public class SignalLEDs extends SubsystemBase {
     }
   }
 
+public void Colonels(LedHwString hwString) { 
+    for (int i = 0; i < hwString.m_length; i++) {
+      if (((i + hwString.m_currentPixel) % hwString.m_length) > hwString.m_length / 2) {
+        hwString.m_ledBuffer.setRGB(i, 0, 255, 0);
+      } else {
+        hwString.m_ledBuffer.setRGB(i, 100, 100, 100);
+      }
+    }
+    hwString.m_led.setData(hwString.m_ledBuffer);
+
+    hwString.m_currentPixel += 1;
+    if (hwString.m_currentPixel >= hwString.m_length - 1) {
+      hwString.m_currentPixel = 0;
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     if (--m_delay <= 0) {
       m_delay = kRefreshEvery;
       ShowLedPattern(m_hwStrings[0]);
+    }
+    if (--m_secondsTick <= 0) {
+      m_secondsTick = 50;  // Assuming standard 20ms rate
+      // Recommended to repeat this to avoid missing a change
+      m_alliance = DriverStation.getAlliance();
     }
   }
 
@@ -236,7 +265,7 @@ public class SignalLEDs extends SubsystemBase {
       break;
 
       case OFF:
-      // No HW strings
+      // No HW strings- NOOP
       break;
     }
   }
