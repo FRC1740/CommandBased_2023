@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.*;
 import frc.constants.ShuffleboardConstants;
+import com.pathplanner.lib.server.PathPlannerServer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -60,6 +61,8 @@ public class Robot extends TimedRobot {
 
     m_nte_BuildComputer = m_sbt_Robot.addPersistent("Build Computer", RobotProperties.getComputer())
           .withSize(3, 1).withPosition(0, 1).getEntry();
+
+    PathPlannerServer.startServer(5811);
   }
 
   /**
