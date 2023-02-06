@@ -95,6 +95,10 @@ public class RobotContainer {
     new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
     true));
 
+    m_AutoChooser.addOption("more curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("more curvy path", 
+    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
+    true));
+
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
 
     m_Arm.setDefaultCommand( new RunCommand(() -> m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));

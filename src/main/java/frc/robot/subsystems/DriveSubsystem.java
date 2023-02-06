@@ -6,19 +6,25 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
+import java.io.IOException;
+import java.nio.file.Path;
 
 import com.kauailabs.navx.frc.AHRS;
+
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import frc.constants.DriveConstants;
 import frc.constants.ShuffleboardConstants;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -31,6 +37,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 
@@ -50,6 +60,9 @@ public class DriveSubsystem extends SubsystemBase {
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
 
     private final DifferentialDriveOdometry m_odometry;
+
+    String circlePathTrajectoryJSON = "output/circlePath.wpilib.json";
+    Trajectory circlePath = new Trajectory();
 
     // Used to grab an instance of the global network tables
     NetworkTableInstance inst;
@@ -105,6 +118,14 @@ public class DriveSubsystem extends SubsystemBase {
       resetEncoders();
 
       m_odometry = new DifferentialDriveOdometry(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+      
+      try {
+        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(circlePathTrajectoryJSON);
+        circlePath = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+     } catch (IOException ex) {
+        DriverStation.reportError("Unable to open trajectory: " + circlePathTrajectoryJSON, ex.getStackTrace());
+     }
+
 
       inst = NetworkTableInstance.getDefault();
       m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
@@ -315,5 +336,33 @@ public class DriveSubsystem extends SubsystemBase {
         false,
         this)
     );
+  }
+
+
+  public Command getAutonomousCommand() {
+    // Create a voltage constraint to ensure we don't accelerate too fast
+
+    RamseteCommand ramseteCommand =
+        new RamseteCommand(
+            circlePath,
+            this::getPose,
+            new RamseteController(),
+            new SimpleMotorFeedforward(
+                DriveConstants.ks,
+                DriveConstants.kv,
+                DriveConstants.ka),
+             DriveConstants.kDriveKinematics,
+            this::getWheelSpeeds,
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            new PIDController(DriveConstants.kPDriveVel, 0, 0),
+            // RamseteCommand passes volts to the callback
+            this::tankDriveVolts,
+            this);
+
+    // Reset odometry to the starting pose of the trajectory.
+    this.resetOdometry(circlePath.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
   }
 }

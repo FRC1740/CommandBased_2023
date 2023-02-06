@@ -28,12 +28,12 @@ public class DriveConstants {
     public static final double kEncoderDistancePerPulse = DRIVE_POSITION_CONVERSION_FACTOR / (double)kEncoderCPR; 
 
     //sysid constants
-    public static final double ks = 0.23145; //Value for testbed
-    public static final double kv = 6.1654; //Value for testbed
-    public static final double ka = 1.9428; //Value for testbed
-    public static final double kPDriveVel = 1.026; //Value for testbed
+    public static final double ks = 0.1256; //Value for testbed
+    public static final double kv = 1.3475; //Value for testbed
+    public static final double ka = 0.18822; //Value for testbed
+    public static final double kPDriveVel = 0.076663; //Value for testbed
 
-    public static final double kTrackWidthMeters = Units.inchesToMeters(22); //22in. for testbot, 18 in. for actual robot
+    public static final double kTrackWidthMeters = 0.6032; //22in. for testbot, 18 in. for actual robot
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
 
     public static final double kMaxSpeedMetersPerSecond = 0.5;
