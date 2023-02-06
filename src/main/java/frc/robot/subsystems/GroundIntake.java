@@ -45,18 +45,18 @@ public class GroundIntake extends SubsystemBase {
           .withSize(2, 1).withPosition(0, 1).getEntry();
   }
 
-  public void deployIntake() {
+  public void deploy() {
     m_intakeSolenoid.set(kForward); // FIXME: May have to swap pneumatics orientation
     setIntakeSpeed(m_intakeSetSpeed);
   }
 
-  public void stowIntake() {
+  public void stow() {
     m_intakeSolenoid.set(kReverse); // FIXME: May have to swap pneumatics orientation
     stopIntake();
   }
 
   public double getIntakeVelocity() {
-    return m_intakeEncoder.getVelocity() / GroundIntakeConstants.kIntakeGearRatio;
+    return m_intakeEncoder.getVelocity(); // GroundIntakeConstants.kIntakeGearRatio;
   }
 
   public void setIntakeSpeed(double speed) {

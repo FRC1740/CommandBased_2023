@@ -24,8 +24,8 @@ import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.DriveSubsystem;
-//import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.Arm;
+//import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
+import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.constants.ArmConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -50,14 +50,15 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final LimeLight m_limelight = new LimeLight();
   private final PhotonVision m_photonVision = new PhotonVision();
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   //protected final Claw m_Claw = new Claw();
-  protected final Arm m_Arm = new Arm();
+  protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
   private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
-  private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
+  // FIXME: We should be migrating away form the XboxController class to the CommandXboxController class
+  // private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
   
   SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
@@ -79,9 +80,6 @@ public class RobotContainer {
       new RunCommand(() ->
           m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
                   m_driverController.getLeftX(), true), m_robotDrive));
-
-    m_Arm.setDefaultCommand( new RunCommand(() ->
-    m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
     
     m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path", 
     new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
@@ -100,9 +98,6 @@ public class RobotContainer {
     true));
 
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
-
-    m_Arm.setDefaultCommand( new RunCommand(() -> m_Arm.Rotate(m_codriverController.getRightY()*.1), m_Arm));
-
   }
 
   /**
@@ -150,21 +145,43 @@ public class RobotContainer {
     // new JoystickButton(m_codriverController, Button.kY.value)
     // .onTrue(new InstantCommand(()-> m_limelight.toggleLED()));
 
-    new JoystickButton(m_codriverController, Button.kA.value)
-      .onTrue(new RotateArmToAngle(ArmConstants.kHighNodeAngle, m_Arm)
-      .withTimeout(1.5));
+    // Enable the Arm PID Subsystem
+    // Maybe need to enable/disable this when running commands
+    // that will utilize the ground intake? Or just ensure
+    // That the Arm setPoint remains at starting config setpoint?
 
-    new JoystickButton(m_codriverController, Button.kB.value)
-      .onTrue(new RotateArmToAngle(ArmConstants.kStowedAngle, m_Arm)
-      .withTimeout(1.5));
+    m_arm.enable();
 
-    new JoystickButton(m_codriverController, Button.kX.value)
-      .onTrue(new RotateArmToAngle(ArmConstants.kMidNodeAngle, m_Arm)
-      .withTimeout(1.5));
+    // Basic PID button commands for Arm Rotation
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
+    // new JoystickButton(m_driverController, Button.kB.value)
+    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
+    // new JoystickButton(m_driverController, Button.kX.value)
+    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
+    // new JoystickButton(m_driverController, Button.kY.value)
+    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
 
-    new JoystickButton(m_codriverController, Button.kY.value)
-      .onTrue(new RotateArmToAngle(ArmConstants.kLowNodeAngle, m_Arm)
-      .withTimeout(1.5));
+    // Combination PID commands for Arm rotate & extend/retract
+    new JoystickButton(m_driverController, Button.kA.value)
+      .onTrue(new InstantCommand(() -> new SequentialCommandGroup(
+          new InstantCommand(() -> m_arm.telescope(ArmConstants.kStowedPosition)),
+          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)))));
+
+    new JoystickButton(m_driverController, Button.kB.value)
+      .onTrue(new InstantCommand(() -> new SequentialCommandGroup(
+          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
+          new InstantCommand(() -> m_arm.telescope(ArmConstants.kHighNodePosition)))));
+
+    new JoystickButton(m_driverController, Button.kX.value)
+      .onTrue(new InstantCommand(() -> new SequentialCommandGroup(
+          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
+          new InstantCommand(() -> m_arm.telescope(ArmConstants.kMidNodePosition)))));
+    
+    new JoystickButton(m_driverController, Button.kY.value)
+      .onTrue(new InstantCommand(() -> new SequentialCommandGroup(
+          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
+          new InstantCommand(() -> m_arm.telescope(ArmConstants.kLowNodePosition)))));
       
       // Signal for a CUBE when held
     // new JoystickButton(m_codriverController, Button.kA.value)
@@ -218,12 +235,28 @@ public class RobotContainer {
 //         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE,SignalLEDs.LedPreference.MAIN,false)))
 //         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
 //       m_driverController.x()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)));
 //       m_driverController.y()
 //         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,true)));
 //       m_driverController.back().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.BLUE,SignalLEDs.LedPreference.MAIN,true)));
 //       m_driverController.start().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.KITT,SignalLEDs.LedPreference.MAIN,true)));
+
+//       m_driverController.leftBumper()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.ALLIANCE,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.leftTrigger()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.GREEN,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.leftStick()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.rightBumper()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
+//       m_driverController.rightTrigger()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COUNTDOWN,SignalLEDs.LedPreference.MAIN,true)));
+//       m_driverController.rightStick()
+//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE,SignalLEDs.LedPreference.MAIN,false)))
+//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
 //     }
   
 //   public Command getAutonomousCommand() {

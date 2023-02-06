@@ -6,29 +6,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
-import frc.robot.subsystems.Arm;
-import frc.constants.ArmTunable;
+import frc.robot.subsystems.ArmPIDSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class RotateArmToAngle extends PIDCommand {
-  /** Creates a new RotateArmToAngle. */
-  public RotateArmToAngle(double angle, Arm arm) {
+public class ExtendOrRetractArmPID extends PIDCommand {
+  /** Creates a new ExtendOrRetractArmPID. */
+  public ExtendOrRetractArmPID(double distance, ArmPIDSubsystem m_arm) {
     super(
         // The controller that the command will use
-        new PIDController(
-          ArmTunable.getRotateP(),
-          ArmTunable.getRotateI(),
-          ArmTunable.getRotateD()),
+        new PIDController(.01, 0, 0),
         // This should return the measurement
-        () -> arm.getRotationAngle(),
+        () -> m_arm.getArmExtensionInches(),
         // This should return the setpoint (can also be a constant)
-        () -> angle,
+        () -> distance,
         // This uses the output
-        (output) -> arm.Rotate(output)
+        output -> {
           // Use the output here
-        );
+          m_arm.telescope(output);
+        });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
   }
@@ -38,14 +35,4 @@ public class RotateArmToAngle extends PIDCommand {
   public boolean isFinished() {
     return false;
   }
-
-  @Override
-  public void execute() {
-    PIDController controller = getController();
-    controller.setP(ArmTunable.getRotateP());
-    controller.setI(ArmTunable.getRotateI());
-    controller.setD(ArmTunable.getRotateD());
-    super.execute();
-  }
-    
 }
