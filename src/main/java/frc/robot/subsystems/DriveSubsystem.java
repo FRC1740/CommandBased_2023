@@ -339,7 +339,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
 
-  public Command getAutonomousCommand() {
+  public Command getPathWeaverCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
 
     RamseteCommand ramseteCommand =
