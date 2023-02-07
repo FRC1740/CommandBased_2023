@@ -12,6 +12,7 @@ import frc.constants.ArmTunable;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
+// THIS CLASS IS DEPRECATED: USE ArmPIDSubsystem
 public class RotateArmToAngle extends PIDCommand {
   /** Creates a new RotateArmToAngle. */
   public RotateArmToAngle(double angle, Arm arm) {

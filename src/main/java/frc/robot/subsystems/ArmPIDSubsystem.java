@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import frc.constants.ArmConstants;
+import frc.constants.ArmTunable;
 import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -42,7 +43,7 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   public ArmPIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(.01, 0, 0));
+        new PIDController(ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD()));
 
         // The target angle for PID rotation control
     // Follower motor direction is inverted
@@ -93,6 +94,10 @@ public class ArmPIDSubsystem extends PIDSubsystem {
 
   @Override
   public void periodic() {
+    PIDController controller = getController();
+    controller.setP(ArmTunable.getRotateP());
+    controller.setI(ArmTunable.getRotateI());
+    controller.setD(ArmTunable.getRotateD());
     // WPILib Docs say to call the parent periodic method or PID will not work
     super.periodic();
     m_nte_ArmAngle.setDouble(getArmRotationDegrees());
