@@ -70,10 +70,6 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   @Override
   public boolean isFinished() {
     //28 is max inches traveled to avoid flying off the ramp
-    if(getController().atGoal()/*||(initEncoderPos + 38) < Math.abs(m_drive.getAverageEncoderInches())*/){
-     return true;
-    }else{
-     return false;
-    }
+    return (getController().atGoal());/*||(initEncoderPos + 38) < Math.abs(m_drive.getAverageEncoderInches())*/
   }
 }
