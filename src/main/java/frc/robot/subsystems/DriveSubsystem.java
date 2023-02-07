@@ -43,6 +43,7 @@ import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
+// import edu.wpi.first.math.filter.LinearFilter;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -90,6 +91,8 @@ public class DriveSubsystem extends SubsystemBase {
     // PID Tuning
     GenericEntry m_nte_DriveSpeedFilter;
     GenericEntry m_nte_DriveRotationFilter;
+    // LinearFilter speedFilter;
+    // LinearFilter rotationFilter;
 
     // Create widget for non-linear input
     GenericEntry m_nte_InputExponent;
@@ -179,6 +182,8 @@ public class DriveSubsystem extends SubsystemBase {
   
       m_nte_IMU_PitchAngle = m_sbt_DriveTrain.addPersistent("IMU Pitch", 0.0)
                 .withSize(2,1).withPosition(4,3).getEntry();
+      // speedFilter = LinearFilter.movingAverage(11);
+      // rotationFilter = LinearFilter.movingAverage(5);
   }
 
   /**
@@ -189,6 +194,8 @@ public class DriveSubsystem extends SubsystemBase {
    */
   
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
+    // double f_fwd = speedFilter.calculate(fwd);
+    // double f_rot = rotationFilter.calculate(rot);
     m_drive.arcadeDrive(fwd, rot, squaredInput);
   }
 
