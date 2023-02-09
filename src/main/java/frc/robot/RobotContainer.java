@@ -116,7 +116,7 @@ public class RobotContainer {
 
     // Auto-drive distance
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(new DriveToDistance(-240, m_robotDrive));
+        .onTrue(new DriveToDistance(5, m_robotDrive));
 
     // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
@@ -133,7 +133,7 @@ public class RobotContainer {
 
 
     new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(new AprilTagAlign(m_robotDrive, m_photonVision));
+        .onTrue(m_robotDrive.getPathWeaverCommand());
         
     /* ***************** CO-Driver Contols ************ */
 

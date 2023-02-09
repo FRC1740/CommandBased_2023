@@ -15,6 +15,9 @@ import com.revrobotics.CANSparkMaxLowLevel;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -32,6 +35,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
@@ -41,6 +45,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
 // import edu.wpi.first.math.filter.LinearFilter;
@@ -61,10 +67,15 @@ public class DriveSubsystem extends SubsystemBase {
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotorLeader, m_rightMotorLeader);
 
     private final DifferentialDriveOdometry m_odometry;
+    private final DifferentialDrivePoseEstimator m_PoseEstimator;
 
     String circlePathTrajectoryJSON = "output/circlePath.wpilib.json";
     Trajectory circlePath = new Trajectory();
+    String straightishTrajectoryJSON = "output/straightish.wpilib.json";
+    Trajectory straightish = new Trajectory();
+    Field2d m_Field = new Field2d();
 
+    PhotonVision m_PhotonVision = new PhotonVision();
     // Used to grab an instance of the global network tables
     NetworkTableInstance inst;
     NetworkTable m_nt;
@@ -122,14 +133,13 @@ public class DriveSubsystem extends SubsystemBase {
 
       m_odometry = new DifferentialDriveOdometry(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
       
-      try {
-        Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(circlePathTrajectoryJSON);
-        circlePath = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-     } catch (IOException ex) {
-        DriverStation.reportError("Unable to open trajectory: " + circlePathTrajectoryJSON, ex.getStackTrace());
-     }
-
-
+      //Pose estimator combines vision pose with odometry
+      m_PoseEstimator = new DifferentialDrivePoseEstimator(
+        DriveConstants.kDriveKinematics, 
+        getRotation2d(), 
+        0.0, 
+        0.0, 
+        new Pose2d());
       inst = NetworkTableInstance.getDefault();
       m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
       // Create and get reference to SB tab
@@ -182,6 +192,9 @@ public class DriveSubsystem extends SubsystemBase {
   
       m_nte_IMU_PitchAngle = m_sbt_DriveTrain.addPersistent("IMU Pitch", 0.0)
                 .withSize(2,1).withPosition(4,3).getEntry();
+
+      m_sbt_DriveTrain.add(m_Field);
+      
       // speedFilter = LinearFilter.movingAverage(11);
       // rotationFilter = LinearFilter.movingAverage(5);
   }
@@ -225,6 +238,8 @@ public class DriveSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     m_odometry.update(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 
+    updatePoseEstimater();
+
     m_nte_LeftEncoder.setDouble(getAverageLeftEncoders());
     m_nte_RightEncoder.setDouble(getAverageRightEncoders());
     m_nte_IMU_ZAngle.setDouble(getAngle());
@@ -241,13 +256,25 @@ public class DriveSubsystem extends SubsystemBase {
     m_odometry.resetPosition(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
 
+  public void updatePoseEstimater(){
+    m_PoseEstimator.update(getRotation2d(), getLeftDistanceInches(), getRightDistanceInches());
+    
+    Optional<EstimatedRobotPose> result = m_PhotonVision.getEstimatedVisionPose();
+
+    if (result.isPresent()){
+      EstimatedRobotPose visionPose = result.get();
+      m_PoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
+    }
+    m_Field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
+  }
+
   public double getAngle() {
     //System.out.println("gyro angle" + m_gyro.getAngle());
     return m_gyro.getAngle();
   }
   
   public Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(m_gyro.getAngle());
+    return Rotation2d.fromDegrees(-m_gyro.getAngle());
   }
 
   public DifferentialDriveKinematics getDriveKinematics(){
@@ -345,13 +372,25 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
+  public Trajectory getTrajectory(String TrajectoryJSON){
+    
+    try {
+      Path TrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(TrajectoryJSON);
+      return TrajectoryUtil.fromPathweaverJson(TrajectoryPath);
+
+   }catch (IOException ex) {
+      DriverStation.reportError("Unable to open trajectory: " + circlePathTrajectoryJSON, ex.getStackTrace());
+      return null;
+   }
+
+  }
 
   public Command getPathWeaverCommand() {
     // Create a voltage constraint to ensure we don't accelerate too fast
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            circlePath,
+            getTrajectory(straightishTrajectoryJSON),
             this::getPose,
             new RamseteController(),
             new SimpleMotorFeedforward(
@@ -367,7 +406,7 @@ public class DriveSubsystem extends SubsystemBase {
             this);
 
     // Reset odometry to the starting pose of the trajectory.
-    this.resetOdometry(circlePath.getInitialPose());
+    this.resetOdometry(getTrajectory(straightishTrajectoryJSON).getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
