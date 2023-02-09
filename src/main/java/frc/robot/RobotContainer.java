@@ -162,26 +162,26 @@ public class RobotContainer {
     // new JoystickButton(m_driverController, Button.kY.value)
     //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
 
-    // Combination PID commands for Arm rotate & extend/retract
-    new JoystickButton(m_driverController, Button.kA.value)
-      .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.telescope(ArmConstants.kStowedPosition)),
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))));
+    // // Combination PID commands for Arm rotate & extend/retract
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //   .onTrue(new SequentialCommandGroup(
+    //       new InstantCommand(() -> m_arm.telescope(ArmConstants.kStowedPosition)),
+    //       new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))));
 
-    new JoystickButton(m_driverController, Button.kB.value)
-      .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
-          new InstantCommand(() -> m_arm.telescope(ArmConstants.kHighNodePosition))));
+    // new JoystickButton(m_driverController, Button.kB.value)
+    //   .onTrue(new SequentialCommandGroup(
+    //       new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
+    //       new InstantCommand(() -> m_arm.telescope(ArmConstants.kHighNodePosition))));
 
-    new JoystickButton(m_driverController, Button.kX.value)
-      .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
-          new InstantCommand(() -> m_arm.telescope(ArmConstants.kMidNodePosition))));
+    // new JoystickButton(m_driverController, Button.kX.value)
+    //   .onTrue(new SequentialCommandGroup(
+    //       new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
+    //       new InstantCommand(() -> m_arm.telescope(ArmConstants.kMidNodePosition))));
     
-    new JoystickButton(m_driverController, Button.kY.value)
-      .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
-          new InstantCommand(() -> m_arm.telescope(ArmConstants.kLowNodePosition))));
+    // new JoystickButton(m_driverController, Button.kY.value)
+    //   .onTrue(new SequentialCommandGroup(
+    //       new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
+    //       new InstantCommand(() -> m_arm.telescope(ArmConstants.kLowNodePosition))));
       
       // Signal for a CUBE when held
     // new JoystickButton(m_codriverController, Button.kA.value)
