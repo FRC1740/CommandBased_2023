@@ -258,7 +258,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void updatePoseEstimater(){
+
     m_PoseEstimator.update(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+
     
     Optional<EstimatedRobotPose> result = m_PhotonVision.getEstimatedVisionPose();
 
