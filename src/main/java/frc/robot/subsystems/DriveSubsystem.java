@@ -43,13 +43,14 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.*;
-// import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.filter.LinearFilter;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -73,6 +74,9 @@ public class DriveSubsystem extends SubsystemBase {
     Trajectory circlePath = new Trajectory();
     String straightishTrajectoryJSON = "output/straightish.wpilib.json";
     Trajectory straightish = new Trajectory();
+    String StraightTrajectoryJSON = "output/Straight.wpilib.json";
+    Trajectory Straight = new Trajectory();
+
     Field2d m_Field = new Field2d();
 
     PhotonVision m_PhotonVision = new PhotonVision();
@@ -102,8 +106,8 @@ public class DriveSubsystem extends SubsystemBase {
     // PID Tuning
     GenericEntry m_nte_DriveSpeedFilter;
     GenericEntry m_nte_DriveRotationFilter;
-    // LinearFilter speedFilter;
-    // LinearFilter rotationFilter;
+    LinearFilter speedFilter;
+    LinearFilter rotationFilter;
 
     // Create widget for non-linear input
     GenericEntry m_nte_InputExponent;
@@ -195,8 +199,8 @@ public class DriveSubsystem extends SubsystemBase {
 
       m_sbt_DriveTrain.add(m_Field);
       
-      // speedFilter = LinearFilter.movingAverage(11);
-      // rotationFilter = LinearFilter.movingAverage(5);
+      speedFilter = LinearFilter.movingAverage(11);
+      rotationFilter = LinearFilter.movingAverage(5);
   }
 
   /**
@@ -207,9 +211,9 @@ public class DriveSubsystem extends SubsystemBase {
    */
   
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
-    // double f_fwd = speedFilter.calculate(fwd);
-    // double f_rot = rotationFilter.calculate(rot);
-    m_drive.arcadeDrive(fwd, rot, squaredInput);
+    double f_fwd = speedFilter.calculate(fwd);
+    double f_rot = rotationFilter.calculate(rot);
+    m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
 
   /**
@@ -248,6 +252,15 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Pose2d getPose(){
     return m_odometry.getPoseMeters();
+  }
+
+  public Pose2d getEstimatedVisionPose(){
+    return m_PoseEstimator.getEstimatedPosition();
+  }
+
+  public void resetPoseEstimation(Pose2d pose){
+    resetEncoders();
+    m_PoseEstimator.resetPosition(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
 
   public void resetOdometry(Pose2d pose){
@@ -344,10 +357,10 @@ public class DriveSubsystem extends SubsystemBase {
     return m_rightEncoder.getPosition() + m_leftEncoder.getPosition() / 2;
   }
 
-  public void ResetEncoders() {
-    m_leftEncoder.setPosition(0);
-    m_rightEncoder.setPosition(0);
-  }
+  // public void ResetEncoders() {
+  //   m_leftEncoder.setPosition(0);
+  //   m_rightEncoder.setPosition(0);
+  // }
 
   public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) {
     return new SequentialCommandGroup(
@@ -391,7 +404,7 @@ public class DriveSubsystem extends SubsystemBase {
     RamseteCommand ramseteCommand =
         new RamseteCommand(
             getTrajectory(straightishTrajectoryJSON),
-            this::getPose,
+            this::getEstimatedVisionPose,
             new RamseteController(),
             new SimpleMotorFeedforward(
                 DriveConstants.ks,
@@ -406,9 +419,32 @@ public class DriveSubsystem extends SubsystemBase {
             this);
 
     // Reset odometry to the starting pose of the trajectory.
-    this.resetOdometry(getTrajectory(straightishTrajectoryJSON).getInitialPose());
+    resetEncoders();
+    resetGyro();
+    resetPoseEstimation(getTrajectory(straightishTrajectoryJSON).getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
   }
+
+// public Command getManualTrajectoryCommand(){
+//   DifferentialDriveVoltageConstraint autoVoltageConstraint = 
+//     new DifferentialDriveVoltageConstraint(
+//       new SimpleMotorFeedforward(
+//         DriveConstants.ks, 
+//         DriveConstants.kv, 
+//         DriveConstants.ka),
+//       DriveConstants.kDriveKinematics,
+//       10);
+
+//   TrajectoryConfig config =
+//     new TrajectoryConfig(
+//       DriveConstants.kMaxSpeedMetersPerSecond,
+//       DriveConstants.kMaxAccelerationMetersPerSecondSquared)
+//       .setKinematics(DriveConstants.kDriveKinematics)
+//       .addConstraint(autoVoltageConstraint);
+
+//   Trajectory testTrajectory = 
+//     TrajectoryGenerator.generateTrajectory(null, null, null, config)
+//   }
 }
