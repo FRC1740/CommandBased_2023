@@ -236,6 +236,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
     m_odometry.update(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
 
     updatePoseEstimater();
@@ -257,7 +258,9 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void updatePoseEstimater(){
-    m_PoseEstimator.update(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters());
+
+    m_PoseEstimator.update(getRotation2d(), m_leftEncoder.getPosition(), m_rightEncoder.getPosition());
+
     
     Optional<EstimatedRobotPose> result = m_PhotonVision.getEstimatedVisionPose();
 
