@@ -26,6 +26,7 @@ import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.DriveSubsystem;
 //import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
 import frc.robot.subsystems.ArmPIDSubsystem;
+import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ArmExtensionPID;
 import frc.constants.ArmConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -55,6 +56,7 @@ public class RobotContainer {
   //protected final Claw m_Claw = new Claw();
   protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
   protected final ArmExtensionPID m_telescope = new ArmExtensionPID();
+  protected final Claw m_Claw = new Claw();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
@@ -166,25 +168,28 @@ public class RobotContainer {
     //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
 
     // Combination PID commands for Arm rotate & extend/retract
-    new JoystickButton(m_driverController, Button.kA.value)
+    new JoystickButton(m_codriverController, Button.kA.value)
       .onTrue(new SequentialCommandGroup(
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
           new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))));
 
-    new JoystickButton(m_driverController, Button.kB.value)
+    new JoystickButton(m_codriverController, Button.kB.value)
       .onTrue(new SequentialCommandGroup(
           new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition))));
 
-    new JoystickButton(m_driverController, Button.kX.value)
+    new JoystickButton(m_codriverController, Button.kX.value)
       .onTrue(new SequentialCommandGroup(
           new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
     
-    new JoystickButton(m_driverController, Button.kY.value)
+    new JoystickButton(m_codriverController, Button.kY.value)
       .onTrue(new SequentialCommandGroup(
           new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition))));
+
+    new JoystickButton(m_codriverController, Button.kRightBumper.value)
+      .onTrue(new InstantCommand(() -> m_Claw.toggle()));
       
       // Signal for a CUBE when held
     // new JoystickButton(m_codriverController, Button.kA.value)

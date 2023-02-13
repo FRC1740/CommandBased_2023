@@ -68,7 +68,7 @@ public class Claw extends SubsystemBase {
 
   /** Creates a new Manipulator. */
   public Claw() {
-    m_grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
+    m_grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
     // m_intakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
     m_intakeMotor = new WPI_TalonSRX(ClawConstants.IntakeMotorCANID);
     m_intakeMotor.configPeakCurrentLimit(ClawConstants.IntakePeakCurrentLimit, 10); // Amps, timeout (msec)
@@ -198,7 +198,7 @@ public class Claw extends SubsystemBase {
   //       case RED: // Error mode
   //         m_ledBuffer.setRGB(i, 255, 0, 0);  // Note: RBG for our LEDs
   //         break;
-  //       case KITT: 
+  //       case KITT:
   //         Kitt(); // Cylon Pattern
   //         break;
   //       case OFF:
