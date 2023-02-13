@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class PhotonVision extends SubsystemBase {
   /** Creates a new PhotonVision. */
-  PhotonCamera m_camera = new PhotonCamera("Webcam1");
+  PhotonCamera m_camera = new PhotonCamera("FrontCam");
   Transform3d robotToCam = new Transform3d(
     new Translation3d(Units.inchesToMeters(16), 0, 0), 
     new Rotation3d(0,0,0));
