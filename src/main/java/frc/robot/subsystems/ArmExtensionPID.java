@@ -34,7 +34,7 @@ public class ArmExtensionPID extends PIDSubsystem {
   public ArmExtensionPID() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(.01, 0, 0));
+        new PIDController(ArmConstants.kExtP, ArmConstants.kExtI, ArmConstants.kExtD));
 
     m_extensionEncoder = m_extensionMotor.getEncoder();
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
@@ -63,7 +63,7 @@ public class ArmExtensionPID extends PIDSubsystem {
   @Override
   public void periodic() {
     super.periodic();
-    m_nte_ArmExtension.setDouble(getArmExtensionInches());
+    m_nte_ArmExtension.setDouble(getMeasurement());
   }
 
   @Override
@@ -79,7 +79,7 @@ public class ArmExtensionPID extends PIDSubsystem {
     return m_extensionEncoder.getPosition();
   }
   public double getArmExtensionInches() {
-    return m_extensionEncoder.getPosition();
+    return getMeasurement();
   }
 
   public void telescope(double speed) {
