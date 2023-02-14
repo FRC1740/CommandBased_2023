@@ -13,12 +13,14 @@ import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.networktables.*;
+import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class ArmPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax m_rotationLeader = new CANSparkMax(ArmConstants.kRotationLeaderMotorPort, CANSparkMax.MotorType.kBrushless);
   private final CANSparkMax m_rotationFollower = new CANSparkMax(ArmConstants.kRotationFollowerMotorPort, CANSparkMax.MotorType.kBrushless);
   private final RelativeEncoder m_rotationEncoder;
   private final RelativeEncoder m_rotationFollowerEncoder;
+  private final ArmFeedforward m_ArmFeedforward;
   //protected double m_setpoint;
 
   // Create and get reference to SB tab
@@ -38,6 +40,7 @@ public class ArmPIDSubsystem extends PIDSubsystem {
         // The PIDController used by the subsystem
         new PIDController(ArmConstants.kRotP, ArmConstants.kRotI, ArmConstants.kRotD));
 
+    m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
         // The target angle for PID rotation control
     // Follower motor direction is inverted
     m_rotationFollower.follow(m_rotationLeader, true);
@@ -82,7 +85,8 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   public void useOutput(double output, double setpoint) {
     // Use the output here
     // setpoint may be useful for a feedforward adjustment
-    m_rotationLeader.set(output);
+    double feedforward = m_ArmFeedforward.calculate(setpoint,0);
+    m_rotationLeader.setVoltage(output + m_ArmFeedforward.calculate(setpoint, 0));
   }
 
   @Override
