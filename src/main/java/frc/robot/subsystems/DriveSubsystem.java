@@ -113,9 +113,12 @@ public class DriveSubsystem extends SubsystemBase {
     GenericEntry m_nte_InputExponent;
     
     public DriveSubsystem() {
-      m_leftMotorFollower.follow(m_leftMotorLeader);
-      m_rightMotorFollower.follow(m_rightMotorLeader);  
+      m_rightMotorLeader.setInverted(false);
+      m_leftMotorLeader.setInverted(true);
 
+      m_leftMotorFollower.follow(m_leftMotorLeader);
+      m_rightMotorFollower.follow(m_rightMotorLeader);
+      
       m_leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_leftEncoderFollower.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
