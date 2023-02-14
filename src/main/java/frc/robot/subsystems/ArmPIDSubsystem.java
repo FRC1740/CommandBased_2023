@@ -36,7 +36,7 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   public ArmPIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(.01, 0, 0));
+        new PIDController(.005, 0, 0));
 
         // The target angle for PID rotation control
     // Follower motor direction is inverted

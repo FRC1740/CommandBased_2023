@@ -8,12 +8,12 @@ public class ArmConstants {
     public static final int kExtensionMotorPort = 8;
 
     // Arm Rotation Constants
-    public static final double kArmRotationGearRatio = 144; // Gear boxes 4x3x3, Sprockets 64/16 = 4 total 4x3x3x4 = 144
+    public static final double kArmRotationGearRatio = 36*(64/22); // Gear boxes 4x3x3, Sprockets 64/22 total 4x3x3x(64/22)= 144
     public static final double ARM_ROTATION_POSITION_CONVERSION_FACTOR = 360/kArmRotationGearRatio; //Encoder output in degrees the arm rotates
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 1.5 inches of extension
-    public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionGearRatio/1.5; //Encoder output in inches of extension
+    public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = 1.5/kArmExtensionGearRatio; //Encoder output in inches of extension
 
     //public static final double kArmExtensionRotationToLinearDistance = 1.5;
     // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
