@@ -8,11 +8,31 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Constants.*;
+// import frc.robot.Constants.*;
+import frc.constants.LEDConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class SignalLEDs extends SubsystemBase {
+
+    public static class gamePiece {
+      int red, green, blue;
+
+      public gamePiece(int r, int g, int b) {
+          red = r;
+          green = g;
+          blue = b;
+      }
+      public int getRed() {
+          return red;
+      }
+      public int getGreen() {
+          return green;
+      }
+      public int getBlue() {
+          return blue;
+      }
+  }
 
   public enum LedMode {
     CUBE,
@@ -53,7 +73,7 @@ public class SignalLEDs extends SubsystemBase {
 
   // Common to all strings
   public static final int kRefreshEvery = 2;
-  ConSignalLed.gamePiece cube, cone;  // Stores RGB triplets
+  gamePiece cube, cone;  // Stores RGB triplets
 
   // Encapsulate the details for each physical LED string here
   private class LedHwString {
@@ -95,8 +115,8 @@ public class SignalLEDs extends SubsystemBase {
   /** Create new SignalLED(s) */
   public SignalLEDs() {
     // Define the colors appropriate for each game piece
-    cube = new ConSignalLed.gamePiece(50, 0, 100);
-    cone = new ConSignalLed.gamePiece(100, 50, 0);
+    cube = new gamePiece(LEDConstants.kCubeR, LEDConstants.kCubeG, LEDConstants.kCubeB);
+    cone = new gamePiece(LEDConstants.kConeR, LEDConstants.kConeG, LEDConstants.kConeB);
 
     m_delay = kRefreshEvery;
     m_secondsTick = 0;

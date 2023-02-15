@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 import frc.constants.DriveConstants;
+import frc.constants.OIConstants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /**
@@ -58,8 +59,8 @@ public class RobotContainer {
   //protected final Claw m_Claw = new Claw();
 
   // The driver's controller
-  private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
-  private final XboxController m_codriverController = new XboxController(Constants.OIConstants.kCoDriverControllerPort);
+  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private final XboxController m_codriverController = new XboxController(OIConstants.kCoDriverControllerPort);
   // FIXME: We should be migrating away form the XboxController class to the CommandXboxController class
   // private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
   
