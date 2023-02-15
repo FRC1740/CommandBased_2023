@@ -15,24 +15,23 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.AutoBalancePID;
+//import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
-import frc.robot.commands.SequentialVisionAlign;
-import frc.robot.commands.DriveOnAndBalanceChargeStation;
-import frc.robot.commands.RotateArmToAngle;
-import frc.robot.subsystems.ExampleSubsystem;
+//import frc.robot.commands.SequentialVisionAlign;
+//import frc.robot.commands.DriveOnAndBalanceChargeStation;
+//import frc.robot.commands.RotateArmToAngle;
+//import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.DriveSubsystem;
-//import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
+import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ArmExtensionPID;
 import frc.constants.ArmConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.TurnToAngleProfiled;
-import frc.robot.commands.AprilTagAlign;
+//import frc.robot.commands.AprilTagAlign;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -40,7 +39,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
 import frc.constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -53,10 +52,10 @@ public class RobotContainer {
   private final LimeLight m_limelight = new LimeLight();
   private final PhotonVision m_photonVision = new PhotonVision();
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  //protected final Claw m_Claw = new Claw();
+  protected final Claw m_Claw = new Claw();
   protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
   protected final ArmExtensionPID m_telescope = new ArmExtensionPID();
-  protected final Claw m_Claw = new Claw();
+  //protected final Claw m_Claw = new Claw();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(Constants.OIConstants.kDriverControllerPort);
