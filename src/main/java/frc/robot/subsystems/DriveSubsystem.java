@@ -373,12 +373,12 @@ public class DriveSubsystem extends SubsystemBase {
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
-          this.resetOdometry(trajectory.getInitialPose());
+          resetPoseEstimation(trajectory.getInitialPose());
         }
       }),
       new PPRamseteCommand(
         trajectory, 
-        this::getPose,
+        this::getEstimatedVisionPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kDriveKinematics,
