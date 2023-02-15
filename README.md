@@ -1,38 +1,51 @@
 # CommandBased_2023
 FRC Robot 2023 Java Code: Command-Based framework
-** Updated to 2023.1.1 Release version
+** Updated to 2023.3.1 Release version
 
 ### Subsystems
 
 #### DriveSubsystem
-* SparkMax controlled 4-Motor (2 Leaders/2 Followers) Drive SystemDepends upon RevRobotics RevLib vendor library
-* Kauai Labs NavX IMU - [2023 Vendor Library](https://dev.studica.com/releases/2023/NavX.json) 
+* SparkMax controlled 4-Motor (2 Leaders/2 Followers) [RevLib Vendor Library](https://software-metadata.revrobotics.com/REVLib-2023.json)
+* Kauai Labs NavX2 IMU - [Kaui Labs NavX Vendor Library](https://dev.studica.com/releases/2023/NavX.json) 
 
-#### Arm
-* 2x SparkMax controlled brushless Neo motors, leader/follower for rotation
+#### Arm PID Rotation Subsystem
+* 2x SparkMax controlled brushless Neo motors, leader/follower (inverted) for rotation
+#### Arm PID Extension Subsystem
 * 1x SparkMax controlled Neo motor for extension
 
 #### Claw
 * Pneumatic Actuator for open/close
-* 1x SparkMax controlled Neo 550 motor for intake/eject gamepiece
-* PWM controlled LED light strip
-
-#### ExampleSubsystem
-* Spike relay test light (on/off)
+* 1x CANbus/Talon controlled for intake/eject gamepiece
+* [CTRE CANTalon Vendor Library](https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json)
 
 #### GroundIntake
 * Pneumatic controlled extend/retract
 * SparkMax controlled intake/eject motor
 
-#### SignalLED
-* PWM controlled LED light strip
+#### SignalLED Subsystem
+* PWM controlled LED strips: One or two combination or independently controlled: 
+**Signaling gamepiece to human planer
+**Indicating phase of game
+**Countdown timer during endgame
+
+### Vision Subsystems
+#### PhotonVision
+* Raspberry Pi two-camera AprilTag tracking and location detection
+
+#### LimeLight
+* Off-the-shelf AprilTag tracking
 ### Commands
+* AprilTagAlign: Auto-assist to align with Nodes
 * AutoBalancePID: Balance based on "roll" axis (NavX Orientation is sideways)
+* AutoDriveSequential: Sequence of drive distance & turning commands
+* DriveOnAndBalanceChargingStation: Autonomous sequential command
+* DriveToChargeStation: Autonomous mode drives forward until pitch angle of charging station is detected
 * DriveToDistance: Drive an arbitrary distance
 * DriveToDistancePID: Unused
-* ExampleCommand: Used for Testing only. Currently a relay controlled light
+* SequentialVisionAlign: Sequential command, enables the Limelight then runs VisionAlign 
 * TurnToAngle(angle): Unused
-* TurnToAngleProfiled(angle): Turn to an arbitrary angle (PID) 
+* TurnToAngleProfiled(angle): Turn to an arbitrary angle (PID)
+* VisionAlign: Uses Limelight targeting to adjust Z-rotation (left/right turning) of drive subsystem
 
 ### Command Groups
 * AutoDriveSequential: DriveToDistance (onto ramp); AutoBalancePID
