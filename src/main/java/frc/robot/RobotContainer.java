@@ -23,6 +23,7 @@ import frc.robot.commands.DriveToDistance;
 //import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.subsystems.LimeLight;
 import frc.robot.subsystems.PhotonVision;
+import frc.robot.subsystems.ProfiledPIDArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
 import frc.robot.subsystems.ArmPIDSubsystem;
@@ -54,9 +55,9 @@ public class RobotContainer {
   private final PhotonVision m_photonVision = new PhotonVision();
   // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   protected final Claw m_Claw = new Claw();
-  protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
+  //protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
+  protected final ProfiledPIDArmSubsystem m_ProfiledArm = new ProfiledPIDArmSubsystem();
   protected final ArmExtensionPID m_telescope = new ArmExtensionPID();
-  //protected final Claw m_Claw = new Claw();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -154,7 +155,8 @@ public class RobotContainer {
     // that will utilize the ground intake? Or just ensure
     // That the Arm setPoint remains at starting config setpoint?
 
-    m_arm.enable();
+    //m_arm.enable();
+    m_ProfiledArm.enable();
     m_telescope.enable();
 
     // Basic PID button commands for Arm Rotation
@@ -171,21 +173,25 @@ public class RobotContainer {
     new JoystickButton(m_codriverController, Button.kA.value)
       .onTrue(new SequentialCommandGroup(
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))));
+          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))
+          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kStowedAngle))));
 
     new JoystickButton(m_codriverController, Button.kB.value)
       .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition))));
+          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
+          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
+          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kHighNodeAngle))));
 
     new JoystickButton(m_codriverController, Button.kX.value)
       .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
+          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
+          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kMidNodeAngle)),
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
     
     new JoystickButton(m_codriverController, Button.kY.value)
       .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
+          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
+          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kLowNodeAngle)),
           new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition))));
 
     new JoystickButton(m_codriverController, Button.kRightBumper.value)
