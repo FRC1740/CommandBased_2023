@@ -26,11 +26,11 @@ public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
     super(
         // The ProfiledPIDController used by the subsystem
         new ProfiledPIDController(
-            0.05,
-            0,
-            0,
+          0.8,
+            0.0,
+            0.0,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(40, 20)));
+            new TrapezoidProfile.Constraints(30, 16)));
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 

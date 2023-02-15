@@ -191,8 +191,8 @@ public class RobotContainer {
     new JoystickButton(m_codriverController, Button.kY.value)
       .onTrue(new SequentialCommandGroup(
           //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
-          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kLowNodeAngle)),
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition))));
+          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kLowNodeAngle))));
+          //new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition))));
 
     new JoystickButton(m_codriverController, Button.kRightBumper.value)
       .onTrue(new InstantCommand(() -> m_Claw.toggle()));

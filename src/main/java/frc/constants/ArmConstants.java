@@ -49,7 +49,7 @@ public class ArmConstants {
     // ARM Rotation PID constants
     public static final double kRotP = .05;
     public static final double kRotI = 0.01;
-    public static final double kRotD = 0;
+    public static final double kRotD = 0.005;
 
     // ARM Extension PID constants
     public static final double kExtP = .02;
