@@ -87,4 +87,19 @@ public class ArmExtensionPID extends PIDSubsystem {
       return;
   }
 
+  public void manualTelescopeOut(){
+    disable();
+    m_extensionMotor.set(0.1);
+  }
+
+  public void manualTelescopeIn(){
+    disable();
+    m_extensionMotor.set(-0.1);
+    
+  }
+
+  public void manualDone(){
+    enable();
+    setSetpoint(m_extensionEncoder.getPosition());
+  }
 }
