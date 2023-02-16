@@ -26,11 +26,11 @@ public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
     super(
         // The ProfiledPIDController used by the subsystem
         new ProfiledPIDController(
-          0.8,
+          0.4,
             0.0,
             0.0,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(30, 16)));
+            new TrapezoidProfile.Constraints(80, 80)));
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 
@@ -58,6 +58,28 @@ public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
     // Add the feedforward to the PID output to get the motor output
     m_rotationLeader.setVoltage(output + feedforward);
 
+  }
+
+  public void resetToEncoderToStowedAngle(){
+    m_rotationEncoder.setPosition(ArmConstants.kStowedAngle);
+    m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
+  }
+
+  public void manualArmRotateUp(){
+    disable();
+    m_rotationLeader.set(0.1);
+
+
+  }
+
+  public void manualDone(){
+    enable();
+    setGoal(m_rotationEncoder.getPosition());
+  }
+
+  public void manualArmRotateDown(){
+    disable();
+    m_rotationLeader.set(-.1);
   }
 
   @Override

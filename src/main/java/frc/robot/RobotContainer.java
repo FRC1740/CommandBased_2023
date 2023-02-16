@@ -116,19 +116,35 @@ public class RobotContainer {
     /* ***************** Driver Contols ************ */
 
     // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
-    new JoystickButton(m_driverController, Button.kA.value)
-        .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //     .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
 
     // Auto-drive distance
+    // new JoystickButton(m_driverController, Button.kB.value)
+    //     .onTrue(new DriveToDistance(5, m_robotDrive));
+
+    new JoystickButton(m_driverController, Button.kA.value)
+      .onTrue(new InstantCommand(() -> m_ProfiledArm.manualArmRotateUp()))
+      .onFalse(new InstantCommand(() -> m_ProfiledArm.manualDone()));
+
     new JoystickButton(m_driverController, Button.kB.value)
-        .onTrue(new DriveToDistance(5, m_robotDrive));
+      .onTrue(new InstantCommand(() -> m_ProfiledArm.manualArmRotateDown()))
+      .onFalse(new InstantCommand(() -> m_ProfiledArm.manualDone()));
+
+    new JoystickButton(m_driverController, Button.kX.value)
+      .onTrue(new InstantCommand(() -> m_telescope.manualTelescopeOut()))
+      .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
+
+    new JoystickButton(m_driverController, Button.kY.value)
+      .onTrue(new InstantCommand(() -> m_telescope.manualTelescopeIn()))
+      .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
 
     // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
       .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
 
-    new JoystickButton(m_driverController, Button.kY.value)
-      .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
+    // new JoystickButton(m_driverController, Button.kY.value)
+    //   .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
 
 
     // Drive at half speed when the right bumper is held
@@ -137,8 +153,8 @@ public class RobotContainer {
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
 
 
-    new JoystickButton(m_driverController, Button.kX.value)
-        .onTrue(m_robotDrive.getPathWeaverCommand());
+    // new JoystickButton(m_driverController, Button.kX.value)
+    //     .onTrue(m_robotDrive.getPathWeaverCommand());
         
     /* ***************** CO-Driver Contols ************ */
 
@@ -196,6 +212,8 @@ public class RobotContainer {
 
     new JoystickButton(m_codriverController, Button.kRightBumper.value)
       .onTrue(new InstantCommand(() -> m_Claw.toggle()));
+
+
       
       // Signal for a CUBE when held
     // new JoystickButton(m_codriverController, Button.kA.value)
