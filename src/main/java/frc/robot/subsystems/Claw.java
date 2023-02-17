@@ -142,11 +142,11 @@ public class Claw extends SubsystemBase {
   }
 
   private void close() { // Close to grab a cone
-    m_grabberSolenoid.set(kForward); 
+    m_grabberSolenoid.set(kReverse); 
     setMode(ClawMode.CONE);
     }
   private void Open() { // Open to release a cone or intake a cube
-    m_grabberSolenoid.set(kReverse); 
+    m_grabberSolenoid.set(kForward); 
     setMode(ClawMode.CUBE);
   }
   public void setIntakeSpeed(double speed) {
