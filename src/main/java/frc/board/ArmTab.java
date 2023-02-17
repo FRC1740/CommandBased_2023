@@ -15,21 +15,33 @@ public class ArmTab {
 
     // Create and get reference to SB tab
     ShuffleboardTab m_sbt_Arm;
-
+    
     // Encoders/PID Feedback sensors
     GenericEntry m_nte_ArmExtension;
-
+    
     // Parameters Passed from DS via Shuffleboard
     GenericEntry m_nte_HighNodeExtension;
     GenericEntry m_nte_MidNodeExtension;
     GenericEntry m_nte_LowNodeExtension;
+    
+    private static ArmTab instance = null;
 
-    public ArmTab() {
+    private ArmTab() {
+        initShuffleboardTab();
+    }
 
+    public static ArmTab getInstance() {
+        if(instance == null) {
+            instance = new ArmTab();
+        }
+        return instance;
+    }
+
+    private void initShuffleboardTab() {
         // Create and get reference to SB tab
         m_sbt_Arm = Shuffleboard.getTab(ShuffleboardConstants.ArmTab);
 
-        m_nte_ArmExtension = m_sbt_Arm.addPersistent("Current Arm Extension", getArmExtensionInches())
+        m_nte_ArmExtension = m_sbt_Arm.addPersistent("Current Arm Extension", 0.0)
             .withSize(2, 1).withPosition(0, 1).getEntry();
 
         // Create widgets for TARGET Arm Position
@@ -39,7 +51,38 @@ public class ArmTab {
             .withSize(2, 1).withPosition(2, 1).getEntry();
         m_nte_LowNodeExtension = m_sbt_Arm.addPersistent("Low Node Extension", ArmConstants.kLowNodePosition)
             .withSize(2, 1).withPosition(2, 2).getEntry();
-    
-
     }
+
+    public Double getArmExtension() {
+        return m_nte_ArmExtension.getDouble(0.0);
+    }
+
+    public void setArmExtension(Double value) {
+        m_nte_ArmExtension.setDouble(value);
+    }
+  
+    public Double getHighNodeExtension() {
+        return m_nte_HighNodeExtension.getDouble(ArmConstants.kHighNodePosition);
+    }
+
+    public void setHighNodeExtension(Double value) {
+        m_nte_HighNodeExtension.setDouble(value);
+    }
+
+    public Double getMidNodeExtension() {
+        return m_nte_MidNodeExtension.getDouble(ArmConstants.kMidNodePosition);
+    }
+
+    public void setMidNodeExtension(Double value) {
+        m_nte_MidNodeExtension.setDouble(value);
+    }
+
+    public Double getLowNodeExtension() {
+        return m_nte_LowNodeExtension.getDouble(ArmConstants.kLowNodePosition);
+    }
+
+    public void setLowNodeExtension(Double value) {
+        m_nte_LowNodeExtension.setDouble(value);
+    }
+
 }

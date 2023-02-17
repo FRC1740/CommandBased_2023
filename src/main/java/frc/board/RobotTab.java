@@ -8,7 +8,6 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.constants.ShuffleboardConstants;
-import frc.robot.Robot;
 import frc.robot.RobotProperties;
 
 /** Add your docs here. */
@@ -24,14 +23,20 @@ public class RobotTab {
     GenericEntry m_nte_BuildTime;
     GenericEntry m_nte_BuildComputer;
 
-    private Robot m_robot;
+    private static RobotTab instance = null;
 
-    public RobotTab(Robot robot) {
-        m_robot = robot;
-        init();
+    private RobotTab() {
+        initShuffleboardTab();
     }
 
-    private void init() {
+    public static RobotTab getInstance() {
+        if(instance == null) {
+            instance = new RobotTab();
+        }
+        return instance;
+    }
+
+    private void initShuffleboardTab() {
         // Create and get reference to SB tab
 
         m_sbt_Robot = Shuffleboard.getTab(ShuffleboardConstants.RobotTab);
@@ -44,5 +49,21 @@ public class RobotTab {
 
         m_nte_BuildComputer = m_sbt_Robot.addPersistent("Build Computer", RobotProperties.getComputer())
             .withSize(3, 1).withPosition(0, 1).getEntry();
+    }
+
+    public String getBuildTime() {
+        return m_nte_BuildTime.getString(RobotProperties.getTime());
+    }
+
+    public void setBuildTime(String time) {
+        m_nte_BuildTime.setString(time);
+    }
+
+    public String getBuildComputer() {
+        return m_nte_BuildComputer.getString(RobotProperties.getComputer());
+    }    
+
+    public void setBuildComputer(String computer) {
+        m_nte_BuildComputer.setString(computer);
     }
 }
