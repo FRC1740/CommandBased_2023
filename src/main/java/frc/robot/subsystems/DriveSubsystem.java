@@ -24,14 +24,12 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 
+import frc.board.DriveTrainTab;
 import frc.constants.DriveConstants;
-import frc.constants.ShuffleboardConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SPI;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -46,10 +44,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 // import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-// import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.*;
 import edu.wpi.first.math.filter.LinearFilter;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -77,40 +72,12 @@ public class DriveSubsystem extends SubsystemBase {
     String StraightTrajectoryJSON = "output/Straight.wpilib.json";
     Trajectory Straight = new Trajectory();
 
-    Field2d m_Field = new Field2d();
-
     PhotonVision m_PhotonVision = new PhotonVision();
-    // Used to grab an instance of the global network tables
-    NetworkTableInstance inst;
-    NetworkTable m_nt;
-    Shuffleboard m_sb;
 
-    // Shuffleboard DriveTrain entries
-    // Create and get reference to SB tab
-    ShuffleboardTab m_sbt_DriveTrain;
-  
-    GenericEntry m_nte_Testing;
-  
-    // Autonomous Variables
-    GenericEntry m_nte_a_DriveDelay;
-    GenericEntry m_nte_b_DriveDistance;
-    GenericEntry m_nte_c_DriveTurnAngle;
-    GenericEntry m_nte_autoDriveMode;
-
-    // Encoders/PID Feedback sensors
-    GenericEntry m_nte_LeftEncoder;
-    GenericEntry m_nte_RightEncoder;
-    GenericEntry m_nte_IMU_ZAngle;
-    GenericEntry m_nte_IMU_PitchAngle; // USES IMU ROLL AXIS!!!
-
-    // PID Tuning
-    GenericEntry m_nte_DriveSpeedFilter;
-    GenericEntry m_nte_DriveRotationFilter;
     LinearFilter speedFilter;
     LinearFilter rotationFilter;
 
-    // Create widget for non-linear input
-    GenericEntry m_nte_InputExponent;
+    private DriveTrainTab m_DriveTrainTab;
     
     public DriveSubsystem() {
       m_rightMotorLeader.setInverted(false);
@@ -147,60 +114,8 @@ public class DriveSubsystem extends SubsystemBase {
         0.0, 
         0.0, 
         new Pose2d());
-      inst = NetworkTableInstance.getDefault();
-      m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
-      // Create and get reference to SB tab
-      m_sbt_DriveTrain = Shuffleboard.getTab(ShuffleboardConstants.DriveTrainTab);
-      
-      // get a topic from a NetworkTableInstance
-      // the topic name in this case is the full name
-      //DoubleTopic dblTopic = inst.getDoubleTopic("/drivetrain/gyro");
-      
-      // get a topic from a NetworkTable
-      // the topic name in this case is the name within the table;
-      // this line and the one above reference the same topic
-      // DoubleTopic dtGyro = m_nt.getDoubleTopic("gyro");
-      
-      // get a type-specific topic from a generic Topic
-      // Topic genericTopic = inst.getTopic("/datatable/X");
-      // DoubleTopic dblTopic = new DoubleTopic(genericTopic);
-  
-      // Create widgets for digital filter lengths
-      m_nte_DriveSpeedFilter = m_sbt_DriveTrain.addPersistent("Drive Speed Filter", 10.0)
-            .withSize(2, 1).withPosition(0, 0).getEntry();
-      m_nte_DriveRotationFilter = m_sbt_DriveTrain.addPersistent("Drive Rotation Filter", 5.0)
-            .withSize(2, 1).withPosition(0, 1).getEntry();
-      // Create widget for non-linear input
-      m_nte_InputExponent = m_sbt_DriveTrain.addPersistent("Input Exponent", 1.0)
-              .withSize(1, 1).withPosition(0, 2).getEntry();
-  
-      // Create widgets for AutoDrive
-      m_nte_a_DriveDelay     = m_sbt_DriveTrain.addPersistent("Drive Delay", .5)
-            .withSize(1, 1).withPosition(3, 0).getEntry();
-      m_nte_b_DriveDistance  = m_sbt_DriveTrain.addPersistent("Drive Distance", 48)
-            .withSize(1, 1).withPosition(3, 1).getEntry();
-      m_nte_c_DriveTurnAngle = m_sbt_DriveTrain.addPersistent("Turn Angle", 0.0)
-            .withSize(1, 1).withPosition(3, 2).getEntry();            
-      m_nte_autoDriveMode    = m_sbt_DriveTrain.addPersistent("AutoDrive Mode", 2)
-            .withSize(1, 1).withPosition(3, 3).getEntry();
 
-      //  m_nte_Testing     = m_sbt_DriveTrain.addPersistent("Testing", 0.0)       .withSize(1, 1).withPosition(3, 3).getEntry();
-  
-      // Encoder outputs
-      // Display current encoder values
-      m_nte_LeftEncoder = m_sbt_DriveTrain.addPersistent("Left Side Encoder", 0.0)
-                  .withSize(2,1).withPosition(4,0).getEntry();
-  
-      m_nte_RightEncoder = m_sbt_DriveTrain.addPersistent("Right Side Encoder", 0.0)
-                .withSize(2,1).withPosition(4,1).getEntry();
-  
-      m_nte_IMU_ZAngle = m_sbt_DriveTrain.addPersistent("IMU Z-Axis Angle", 0.0)
-                .withSize(2,1).withPosition(4,2).getEntry();
-  
-      m_nte_IMU_PitchAngle = m_sbt_DriveTrain.addPersistent("IMU Pitch", 0.0)
-                .withSize(2,1).withPosition(4,3).getEntry();
-
-      m_sbt_DriveTrain.add(m_Field);
+      m_DriveTrainTab = DriveTrainTab.getInstance();
       
       speedFilter = LinearFilter.movingAverage(11);
       rotationFilter = LinearFilter.movingAverage(5);
@@ -248,11 +163,11 @@ public class DriveSubsystem extends SubsystemBase {
 
     updatePoseEstimater();
 
-    m_nte_LeftEncoder.setDouble(getAverageLeftEncoders());
-    m_nte_RightEncoder.setDouble(getAverageRightEncoders());
-    m_nte_IMU_ZAngle.setDouble(getAngle());
-    m_nte_IMU_PitchAngle.setDouble(getRoll());
-    }
+    m_DriveTrainTab.setLeftEncoder(getAverageLeftEncoders());
+    m_DriveTrainTab.setRightEncoder(getAverageRightEncoders());
+    m_DriveTrainTab.setIMU_ZAngle(getAngle());
+    m_DriveTrainTab.setIMU_PitchAngle(getRoll());
+  }
 
   public Pose2d getPose(){
     return m_odometry.getPoseMeters();
@@ -284,7 +199,7 @@ public class DriveSubsystem extends SubsystemBase {
       EstimatedRobotPose visionPose = result.get();
       m_PoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
     }
-    m_Field.setRobotPose(m_PoseEstimator.getEstimatedPosition());
+    m_DriveTrainTab.setRobotPose(m_PoseEstimator.getEstimatedPosition());
   }
 
   public double getAngle() {

@@ -17,13 +17,13 @@ public class GroundIntakeTab {
     private GenericEntry m_nte_IntakeSpeed;
     private GenericEntry m_nte_IntakeSetSpeed;
 
-    private GroundIntakeTab instance = null;
+    private static GroundIntakeTab instance = null;
 
     private GroundIntakeTab() {
         initShuffleboardTab();
     }
 
-    public GroundIntakeTab getInstance() {
+    public static GroundIntakeTab getInstance() {
         if(instance == null) {
             instance = new GroundIntakeTab();
         }

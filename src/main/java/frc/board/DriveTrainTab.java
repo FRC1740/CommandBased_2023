@@ -48,14 +48,14 @@ public class DriveTrainTab {
     // Create widget for non-linear input
     GenericEntry m_nte_InputExponent;
 
-    private DriveTrainTab instance = null;
+    private static DriveTrainTab instance = null;
 
     private DriveTrainTab() {
         initNetworkTableInstance();
         initShuffleboardTab();
     }
 
-    public DriveTrainTab getInstance() {
+    public static DriveTrainTab getInstance() {
         if(instance == null) {
             instance = new DriveTrainTab();
         }

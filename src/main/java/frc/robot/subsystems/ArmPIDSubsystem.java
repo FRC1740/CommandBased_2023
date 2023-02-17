@@ -8,11 +8,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+
+import frc.board.ArmTab;
 import frc.constants.ArmConstants;
-import frc.constants.ShuffleboardConstants;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.networktables.*;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class ArmPIDSubsystem extends PIDSubsystem {
@@ -22,17 +20,7 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   private final RelativeEncoder m_rotationFollowerEncoder;
   private final ArmFeedforward m_ArmFeedforward;
   //protected double m_setpoint;
-
-  // Create and get reference to SB tab
-  ShuffleboardTab m_sbt_Arm;
-
-  // Encoders/PID Feedback sensors
-  GenericEntry m_nte_ArmAngle;
-
-  // Parameters Passed from DS via Shuffleboard
-  GenericEntry m_nte_HighNodeAngle;
-  GenericEntry m_nte_MidNodeAngle;
-  GenericEntry m_nte_LowNodeAngle;
+  private ArmTab m_ArmTab;
 
   /** Creates a new Arm. */
   public ArmPIDSubsystem() {
@@ -58,28 +46,15 @@ public class ArmPIDSubsystem extends PIDSubsystem {
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedAngle);
 
-    // Create and get reference to SB tab
-    m_sbt_Arm = Shuffleboard.getTab(ShuffleboardConstants.ArmTab);
-
-    // Create Widges for CURRENT Arm Position & Angle
-    m_nte_ArmAngle = m_sbt_Arm.addPersistent("Current Arm Angle", getArmRotationDegrees())
-          .withSize(2, 1).withPosition(0, 0).getEntry();
-
-    // Create widgets for TARGET Arm Angle
-    m_nte_HighNodeAngle     = m_sbt_Arm.addPersistent("High Node Angle", ArmConstants.kHighNodeAngle)
-          .withSize(2, 1).withPosition(4, 0).getEntry();
-    m_nte_MidNodeAngle  = m_sbt_Arm.addPersistent("Mid Node Angle", ArmConstants.kMidNodeAngle)
-          .withSize(2, 1).withPosition(4, 1).getEntry();
-    m_nte_LowNodeAngle = m_sbt_Arm.addPersistent("Low Node Angle", ArmConstants.kLowNodeAngle)
-          .withSize(2, 1).withPosition(4, 2).getEntry();
-
+    m_ArmTab = ArmTab.getInstance();
+    m_ArmTab.setArmAngle(getArmRotationDegrees());
   }
 
   @Override
   public void periodic() {
     // WPILib Docs say to call the parent periodic method or PID will not work
     super.periodic();
-    m_nte_ArmAngle.setDouble(getArmRotationDegrees());
+    m_ArmTab.setArmAngle(getArmRotationDegrees());
   }
   @Override
   public void useOutput(double output, double setpoint) {
