@@ -9,11 +9,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+
+import frc.board.ArmTab;
 import frc.constants.ArmConstants;
-import frc.constants.ShuffleboardConstants;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.networktables.*;
 
 
 public class Arm extends SubsystemBase {
@@ -24,27 +22,12 @@ public class Arm extends SubsystemBase {
   private final RelativeEncoder m_rotationFollowerEncoder;
   private final RelativeEncoder m_extensionEncoder;
   protected double m_setpoint;
+  private ArmTab m_ArmTab;
 
   // Used to grab an instance of the global network tables
   // NetworkTableInstance inst;
   // NetworkTable m_nt;
   // Shuffleboard m_sb;
-
-  // Shuffleboard DriveTrain entries
-  // Create and get reference to SB tab
-  ShuffleboardTab m_sbt_Arm;
-
-  // Encoders/PID Feedback sensors
-  GenericEntry m_nte_ArmAngle;
-  GenericEntry m_nte_ArmExtension;
-
-  // Parameters Passed from DS via Shuffleboard
-  GenericEntry m_nte_HighNodeAngle;
-  GenericEntry m_nte_MidNodeAngle;
-  GenericEntry m_nte_LowNodeAngle;
-  GenericEntry m_nte_HighNodeExtension;
-  GenericEntry m_nte_MidNodeExtension;
-  GenericEntry m_nte_LowNodeExtension;
 
   public Arm() {
     /** Creates a new Arm. */
@@ -68,31 +51,9 @@ public class Arm extends SubsystemBase {
     // inst = NetworkTableInstance.getDefault();
     // m_nt = inst.getTable(ShuffleboardConstants.ArmTab);
     
-    // Create and get reference to SB tab
-    m_sbt_Arm = Shuffleboard.getTab(ShuffleboardConstants.ArmTab);
-
-    // Create Widges for CURRENT Arm Position & Angle
-    m_nte_ArmAngle = m_sbt_Arm.addPersistent("Current Arm Angle", getArmRotationDegrees())
-          .withSize(2, 1).withPosition(0, 0).getEntry();
-    m_nte_ArmExtension = m_sbt_Arm.addPersistent("Current Arm Extension", getArmExtensionInches())
-          .withSize(2, 1).withPosition(0, 1).getEntry();
-
-    // Create widgets for TARGET Arm Position
-    m_nte_HighNodeExtension = m_sbt_Arm.addPersistent("High Node Extension", ArmConstants.kHighNodePosition)
-          .withSize(2, 1).withPosition(2, 0).getEntry();
-    m_nte_MidNodeExtension  = m_sbt_Arm.addPersistent("Mid Node Extension", ArmConstants.kMidNodePosition)
-          .withSize(2, 1).withPosition(2, 1).getEntry();
-    m_nte_LowNodeExtension = m_sbt_Arm.addPersistent("Low Node Extension", ArmConstants.kLowNodePosition)
-          .withSize(2, 1).withPosition(2, 2).getEntry();
-
-    // Create widgets for TARGET Arm Angle
-    m_nte_HighNodeAngle     = m_sbt_Arm.addPersistent("High Node Angle", ArmConstants.kHighNodeAngle)
-          .withSize(2, 1).withPosition(4, 0).getEntry();
-    m_nte_MidNodeAngle  = m_sbt_Arm.addPersistent("Mid Node Angle", ArmConstants.kMidNodeAngle)
-          .withSize(2, 1).withPosition(4, 1).getEntry();
-    m_nte_LowNodeAngle = m_sbt_Arm.addPersistent("Low Node Angle", ArmConstants.kLowNodeAngle)
-          .withSize(2, 1).withPosition(4, 2).getEntry();
-              
+    m_ArmTab = ArmTab.getInstance();
+    m_ArmTab.setArmAngle(getArmRotationDegrees());
+    m_ArmTab.setArmExtension(getArmExtensionInches());          
   }
 
   public void setSetpoint(double angle) {
@@ -165,8 +126,8 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_nte_ArmAngle.setDouble(getArmRotationDegrees());
-    m_nte_ArmExtension.setDouble(getArmExtensionInches());
-    }
+    m_ArmTab.setArmAngle(getArmRotationDegrees());
+    m_ArmTab.setArmExtension(getArmExtensionInches());          
+  }
 
 }

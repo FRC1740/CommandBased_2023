@@ -16,14 +16,11 @@ import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 // import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 // import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Timer;
+import frc.board.ClawTab;
 import frc.constants.ClawConstants;
 //import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 // import com.revrobotics.RelativeEncoder;
-import frc.constants.ShuffleboardConstants;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.networktables.*;
 
 public class Claw extends SubsystemBase {
   private final DoubleSolenoid m_grabberSolenoid;
@@ -57,14 +54,7 @@ public class Claw extends SubsystemBase {
   // private int m_currentPixel;
   // private int m_kittDelta;
   private Timer m_timer;
-  // Shuffleboard DriveTrain entries
-  // Create and get reference to SB tab
-  private ShuffleboardTab m_sbt_Claw;
-
-  // Parameters Passed from DS via Shuffleboard
-  private GenericEntry m_nte_ClawMode;
-  // private GenericEntry m_nte_IntakeSpeed;
-  private GenericEntry m_nte_IntakeCurrent;
+  private ClawTab m_ClawTab;
 
   /** Creates a new Manipulator. */
   public Claw() {
@@ -81,17 +71,9 @@ public class Claw extends SubsystemBase {
     m_clawMode = ClawMode.READY;
     m_timer = new Timer();
 
-    // Create and get reference to SB tab
-    m_sbt_Claw = Shuffleboard.getTab(ShuffleboardConstants.ClawTab);
-
-    // Create Widges for CURRENT Arm Position & Angle
-    m_nte_ClawMode = m_sbt_Claw.addPersistent("Claw Mode", getModeString())
-          .withSize(2, 1).withPosition(0, 0).getEntry();
-    // m_nte_IntakeSpeed = m_sbt_Claw.addPersistent("Intake Speed", getIntakeSpeed())
-    //       .withSize(2, 1).withPosition(0, 1).getEntry();
-    m_nte_IntakeCurrent = m_sbt_Claw.addPersistent("Intake Current", getIntakeCurrent())
-          .withSize(2, 1).withPosition(0, 2).getEntry();
-
+    m_ClawTab = ClawTab.getInstance();
+    m_ClawTab.setClawMode(getModeString());
+    m_ClawTab.setIntakeCurrent(getIntakeCurrent());
   //   m_currentPixel = 0;
   //   m_kittDelta = 1;
   //   m_delay = 50; // Include a delay during Peridoc() if too processor intensive
@@ -176,7 +158,7 @@ public class Claw extends SubsystemBase {
   private void setMode(ClawMode newMode) {
     m_clawMode = newMode;
     System.out.println(m_clawMode);
-    m_nte_ClawMode.setString(getModeString());
+    m_ClawTab.setClawMode(getModeString());
   }
   private ClawMode getMode() {
     return m_clawMode;
@@ -251,6 +233,6 @@ public class Claw extends SubsystemBase {
       }
     }
     // m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
-    m_nte_IntakeCurrent.setDouble(getIntakeCurrent());
+    m_ClawTab.setIntakeCurrent(getIntakeCurrent());
   }
 }

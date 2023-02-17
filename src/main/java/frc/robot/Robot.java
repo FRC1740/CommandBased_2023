@@ -7,10 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.board.RobotTab;
 import edu.wpi.first.networktables.*;
-import frc.constants.ShuffleboardConstants;
 import com.pathplanner.lib.server.PathPlannerServer;
 
 /**
@@ -27,15 +25,8 @@ public class Robot extends TimedRobot {
   // Used to grab an instance of the global network tables
   NetworkTableInstance inst;
   NetworkTable m_nt;
-  Shuffleboard m_sb;
 
-  // Shuffleboard DriveTrain entries
-  // Create and get reference to SB tab
-  ShuffleboardTab m_sbt_Robot;
-
-  // Encoders/PID Feedback sensors
-  GenericEntry m_nte_BuildTime;
-  GenericEntry m_nte_BuildComputer;
+  private RobotTab m_RobotTab;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -49,18 +40,8 @@ public class Robot extends TimedRobot {
 
 //    inst = NetworkTableInstance.getDefault();
 //    m_nt = inst.getTable(ShuffleboardConstants.RobotTab);
-    // Create and get reference to SB tab
 
-    m_sbt_Robot = Shuffleboard.getTab(ShuffleboardConstants.RobotTab);
-    // See https://docs.wpilib.org/en/latest/docs/software/wpilib-tools/shuffleboard/layouts-with-code/using-tabs.html
-
-    // Create widget for code version
-
-    m_nte_BuildTime = m_sbt_Robot.addPersistent("Build Time", RobotProperties.getTime())
-          .withSize(3, 1).withPosition(0, 0).getEntry();
-
-    m_nte_BuildComputer = m_sbt_Robot.addPersistent("Build Computer", RobotProperties.getComputer())
-          .withSize(3, 1).withPosition(0, 1).getEntry();
+    m_RobotTab = RobotTab.getInstance();
 
     PathPlannerServer.startServer(5811);
   }
