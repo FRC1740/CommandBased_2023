@@ -12,10 +12,11 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.constants.ArmConstants;
+import frc.board.ArmTab;
 
 public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
   /** Creates a new ProfiledPIDArmSubsystem. */
-
+  private final ArmTab m_ArmTab;
   private final CANSparkMax m_rotationLeader = new CANSparkMax(ArmConstants.kRotationLeaderMotorPort, CANSparkMax.MotorType.kBrushless);
   private final CANSparkMax m_rotationFollower = new CANSparkMax(ArmConstants.kRotationFollowerMotorPort, CANSparkMax.MotorType.kBrushless);
   private final RelativeEncoder m_rotationEncoder;
@@ -48,6 +49,18 @@ public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
         m_rotationFollower.burnFlash();
 
         setGoal(ArmConstants.kStowedAngle);
+
+        m_ArmTab = ArmTab.getInstance();
+  }
+
+  @Override
+  public void periodic(){
+    super.periodic();
+    m_ArmTab.setArmAngle(getArmRotationDegrees());
+  }
+  
+  private double getArmRotationDegrees() {
+    return getMeasurement();
   }
 
   @Override
