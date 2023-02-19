@@ -28,6 +28,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
 import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.ArmExtensionPID;
+import frc.robot.subsystems.GroundIntake;
 import frc.constants.ArmConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -58,6 +59,7 @@ public class RobotContainer {
   //protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
   protected final ProfiledPIDArmSubsystem m_ProfiledArm = new ProfiledPIDArmSubsystem();
   protected final ArmExtensionPID m_telescope = new ArmExtensionPID();
+  protected final GroundIntake m_groundIntake = new GroundIntake();
 
   // The driver's controller
   private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -122,7 +124,7 @@ public class RobotContainer {
     // Auto-drive distance
     // new JoystickButton(m_driverController, Button.kB.value)
     //     .onTrue(new DriveToDistance(5, m_robotDrive));
-
+if (false) { 
     new JoystickButton(m_driverController, Button.kA.value)
       .onTrue(new InstantCommand(() -> m_ProfiledArm.manualArmRotateUp()))
       .onFalse(new InstantCommand(() -> m_ProfiledArm.manualDone()));
@@ -142,15 +144,33 @@ public class RobotContainer {
     // Manually rsest the gyro
     new JoystickButton(m_driverController, Button.kStart.value)
       .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
+}
+
+if (true) { // GroundIntake testing
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
+      // This command must also stow the arm first!!
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
+
+    new JoystickButton(m_driverController, Button.kLeftBumper.value)
+      .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
+
+    new JoystickButton(m_driverController, Button.kX.value)
+      .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(0.1)));
+
+    new JoystickButton(m_driverController, Button.kY.value)
+      .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(-0.1)));
+}
 
     // new JoystickButton(m_driverController, Button.kY.value)
     //   .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
 
 
-    // Drive at half speed when the right bumper is held
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
-        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
+    // // Drive at half speed when the right bumper is held
+    // new JoystickButton(m_driverController, Button.kRightBumper.value)
+    //     .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
+    //     .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
 
 
     // new JoystickButton(m_driverController, Button.kX.value)
@@ -185,6 +205,7 @@ public class RobotContainer {
     // new JoystickButton(m_driverController, Button.kY.value)
     //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
 
+if (false) {
     // Combination PID commands for Arm rotate & extend/retract
     new JoystickButton(m_codriverController, Button.kA.value)
       .onTrue(new SequentialCommandGroup(
@@ -212,7 +233,7 @@ public class RobotContainer {
 
     new JoystickButton(m_codriverController, Button.kRightBumper.value)
       .onTrue(new InstantCommand(() -> m_Claw.toggle()));
-
+}
 
       
       // Signal for a CUBE when held

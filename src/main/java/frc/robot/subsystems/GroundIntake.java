@@ -22,9 +22,9 @@ import frc.constants.GroundIntakeConstants;
 
 public class GroundIntake extends SubsystemBase {
   private final CANSparkMax m_intakeMotor = new CANSparkMax(GroundIntakeConstants.kIntakeMotorPort, CANSparkMax.MotorType.kBrushless);
-  private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, GroundIntakeConstants.kPneumaticPortA, GroundIntakeConstants.kPneumaticPortB);
+  private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, GroundIntakeConstants.kPneumaticPortA, GroundIntakeConstants.kPneumaticPortB);
   private final RelativeEncoder m_intakeEncoder;
-  private double m_intakeSetSpeed = 0.0;
+  private double m_intakeSetSpeed = 0.5;
 
   private GroundIntakeTab m_GroundIntakeTab;
 
@@ -45,6 +45,10 @@ public class GroundIntake extends SubsystemBase {
   public void stow() {
     m_intakeSolenoid.set(kReverse); // FIXME: May have to swap pneumatics orientation
     stopIntake();
+  }
+
+  public void eject() {
+    setIntakeSpeed(-m_intakeSetSpeed);
   }
 
   public double getIntakeVelocity() {
