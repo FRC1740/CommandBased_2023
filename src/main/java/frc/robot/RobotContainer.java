@@ -50,7 +50,7 @@ public class RobotContainer {
   private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
   //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
   protected final ClawSubsystem m_claw = new ClawSubsystem();
-  protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
+  // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
   protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
   protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
   protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
@@ -112,7 +112,7 @@ public class RobotContainer {
     // bind_AutoDriveDistanceTest();
     // bind_ManualArmTest();
     // bind_ResetGyro();
-    bind_GroundIntakeTest();
+    // bind_GroundIntakeTest();
     // bind_Limelight();
     // bind_HalfSpeed();
     // bind_PathWeaver();
@@ -121,11 +121,11 @@ public class RobotContainer {
 
     // // Enable the Arm PID Subsystem
     // // m_arm.enable();
-    // m_armProfiled.enable();
-    // m_telescope.enable();
+    m_armProfiled.enable();
+    m_telescope.enable();
 
-    // bind_ArmPID();
-    // bind_ArmAndTelescope();
+    // bind_ArmPIDTest();
+    bind_ArmAndTelescope();
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
   }
@@ -216,20 +216,20 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> m_limelight.toggleLED()));
   }
 
-  private void bind_ArmPID() {
+  private void bind_ArmPIDTest() {
     // Maybe need to enable/disable this when running commands
     // that will utilize the ground intake? Or just ensure
     // That the Arm setPoint remains at starting config setpoint?
 
     // Basic PID button commands for Arm Rotation
-    m_driverController.a()
-      .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
-    m_driverController.b()
-      .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
-    m_driverController.x()
-      .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
-    m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
+    // m_driverController.a()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
+    // m_driverController.b()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
+    // m_driverController.x()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
+    // m_driverController.y()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
   }
 
   private void bind_ArmAndTelescope() {
@@ -265,13 +265,13 @@ public class RobotContainer {
   private void bind_LedModeTest() {
     // Signal for a CUBE when held
     m_codriverController.a()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CUBE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
 
     // Signal for a CONE when held
     m_codriverController.b()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
 
     m_codriverController.x()
       .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
@@ -282,36 +282,36 @@ public class RobotContainer {
 
   private void bind_LedSubsystemTest() {
     m_driverController.a()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
     m_driverController.b()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CUBE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
     m_driverController.x()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.RED, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.RED, SignalLEDSubsystem.LedPreference.MAIN, false)));
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, true)));
     m_driverController.back()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.BLUE, SignalLEDs.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.BLUE, SignalLEDSubsystem.LedPreference.MAIN, true)));
     m_driverController.start()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.KITT, SignalLEDs.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.KITT, SignalLEDSubsystem.LedPreference.MAIN, true)));
 
     m_driverController.leftBumper()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.ALLIANCE, SignalLEDs.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.ALLIANCE, SignalLEDSubsystem.LedPreference.MAIN, true)));
     m_driverController.leftTrigger()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.GREEN, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.GREEN, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
     m_driverController.leftStick()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COLONELS, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
     m_driverController.rightBumper()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COLONELS, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
     m_driverController.rightTrigger()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.COUNTDOWN, SignalLEDs.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COUNTDOWN, SignalLEDSubsystem.LedPreference.MAIN, true)));
     m_driverController.rightStick()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE, SignalLEDs.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF, SignalLEDs.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
   }
 
   // Return the command to run in autonomous
