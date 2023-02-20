@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.board.GroundIntakeTab;
 import frc.constants.GroundIntakeConstants;
 
-public class GroundIntake extends SubsystemBase {
+public class GroundIntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_intakeMotor = new CANSparkMax(GroundIntakeConstants.kIntakeMotorPort, CANSparkMax.MotorType.kBrushless);
   private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, GroundIntakeConstants.kPneumaticPortA, GroundIntakeConstants.kPneumaticPortB);
   private final RelativeEncoder m_intakeEncoder;
@@ -29,7 +29,7 @@ public class GroundIntake extends SubsystemBase {
   private GroundIntakeTab m_GroundIntakeTab;
 
   /** Creates a new GroundIntake. */
-  public GroundIntake() {
+  public GroundIntakeSubsystem() {
     m_intakeEncoder = m_intakeMotor.getEncoder();
 
     m_GroundIntakeTab = GroundIntakeTab.getInstance();

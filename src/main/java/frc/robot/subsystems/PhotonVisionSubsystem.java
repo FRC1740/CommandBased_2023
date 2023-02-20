@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 
-public class PhotonVision extends SubsystemBase {
+public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVision. */
   PhotonCamera m_camera = new PhotonCamera("FrontCam");
   Transform3d robotToCam = new Transform3d(
@@ -31,7 +31,7 @@ public class PhotonVision extends SubsystemBase {
   AprilTagFieldLayout m_aprilTagFieldLayout;
   PhotonPoseEstimator m_photonPoseEstimator;
 
-  public PhotonVision() {
+  public PhotonVisionSubsystem() {
     try{
     m_aprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();}
     catch(IOException IOE){

@@ -72,7 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
     String StraightTrajectoryJSON = "output/Straight.wpilib.json";
     Trajectory Straight = new Trajectory();
 
-    PhotonVision m_PhotonVision = new PhotonVision();
+    PhotonVisionSubsystem m_PhotonVision = new PhotonVisionSubsystem(); // Fixme: We should NOT be instantiating a new subsystem here! RobotContainer does that. use getInstance()!!
 
     LinearFilter speedFilter;
     LinearFilter rotationFilter;
@@ -283,7 +283,8 @@ public class DriveSubsystem extends SubsystemBase {
   //   m_rightEncoder.setPosition(0);
   // }
 
-  public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) {
+  
+  public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
     return new SequentialCommandGroup(
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
