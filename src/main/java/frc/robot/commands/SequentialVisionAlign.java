@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -15,7 +15,7 @@ import frc.robot.subsystems.DriveSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class SequentialVisionAlign extends SequentialCommandGroup {
   /** Creates a new SequentialVisionAlign. */
-  public SequentialVisionAlign(DriveSubsystem drive, LimeLight m_LimeLight) {
+  public SequentialVisionAlign(DriveSubsystem drive, LimeLightSubsystem m_LimeLight) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

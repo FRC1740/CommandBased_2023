@@ -13,7 +13,7 @@ import frc.constants.LEDConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
-public class SignalLEDs extends SubsystemBase {
+public class SignalLEDSubsystem extends SubsystemBase {
 
     public static class gamePiece {
       int red, green, blue;
@@ -113,7 +113,7 @@ public class SignalLEDs extends SubsystemBase {
   private int m_matchTime;
 
   /** Create new SignalLED(s) */
-  public SignalLEDs() {
+  public SignalLEDSubsystem() {
     // Define the colors appropriate for each game piece
     cube = new gamePiece(LEDConstants.kCubeR, LEDConstants.kCubeG, LEDConstants.kCubeB);
     cone = new gamePiece(LEDConstants.kConeR, LEDConstants.kConeG, LEDConstants.kConeB);

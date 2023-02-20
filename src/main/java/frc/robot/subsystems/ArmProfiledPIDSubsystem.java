@@ -12,9 +12,10 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.constants.ArmConstants;
+import frc.constants.ArmTunable;
 import frc.board.ArmTab;
 
-public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
+public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   /** Creates a new ProfiledPIDArmSubsystem. */
   private final ArmTab m_ArmTab;
   private final CANSparkMax m_rotationLeader = new CANSparkMax(ArmConstants.kRotationLeaderMotorPort, CANSparkMax.MotorType.kBrushless);
@@ -23,15 +24,13 @@ public class ProfiledPIDArmSubsystem extends ProfiledPIDSubsystem {
   private final RelativeEncoder m_rotationFollowerEncoder;
   private final ArmFeedforward m_ArmFeedforward;
   
-  public ProfiledPIDArmSubsystem() {
+  public ArmProfiledPIDSubsystem() {
     super(
         // The ProfiledPIDController used by the subsystem
         new ProfiledPIDController(
-          0.4,
-            0.0,
-            0.0,
+          ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD(),
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(80, 80)));
+            new TrapezoidProfile.Constraints(80, 80))); // FIXME: We are effectively NOT using profiling with these settings.
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 

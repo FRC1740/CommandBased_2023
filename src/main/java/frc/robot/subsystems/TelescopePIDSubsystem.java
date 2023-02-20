@@ -11,18 +11,19 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
+import frc.constants.ArmTunable;
 
-public class ArmExtensionPID extends PIDSubsystem {
+public class TelescopePIDSubsystem extends PIDSubsystem {
 
   private final CANSparkMax m_extensionMotor = new CANSparkMax(ArmConstants.kExtensionMotorPort, CANSparkMax.MotorType.kBrushless);
   private final RelativeEncoder m_extensionEncoder;
   private ArmTab m_ArmTab;
 
   /** Creates a new Telescope. */
-  public ArmExtensionPID() {
+  public TelescopePIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(ArmConstants.kExtP, ArmConstants.kExtI, ArmConstants.kExtD));
+        new PIDController(ArmTunable.getExtendP(), ArmTunable.getExtendI(), ArmTunable.getExtendD()));
 
     m_extensionEncoder = m_extensionMotor.getEncoder();
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
