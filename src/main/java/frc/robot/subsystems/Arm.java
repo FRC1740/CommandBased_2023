@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
+import frc.network.ArmTable;
 
 
 public class Arm extends SubsystemBase {
@@ -22,12 +23,9 @@ public class Arm extends SubsystemBase {
   private final RelativeEncoder m_rotationFollowerEncoder;
   private final RelativeEncoder m_extensionEncoder;
   protected double m_setpoint;
+  
   private ArmTab m_ArmTab;
-
-  // Used to grab an instance of the global network tables
-  // NetworkTableInstance inst;
-  // NetworkTable m_nt;
-  // Shuffleboard m_sb;
+  private ArmTable m_ArmTable;
 
   public Arm() {
     /** Creates a new Arm. */
@@ -48,12 +46,13 @@ public class Arm extends SubsystemBase {
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
     m_rotationLeader.burnFlash();
     m_rotationFollower.burnFlash();
-    // inst = NetworkTableInstance.getDefault();
-    // m_nt = inst.getTable(ShuffleboardConstants.ArmTab);
     
     m_ArmTab = ArmTab.getInstance();
     m_ArmTab.setArmAngle(getArmRotationDegrees());
-    m_ArmTab.setArmExtension(getArmExtensionInches());          
+    m_ArmTab.setArmExtension(getArmExtensionInches());
+
+    m_ArmTable = ArmTable.getInstance();
+       
   }
 
   public void setSetpoint(double angle) {
