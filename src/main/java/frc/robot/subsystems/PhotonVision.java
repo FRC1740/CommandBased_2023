@@ -18,7 +18,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 
 
@@ -32,7 +31,6 @@ public class PhotonVision extends SubsystemBase {
   AprilTagFieldLayout m_aprilTagFieldLayout;
   PhotonPoseEstimator m_photonPoseEstimator;
 
-  Field2d m_PhotonField = new Field2d();
   public PhotonVision() {
     try{
     m_aprilTagFieldLayout = AprilTagFields.k2023ChargedUp.loadAprilTagLayoutField();}
