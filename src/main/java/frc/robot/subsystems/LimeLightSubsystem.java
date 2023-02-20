@@ -9,11 +9,11 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.network.LimeLightTable;
 
-public class LimeLight extends SubsystemBase {
+public class LimeLightSubsystem extends SubsystemBase {
 
   private LimeLightTable m_LimeLightTable;
 
-  public LimeLight() {
+  public LimeLightSubsystem() {
     m_LimeLightTable = LimeLightTable.getInstance();
   }
 

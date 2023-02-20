@@ -10,7 +10,7 @@ public class ArmConstants {
     // Arm Rotation Constants
     public static final double kArmRotationGearRatio = 36*(64/22); // Gear boxes 4x3x3, Sprockets 64/22 total 4x3x3x(64/22)= 144
     public static final double ARM_ROTATION_POSITION_CONVERSION_FACTOR = 360/kArmRotationGearRatio; //Encoder output in degrees the arm rotates
-    public static final double ArmRotationKs = 0.14167;
+    public static final double ArmRotationKs = 0.14167; // FIXME: These belong in ArmTunable
     public static final double ArmRotationKv = 0.03583;
     public static final double ArmRotationKa = 0.0010212;
     public static final double ArmRotationKg = 0.24227;
@@ -46,14 +46,14 @@ public class ArmConstants {
     public static final int kLowNodePosition = 8;  
     public static final int kSubStationPosition = 20; 
 
-    // ARM Rotation PID constants
-    public static final double kRotP = .05;
-    public static final double kRotI = 0.01;
-    public static final double kRotD = 0.005;
+    // // ARM Rotation PID constants
+    // public static final double kRotP = .05;
+    // public static final double kRotI = 0.01;
+    // public static final double kRotD = 0.005;
 
-    // ARM Extension PID constants
-    public static final double kExtP = .02;
-    public static final double kExtI = 0;
-    public static final double kExtD = 0;
+    // // ARM Extension PID constants
+    // public static final double kExtP = .02;
+    // public static final double kExtI = 0;
+    // public static final double kExtD = 0;
     
 }

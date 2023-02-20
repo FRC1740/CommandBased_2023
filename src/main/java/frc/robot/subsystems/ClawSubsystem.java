@@ -22,7 +22,7 @@ import frc.constants.ClawConstants;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 // import com.revrobotics.RelativeEncoder;
 
-public class Claw extends SubsystemBase {
+public class ClawSubsystem extends SubsystemBase {
   private final DoubleSolenoid m_grabberSolenoid;
   private final WPI_TalonSRX m_intakeMotor; // One Talon controlling TWO bag motors (hardwired)
   // private final RelativeEncoder m_intakeEncoder;
@@ -57,7 +57,7 @@ public class Claw extends SubsystemBase {
   private ClawTab m_ClawTab;
 
   /** Creates a new Manipulator. */
-  public Claw() {
+  public ClawSubsystem() {
     m_grabberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, ClawConstants.kPneumaticPortA, ClawConstants.kPneumaticPortB);
     // m_intakeMotor = new CANSparkMax(ClawConstants.IntakeMotorCANID, CANSparkMax.MotorType.kBrushless);
     m_intakeMotor = new WPI_TalonSRX(ClawConstants.IntakeMotorCANID);
