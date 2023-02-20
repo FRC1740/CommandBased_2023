@@ -19,15 +19,15 @@ import frc.robot.commands.DriveToDistance;
 //import frc.robot.commands.AprilTagAlign;
 import frc.robot.commands.TurnToAngleProfiled;
 
-import frc.robot.subsystems.LimeLight;
-//import frc.robot.subsystems.PhotonVision;
-import frc.robot.subsystems.ProfiledPIDArmSubsystem;
+import frc.robot.subsystems.LimeLightSubsystem;
+//import frc.robot.subsystems.PhotonVisionSubsystem;
+import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.ArmExtensionPID;
-import frc.robot.subsystems.GroundIntake;
-import frc.robot.subsystems.SignalLEDs;
+import frc.robot.subsystems.TelescopePIDSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem;
+import frc.robot.subsystems.SignalLEDSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -47,14 +47,14 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final LimeLight m_limelight = new LimeLight();
-  //private final PhotonVision m_photonVision = new PhotonVision();
-  protected final Claw m_claw = new Claw();
+  private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
+  //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
+  protected final ClawSubsystem m_claw = new ClawSubsystem();
   protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
-  protected final ProfiledPIDArmSubsystem m_armProfiled = new ProfiledPIDArmSubsystem();
-  protected final ArmExtensionPID m_telescope = new ArmExtensionPID();
-  protected final GroundIntake m_groundIntake = new GroundIntake();
-  private final SignalLEDs m_signalLEDs = new SignalLEDs();
+  protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
+  protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
+  protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
+  private final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
 
   private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
