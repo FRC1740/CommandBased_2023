@@ -72,7 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
     String StraightTrajectoryJSON = "output/Straight.wpilib.json";
     Trajectory Straight = new Trajectory();
 
-    PhotonVisionSubsystem m_PhotonVision = new PhotonVisionSubsystem(); // Fixme: We should NOT be instantiating a new subsystem here! RobotContainer does that. use getInstance()!!
+    PhotonVisionSubsystem m_PhotonVision = new PhotonVisionSubsystem(); // FIXME: We should NOT be instantiating a new subsystem here! RobotContainer does that. use getInstance()!!
 
     LinearFilter speedFilter;
     LinearFilter rotationFilter;

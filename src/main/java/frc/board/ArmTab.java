@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.constants.ArmConstants;
+import frc.constants.ArmTunable;
 import frc.constants.ShuffleboardConstants;
 
 /** Add your docs here. */
@@ -28,7 +29,15 @@ public class ArmTab {
     GenericEntry m_nte_HighNodeExtension;
     GenericEntry m_nte_MidNodeExtension;
     GenericEntry m_nte_LowNodeExtension;
-      
+
+    // Arm Rotation & Extension PID settings
+    GenericEntry m_nte_kPRot;
+    GenericEntry m_nte_kIRot;
+    GenericEntry m_nte_kDRot;
+    GenericEntry m_nte_kPExt;
+    GenericEntry m_nte_kIExt;
+    GenericEntry m_nte_kDExt;
+    
     private static ArmTab instance = null;
 
     private ArmTab() {
@@ -48,26 +57,65 @@ public class ArmTab {
 
         m_nte_ArmExtension = m_sbt_Arm.addPersistent("Current Arm Extension", 0.0)
             .withWidget(BuiltInWidgets.kGraph)
-            .withSize(2, 1).withPosition(0, 1).getEntry();
+            .withSize(3, 3).withPosition(5, 0).getEntry();
         m_nte_ArmAngle = m_sbt_Arm.addPersistent("Current Arm Angle", 0.0)
-            .withSize(2, 1).withPosition(0, 0).getEntry();
+            .withWidget(BuiltInWidgets.kGraph)
+            .withSize(3, 3).withPosition(0, 0).getEntry();
   
         // Create widgets for TARGET Arm Position
         m_nte_HighNodeExtension = m_sbt_Arm.addPersistent("High Node Extension", ArmConstants.kHighNodePosition)
-            .withSize(2, 1).withPosition(2, 0).getEntry();
+            .withSize(1, 1).withPosition(8, 0).getEntry();
         m_nte_MidNodeExtension  = m_sbt_Arm.addPersistent("Mid Node Extension", ArmConstants.kMidNodePosition)
-            .withSize(2, 1).withPosition(2, 1).getEntry();
+            .withSize(1, 1).withPosition(8, 1).getEntry();
         m_nte_LowNodeExtension = m_sbt_Arm.addPersistent("Low Node Extension", ArmConstants.kLowNodePosition)
-            .withSize(2, 1).withPosition(2, 2).getEntry();
+            .withSize(1, 1).withPosition(8, 2).getEntry();
 
         // Create widgets for TARGET Arm Angle
         m_nte_HighNodeAngle = m_sbt_Arm.addPersistent("High Node Angle", ArmConstants.kHighNodeAngle)
-            .withSize(2, 1).withPosition(4, 0).getEntry();
+            .withSize(1, 1).withPosition(3, 0).getEntry();
         m_nte_MidNodeAngle = m_sbt_Arm.addPersistent("Mid Node Angle", ArmConstants.kMidNodeAngle)
-            .withSize(2, 1).withPosition(4, 1).getEntry();
+            .withSize(1, 1).withPosition(3, 1).getEntry();
         m_nte_LowNodeAngle = m_sbt_Arm.addPersistent("Low Node Angle", ArmConstants.kLowNodeAngle)
-            .withSize(2, 1).withPosition(4, 2).getEntry();
+            .withSize(1, 1).withPosition(3, 2).getEntry();
+
+        // Create widgets for Arm Angle PID
+        m_nte_kPRot = m_sbt_Arm.addPersistent("Rot kP", ArmTunable.getRotateP())
+            .withSize(1, 1).withPosition(4, 0).getEntry();
+        m_nte_kIRot = m_sbt_Arm.addPersistent("Rot kI", ArmTunable.getRotateI())
+            .withSize(1, 1).withPosition(4, 1).getEntry();
+        m_nte_kDRot = m_sbt_Arm.addPersistent("Rot kD", ArmTunable.getRotateD())
+            .withSize(1, 1).withPosition(4, 2).getEntry();
+
+        // Create widgets for Arm Telescope PID
+        m_nte_kPExt = m_sbt_Arm.addPersistent("Ext kP", ArmTunable.getExtendP())
+            .withSize(1, 1).withPosition(9, 0).getEntry();
+        m_nte_kIExt = m_sbt_Arm.addPersistent("Ext kI", ArmTunable.getExtendI())
+            .withSize(1, 1).withPosition(9, 1).getEntry();
+        m_nte_kDExt = m_sbt_Arm.addPersistent("Ext kD", ArmTunable.getExtendD())
+            .withSize(1, 1).withPosition(9, 2).getEntry();
+            
     }
+
+    public Double getRotkP() {
+        return m_nte_kPRot.getDouble(ArmTunable.getRotateP());
+    }
+    public Double getRotkI() {
+        return m_nte_kIRot.getDouble(ArmTunable.getRotateI());
+    }
+    public Double getRotkD() {
+        return m_nte_kDRot.getDouble(ArmTunable.getRotateD());
+    }
+
+    public Double getExtkP() {
+        return m_nte_kPExt.getDouble(ArmTunable.getExtendP());
+    }
+    public Double getExtkI() {
+        return m_nte_kIExt.getDouble(ArmTunable.getExtendI());
+    }
+    public Double getExtkD() {
+        return m_nte_kDExt.getDouble(ArmTunable.getExtendD());
+    }
+
 
     public Double getArmExtension() {
         return m_nte_ArmExtension.getDouble(0.0);
