@@ -117,7 +117,7 @@ public class RobotContainer {
     // bind_Limelight();
     // bind_HalfSpeed();
     // bind_PathWeaver();
-    // bind_CoAutoBalance();
+    bind_CoAutoBalance();
     // bind_CoLightToggle();
     bind_CoCubeOp();
     // // Enable the Arm PID Subsystem
