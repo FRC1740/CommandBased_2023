@@ -95,11 +95,6 @@ public class DriveSubsystem extends SubsystemBase {
       m_leftEncoderFollower.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
       m_rightEncoder.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
       m_rightEncoderFollower.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
-
-      m_leftMotorLeader.burnFlash();
-      m_leftMotorFollower.burnFlash();
-      m_rightMotorLeader.burnFlash();
-      m_rightMotorFollower.burnFlash();
       
       m_gyro.reset();
       m_gyro.calibrate();
@@ -369,4 +364,10 @@ public class DriveSubsystem extends SubsystemBase {
 //   Trajectory testTrajectory = 
 //     TrajectoryGenerator.generateTrajectory(null, null, null, config)
 //   }
+  public void burnFlash() {
+    m_leftMotorLeader.burnFlash();
+    m_leftMotorFollower.burnFlash();
+    m_rightMotorLeader.burnFlash();
+    m_rightMotorFollower.burnFlash();
+  }
 }

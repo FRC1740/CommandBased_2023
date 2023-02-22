@@ -71,4 +71,9 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     m_GroundIntakeTab.setIntakeSpeed(getIntakeVelocity());
     m_intakeSetSpeed = m_GroundIntakeTab.getIntakeSetSpeed();
   }
+
+  public void burnFlash() {
+    m_intakeMotor.burnFlash();
+  }
+
 }
