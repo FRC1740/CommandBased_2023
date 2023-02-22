@@ -28,9 +28,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     m_extensionEncoder = m_extensionMotor.getEncoder();
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
-
-    m_extensionMotor.burnFlash();
-    
+ 
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedPosition);
     
@@ -80,4 +78,9 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     enable();
     setSetpoint(m_extensionEncoder.getPosition());
   }
+
+  public void burnFlash() {
+    m_extensionMotor.burnFlash();
+  }
+
 }

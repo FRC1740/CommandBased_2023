@@ -44,8 +44,6 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     
         m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
-        m_rotationLeader.burnFlash(); // Do we need to do this?
-        m_rotationFollower.burnFlash();
 
         setGoal(ArmConstants.kStowedAngle);
 
@@ -103,4 +101,10 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     // Return the process variable measurement here
     return m_rotationEncoder.getPosition();
   }
+
+  public void burnFlash() {
+    m_rotationLeader.burnFlash();
+    m_rotationFollower.burnFlash();
+  }
+
 }

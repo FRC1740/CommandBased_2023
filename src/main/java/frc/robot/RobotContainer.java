@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.DriverStation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -318,4 +319,16 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
       return m_AutoChooser.getSelected();
   }
+
+  public void autonomousInit() {
+    if (DriverStation.isFMSAttached()) {
+      m_robotDrive.burnFlash();
+      m_claw.burnFlash();
+      // m_arm.burnFlash();
+      m_armProfiled.burnFlash();
+      m_telescope.burnFlash();
+      m_groundIntake.burnFlash();
+    }
+  }
+
 }

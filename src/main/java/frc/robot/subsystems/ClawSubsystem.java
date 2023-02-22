@@ -235,4 +235,9 @@ public class ClawSubsystem extends SubsystemBase {
     // m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
   }
+
+  public void burnFlash() {
+    // only for SparkMax
+  }
+
 }
