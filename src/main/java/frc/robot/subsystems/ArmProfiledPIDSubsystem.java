@@ -23,6 +23,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   private final RelativeEncoder m_rotationEncoder;
   private final RelativeEncoder m_rotationFollowerEncoder;
   private final ArmFeedforward m_ArmFeedforward;
+  private final ProfiledPIDController m_PIDController; 
   
   public ArmProfiledPIDSubsystem() {
     super(
@@ -48,15 +49,19 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         setGoal(ArmConstants.kStowedAngle);
 
         m_ArmTab = ArmTab.getInstance();
+        m_PIDController = getController();
   }
 
   @Override
   public void periodic(){
     super.periodic();
     m_ArmTab.setArmAngle(getArmRotationDegrees());
+    m_PIDController.setPID(m_ArmTab.getRotkP(),
+                          m_ArmTab.getRotkI(), 
+                          m_ArmTab.getRotkD());
   }
   
-  private double getArmRotationDegrees() {
+  private double getArmRotationDegrees() {  
     return getMeasurement();
   }
 
