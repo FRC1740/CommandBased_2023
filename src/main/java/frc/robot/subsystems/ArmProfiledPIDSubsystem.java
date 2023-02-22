@@ -65,11 +65,15 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   @Override
   public void useOutput(double output, TrapezoidProfile.State setpoint) {
     // Use the output (and optionally the setpoint) here
-    // Calculate the feedforward from the sepoint
-    double feedforward = m_ArmFeedforward.calculate(setpoint.position, setpoint.velocity);
+
+    // Calculate the feedforward from the setpoint. 
+    // Note that sysid says to use horizontal as the reference position
+    // double feedforward = m_ArmFeedforward.calculate(setpoint.position - ArmConstants.ArmRotationAngleOffset, setpoint.velocity);
+    // FIXME: After PID tuning, add the feedforward back in
+    double feedforward = 0;
+
     // Add the feedforward to the PID output to get the motor output
     m_rotationLeader.setVoltage(output + feedforward);
-
   }
 
   public void resetToEncoderToStowedAngle(){

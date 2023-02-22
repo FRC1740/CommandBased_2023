@@ -10,10 +10,11 @@ public class ArmConstants {
     // Arm Rotation Constants
     public static final double kArmRotationGearRatio = 36*(64/22); // Gear boxes 4x3x3, Sprockets 64/22 total 4x3x3x(64/22)= 144
     public static final double ARM_ROTATION_POSITION_CONVERSION_FACTOR = 360/kArmRotationGearRatio; //Encoder output in degrees the arm rotates
-    public static final double ArmRotationKs = 0.14167; // FIXME: These belong in ArmTunable
+    public static final double ArmRotationKs = 0.14167;
     public static final double ArmRotationKv = 0.03583;
     public static final double ArmRotationKa = 0.0010212;
     public static final double ArmRotationKg = 0.24227;
+    public static final double ArmRotationAngleOffset = 86.042;
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 5 inches of extension
