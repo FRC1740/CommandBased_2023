@@ -54,6 +54,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     // Return the process variable measurement here
     return m_extensionEncoder.getPosition();
   }
+
   public double getArmExtensionInches() {
     return getMeasurement();
   }
@@ -63,18 +64,19 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
       return;
   }
 
-  public void manualTelescopeOut(){
+  public void manualTelescope(double speed) {
+    double position = getArmExtensionInches();
     disable();
-    m_extensionMotor.set(0.1);
+    if ((speed > 0.0 && position < ArmConstants.kArmExtendMaxInches) ||
+        (speed < 0.0 && position > ArmConstants.kArmExtendMinInches)) {
+      m_extensionMotor.set(speed);
+    }
+    else {
+      m_extensionMotor.set(0.0);
+    }
   }
 
-  public void manualTelescopeIn(){
-    disable();
-    m_extensionMotor.set(-0.1);
-    
-  }
-
-  public void manualDone(){
+  public void manualDone() {
     enable();
     setSetpoint(m_extensionEncoder.getPosition());
   }
