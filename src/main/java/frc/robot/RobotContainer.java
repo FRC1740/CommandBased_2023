@@ -129,6 +129,28 @@ public class RobotContainer {
     bind_ArmAndTelescope();
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
+
+    bind_RC_ManualArm();
+    bind_RC_AutoArm();
+    bind_RC_GamePiece();
+    bind_RC_RearIntake();
+  }
+
+  // See the Robot Control documents for the spec
+  private void bind_RC_ManualArm() {
+ 
+  }
+
+  private void bind_RC_AutoArm() {
+
+  }
+
+  private void bind_RC_GamePiece() {
+
+  }
+
+  private void bind_RC_RearIntake() {
+
   }
 
   private void bind_CircleTest() {
@@ -146,19 +168,19 @@ public class RobotContainer {
 
   private void bind_ManualArmTest() {
     m_driverController.a()
-      .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotateUp()))
+      .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotate(ArmConstants.kArmRotateManualSpeed)))
       .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
 
     m_driverController.b()
-      .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotateDown()))
+      .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotate(-ArmConstants.kArmRotateManualSpeed)))
       .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
 
     m_driverController.x()
-      .onTrue(new InstantCommand(() -> m_telescope.manualTelescopeOut()))
+      .onTrue(new InstantCommand(() -> m_telescope.manualTelescope(ArmConstants.kArmExtendManualSpeed)))
       .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
 
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_telescope.manualTelescopeIn()))
+      .onTrue(new InstantCommand(() -> m_telescope.manualTelescope(-ArmConstants.kArmExtendManualSpeed)))
       .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
   }
 

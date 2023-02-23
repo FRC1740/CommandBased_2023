@@ -84,21 +84,21 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
   }
 
-  public void manualArmRotateUp(){
+  public void manualArmRotate(double speed){
+    double position = getArmRotationDegrees();
     disable();
-    m_rotationLeader.set(0.1);
-
-
+    if ((speed > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) ||
+        (speed < 0.0 && position > ArmConstants.kArmRotateMinDegrees)) {
+      m_rotationLeader.set(speed);
+    }
+    else {
+      m_rotationLeader.set(0.0);
+    }
   }
 
   public void manualDone(){
     enable();
     setGoal(m_rotationEncoder.getPosition());
-  }
-
-  public void manualArmRotateDown(){
-    disable();
-    m_rotationLeader.set(-.1);
   }
 
   @Override

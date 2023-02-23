@@ -22,6 +22,15 @@ public class ArmConstants {
     // Encoder output to inches of extension
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
+    // Manual limits and speeds
+    public static final double kArmExtendMaxInches = 20.0;
+    public static final double kArmExtendMinInches = 0.0;
+    public static final double kArmExtendManualSpeed = 0.1;
+
+    public static final double kArmRotateMaxDegrees = 129.0;
+    public static final double kArmRotateMinDegrees = 0.0;
+    public static final double kArmRotateManualSpeed = 0.1;
+
     //public static final double kArmExtensionRotationToLinearDistance = 1.5;
     // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
     //public static final double kArmExtensionTicksPerRotationOutput = ConSparkMax.POSITION_CONVERSION_FACTOR * kArmExtensionGearRatio;
