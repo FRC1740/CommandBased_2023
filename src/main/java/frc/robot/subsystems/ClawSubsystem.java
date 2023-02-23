@@ -79,8 +79,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void ejectCube() {
     m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
-    m_timer.reset(); // Reset timer to allow a delayed shutdown of Eject Motors
-    m_timer.hasElapsed(2);
+   m_intakeMotor.setExpiration(1);
     setMode(ClawMode.READY);
   }
 
