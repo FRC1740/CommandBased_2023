@@ -14,9 +14,12 @@ public class ArmTunable {
     private static final String extendIKey = namespace + "Extend_I";
     private static final String extendDKey = namespace + "Extend_D";
 
-    private static final double rotatePDefault = 0.04;
+    private static final double rotatePDefault = 0.12149;
     private static final double rotateIDefault = 0.0;
-    private static final double rotateDDefault = 0.0;
+    private static final double rotateDDefault = 0.039139*2;
+
+    public static final double rotateMaxAcceleration = 800;
+    public static final double rotateMaxVelocity = 800;   
 
     public static final double extendPDefault = .02;
     public static final double extendIDefault = 0;
@@ -30,7 +33,8 @@ public class ArmTunable {
     }
 
     public static double getRotateP() {
-        return getDoubleValue(rotatePKey, rotatePDefault);
+        // return getDoubleValue(rotatePKey, rotatePDefault);
+        return rotatePDefault;
     }
 
     public static double getRotateI() {

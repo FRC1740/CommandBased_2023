@@ -10,11 +10,11 @@ public class ArmConstants {
     // Arm Rotation Constants
     public static final double kArmRotationGearRatio = 36*(64/22); // Gear boxes 4x3x3, Sprockets 64/22 total 4x3x3x(64/22)= 144
     public static final double ARM_ROTATION_POSITION_CONVERSION_FACTOR = 360/kArmRotationGearRatio; //Encoder output in degrees the arm rotates
-    public static final double ArmRotationKs = 0.14167;
-    public static final double ArmRotationKv = 0.03583;
-    public static final double ArmRotationKa = 0.0010212;
-    public static final double ArmRotationKg = 0.24227;
-    public static final double ArmRotationAngleOffset = 86.042;
+    public static final double ArmRotationKs = 0.1632;
+    public static final double ArmRotationKv = 0.034513;
+    public static final double ArmRotationKa = 0.0022757;
+    public static final double ArmRotationKg = 0.23146;
+    public static final double ArmRotationAngleOffset = 102.24;
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 5 inches of extension
@@ -51,10 +51,10 @@ public class ArmConstants {
     public static final double kSubStationAngle = 70; // Same as Mid-node? [Started 75]
     
     public static final int kStowedPosition = 0;    // FIXME: Pseudo-wild guess at node distance
-    public static final int kHighNodePosition = 4;  // These values came from CAD and will likely
-    public static final int kMidNodePosition = 20;  // change once the arm is installed on the robot
-    public static final int kLowNodePosition = 8;  
-    public static final int kSubStationPosition = 20; 
+    public static final int kHighNodePosition = 0;  // These values came from CAD and will likely
+    public static final int kMidNodePosition = 0;  // change once the arm is installed on the robot
+    public static final int kLowNodePosition = 0;  
+    public static final int kSubStationPosition = 0; 
 
     // // ARM Rotation PID constants
     // public static final double kRotP = .05;
