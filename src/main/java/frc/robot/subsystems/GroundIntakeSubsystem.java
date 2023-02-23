@@ -24,7 +24,7 @@ public class GroundIntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_intakeMotor = new CANSparkMax(GroundIntakeConstants.kIntakeMotorPort, CANSparkMax.MotorType.kBrushless);
   private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, GroundIntakeConstants.kPneumaticPortA, GroundIntakeConstants.kPneumaticPortB);
   private final RelativeEncoder m_intakeEncoder;
-  private double m_intakeSetSpeed = -0.5;
+  private double m_intakeSetSpeed = GroundIntakeConstants.kDefaultIntakeSpeed;
 
   private GroundIntakeTab m_GroundIntakeTab;
 

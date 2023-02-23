@@ -177,12 +177,6 @@ public class RobotContainer {
     m_driverController.leftBumper()
       .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
-
-    // m_driverController.x()
-    //   .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(0.1)));
-
-    // m_driverController.y()
-    //   .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(-0.1)));
   }
 
   private void bind_Limelight() {
