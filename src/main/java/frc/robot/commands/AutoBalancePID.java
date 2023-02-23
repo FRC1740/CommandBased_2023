@@ -4,8 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
@@ -17,13 +15,13 @@ import frc.constants.AutoConstants;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoBalancePID extends ProfiledPIDCommand {
   /** Creates a new AutoBalancePID. */
-  private XboxController m_codriverController;
+  
   private DriveSubsystem m_drive;
   //private double initEncoderPos;
   private double heading;
   private static double error = 0;
 
-  public AutoBalancePID(DriveSubsystem drive, XboxController coDriveController) {
+  public AutoBalancePID(DriveSubsystem drive) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -46,11 +44,11 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   getController()
       .setTolerance(AutoConstants.kBalanceToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
       m_drive = drive;
-  m_codriverController = coDriveController;
+
   }
   @Override
   public void end(boolean interrupted) {
-    m_codriverController.setRumble(RumbleType.kBothRumble, 0);
+
   }
 
 
@@ -59,7 +57,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     super.initialize();
     heading = m_drive.getAngle();
     //initEncoderPos = Math.abs(m_drive.getAverageEncoderInches());
-    m_codriverController.setRumble(RumbleType.kBothRumble, 1);
+
   }
   public void execute(){
     super.execute();

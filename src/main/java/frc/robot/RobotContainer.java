@@ -4,44 +4,41 @@
 
 package frc.robot;
 
-
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 
+import frc.constants.ArmConstants;
+import frc.constants.DriveConstants;
+import frc.constants.OIConstants;
 
-
-import static edu.wpi.first.wpilibj.XboxController.Button;
-
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-//import frc.robot.commands.AutoBalancePID;
+import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
 //import frc.robot.commands.RotateArmToAngle;
-//import frc.robot.subsystems.ExampleSubsystem;
-import frc.robot.subsystems.LimeLight;
-import frc.robot.subsystems.PhotonVision;
-import frc.robot.subsystems.ProfiledPIDArmSubsystem;
+//import frc.robot.commands.AprilTagAlign;
+import frc.robot.commands.TurnToAngleProfiled;
+
+import frc.robot.subsystems.LimeLightSubsystem;
+//import frc.robot.subsystems.PhotonVisionSubsystem;
+import frc.robot.subsystems.ArmProfiledPIDSubsystem;
+// import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.Claw; // Uncomment this when mechanism is ready to test
-import frc.robot.subsystems.ArmPIDSubsystem;
-import frc.robot.subsystems.ArmExtensionPID;
-import frc.constants.ArmConstants;
+import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.TelescopePIDSubsystem;
+import frc.robot.subsystems.GroundIntakeSubsystem;
+import frc.robot.subsystems.SignalLEDSubsystem;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.commands.TurnToAngleProfiled;
-//import frc.robot.commands.AprilTagAlign;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.DriverStation;
 
-import frc.constants.DriveConstants;
-import frc.constants.OIConstants;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-//import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -51,29 +48,28 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final LimeLight m_limelight = new LimeLight();
-  private final PhotonVision m_photonVision = new PhotonVision();
-  // private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  protected final Claw m_Claw = new Claw();
-  //protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
-  protected final ProfiledPIDArmSubsystem m_ProfiledArm = new ProfiledPIDArmSubsystem();
-  protected final ArmExtensionPID m_telescope = new ArmExtensionPID();
+  private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
+  //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
+  protected final ClawSubsystem m_claw = new ClawSubsystem();
+  // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
+  protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
+  protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
+  protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
+  private final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
 
-  // The driver's controller
-  private final XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  private final XboxController m_codriverController = new XboxController(OIConstants.kCoDriverControllerPort);
-  // FIXME: We should be migrating away form the XboxController class to the CommandXboxController class
-  // private final CommandXboxController m_codriverCommand = new CommandXboxController(Constants.OIConstants.kCoDriverControllerPort);
+  private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
   
   SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
   // auto command
-  private Command m_autoCommand = m_AutoChooser.getSelected();
-
+  // Note: The autocommand is dynamically retrieved in getAutonomousCommand.
+  // This member variable is currently unused
+  // private Command m_autoCommand = m_AutoChooser.getSelected();
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
+
     configureButtonBindings();
 
     // Configure default commands
@@ -83,215 +79,263 @@ public class RobotContainer {
       // Triggers are Axis 2; RightStick X is axis 3
       // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
       new RunCommand(() ->
-          m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
-                  m_driverController.getLeftX(), true), m_robotDrive));
+        m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+        m_driverController.getLeftX(), true), m_robotDrive));
     
-    m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path", 
-    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
-    true));
-    
-    m_AutoChooser.addOption("straight", m_robotDrive.FollowPath(PathPlanner.loadPath("Straight path", 
-    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
-    true));
-    
-    m_AutoChooser.addOption("Short Straight path", m_robotDrive.FollowPath(PathPlanner.loadPath("Short_Straight_Path", 
-    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
-    true));
+    m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path",
+        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
+          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
+          true));
 
-    m_AutoChooser.addOption("more curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("more curvy path", 
-    new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared)), 
-    true));
+    m_AutoChooser.addOption("straight", m_robotDrive.FollowPath(PathPlanner.loadPath("Straight path",
+        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
+          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
+          true));
+
+    m_AutoChooser.addOption("Short Straight path", m_robotDrive.FollowPath(PathPlanner.loadPath("Short_Straight_Path",
+        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
+          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
+          true));
+
+    m_AutoChooser.addOption("more curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("more curvy path",
+        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
+          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
+          true));
 
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
   }
 
   /**
-   * Use this method to define your button->command mappings. Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
-   * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
+    // bind_CircleTest();
+    // bind_AutoDriveDistanceTest();
+    bind_ManualArmTest();
+    // bind_ResetGyro();
+    bind_GroundIntakeTest();
+    // bind_Limelight();
+    // bind_HalfSpeed();
+    // bind_PathWeaver();
+    bind_CoAutoBalance();
+    // bind_CoLightToggle();
+    bind_CoCubeOp();
+    // // Enable the Arm PID Subsystem
+    // // m_arm.enable();
+    m_armProfiled.enable();
+    m_telescope.enable();
 
-    /* ***************** Driver Contols ************ */
+    // bind_ArmPIDTest();
+    bind_ArmAndTelescope();
+    // bind_LedModeTest();
+    // bind_LedSubsystemTest();
+  }
 
-    // Turn to -90 degrees with a profile when the Circle button is pressed, with a 5 second timeout
-    // new JoystickButton(m_driverController, Button.kA.value)
-    //     .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
+  private void bind_CircleTest() {
+    // Turn to -90 degrees with a profile when the Circle button is pressed, with a
+    // 5 second timeout
+    m_driverController.a()
+      .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
+  }
 
+  private void bind_AutoDriveDistanceTest() {
     // Auto-drive distance
-    // new JoystickButton(m_driverController, Button.kB.value)
-    //     .onTrue(new DriveToDistance(5, m_robotDrive));
+    m_driverController.b()
+      .onTrue(new DriveToDistance(5, m_robotDrive));
+  }
 
-    new JoystickButton(m_driverController, Button.kA.value)
-      .onTrue(new InstantCommand(() -> m_ProfiledArm.manualArmRotateUp()))
-      .onFalse(new InstantCommand(() -> m_ProfiledArm.manualDone()));
+  private void bind_ManualArmTest() {
+    m_driverController.a()
+      .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotateUp()))
+      .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
 
-    new JoystickButton(m_driverController, Button.kB.value)
-      .onTrue(new InstantCommand(() -> m_ProfiledArm.manualArmRotateDown()))
-      .onFalse(new InstantCommand(() -> m_ProfiledArm.manualDone()));
+    m_driverController.b()
+      .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotateDown()))
+      .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
 
-    new JoystickButton(m_driverController, Button.kX.value)
+    m_driverController.x()
       .onTrue(new InstantCommand(() -> m_telescope.manualTelescopeOut()))
       .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
 
-    new JoystickButton(m_driverController, Button.kY.value)
+    m_driverController.y()
       .onTrue(new InstantCommand(() -> m_telescope.manualTelescopeIn()))
       .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
+  }
 
+  private void bind_ResetGyro() {
     // Manually rsest the gyro
-    new JoystickButton(m_driverController, Button.kStart.value)
+    m_driverController.start()
       .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
+  }
 
-    // new JoystickButton(m_driverController, Button.kY.value)
-    //   .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
+  private void bind_GroundIntakeTest() {
+    m_driverController.rightBumper()
+      // This command must also stow the arm first!!
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
+    m_driverController.leftBumper()
+      .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
+  }
 
+  private void bind_Limelight() {
+    m_driverController.y()
+      .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
+  }
+
+  private void bind_HalfSpeed() {
     // Drive at half speed when the right bumper is held
-    new JoystickButton(m_driverController, Button.kRightBumper.value)
-        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
-        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
+    m_driverController.rightBumper()
+      .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
+      .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
+  }
 
+  private void bind_PathWeaver() {
+    m_driverController.x()
+      .onTrue(m_robotDrive.getPathWeaverCommand());
+  }
 
-    // new JoystickButton(m_driverController, Button.kX.value)
-    //     .onTrue(m_robotDrive.getPathWeaverCommand());
-        
-    /* ***************** CO-Driver Contols ************ */
+  /* ***************** CO-Driver Contols ************ */
+  private void bind_CoAutoBalance() {
+    // Drive to autobalance on teetertotter when 'X' button is pressed on codriver
+    // controller, 5 second timeout
+    // FIXME: change AutoBalancePID second parameter to CommandXboxController
+    m_codriverController.back()
+      .onTrue(new AutoBalancePID(m_robotDrive));
+  }
 
-    //Drive to autobalance on teetertotter when 'X' button is pressed on codriver controller, 5 second timeout
-    // new JoystickButton(m_codriverController, Button.kX.value)
-    //     .onTrue(new AutoBalancePID(m_robotDrive, m_codriverController));
+  private void bind_CoLightToggle() {
+    // When codriver button is pressed, toggle the light
+    m_codriverController.y()
+      .onTrue(new InstantCommand(() -> m_limelight.toggleLED()));
+  }
 
-    // // When codriver button is pressed, toggle the light
-    // new JoystickButton(m_codriverController, Button.kY.value)
-    // .onTrue(new InstantCommand(()-> m_limelight.toggleLED()));
+  private void bind_CoCubeOp(){
+    m_codriverController.leftBumper()
+    .onTrue(new InstantCommand(() -> m_claw.intakeCube()));
+    m_codriverController.start()
+    .onTrue(new InstantCommand(() -> m_claw.ejectCube()));
+  }
 
-    // Enable the Arm PID Subsystem
+  private void bind_ArmPIDTest() {
     // Maybe need to enable/disable this when running commands
     // that will utilize the ground intake? Or just ensure
     // That the Arm setPoint remains at starting config setpoint?
 
-    //m_arm.enable();
-    m_ProfiledArm.enable();
-    m_telescope.enable();
-
     // Basic PID button commands for Arm Rotation
-    // new JoystickButton(m_driverController, Button.kA.value)
-    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
-    // new JoystickButton(m_driverController, Button.kB.value)
-    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
-    // new JoystickButton(m_driverController, Button.kX.value)
-    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
-    // new JoystickButton(m_driverController, Button.kY.value)
-    //     .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
+    // m_driverController.a()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
+    // m_driverController.b()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
+    // m_driverController.x()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
+    // m_driverController.y()
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
+  }
 
+
+  private void bind_ArmAndTelescope() {
     // Combination PID commands for Arm rotate & extend/retract
-    new JoystickButton(m_codriverController, Button.kA.value)
+    m_codriverController.a()
       .onTrue(new SequentialCommandGroup(
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))
-          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kStowedAngle))));
+        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
+        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))
+        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))));
 
-    new JoystickButton(m_codriverController, Button.kB.value)
+    m_codriverController.b()
       .onTrue(new SequentialCommandGroup(
-          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
-          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kHighNodeAngle))));
+        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
+        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
+        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle))));
 
-    new JoystickButton(m_codriverController, Button.kX.value)
+    m_codriverController.x()
       .onTrue(new SequentialCommandGroup(
-          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
-          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kMidNodeAngle)),
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
-    
-    new JoystickButton(m_codriverController, Button.kY.value)
+        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
+        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
+        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
+
+    m_codriverController.y()
       .onTrue(new SequentialCommandGroup(
-          //new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
-          new InstantCommand(() -> m_ProfiledArm.setGoal(ArmConstants.kLowNodeAngle))));
-          //new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition))));
+        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
+        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle))));
+        // new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)));
 
-    new JoystickButton(m_codriverController, Button.kRightBumper.value)
-      .onTrue(new InstantCommand(() -> m_Claw.toggle()));
+    m_codriverController.rightBumper()
+      .onTrue(new InstantCommand(() -> m_claw.toggle()));
+  }
 
-
-      
-      // Signal for a CUBE when held
-    // new JoystickButton(m_codriverController, Button.kA.value)
-    //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CUBE)))
-    //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
-    
-    // // Signal for a CONE when held
-    // new JoystickButton(m_codriverController, Button.kB.value)
-    //     .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.CONE)))
-    //     .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDs.mode.OFF)));
-    
-    /*
-    new JoystickButton(m_codriverController, Button.kA.value)
-      .toggleOnTrue(new InstantCommand(() -> m_Claw.GrabOrReleaseCube()));
+  private void bind_LedModeTest() {
+    // Signal for a CUBE when held
+    m_codriverController.a()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CUBE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
 
     // Signal for a CONE when held
-    new JoystickButton(m_codriverController, Button.kB.value)
-      .toggleOnTrue(new InstantCommand(() -> m_Claw.GrabOrReleaseCone()));
-     */
+    m_codriverController.b()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+
+    m_codriverController.x()
+      .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
+
+    m_codriverController.y()
+      .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCone()));
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
+  private void bind_LedSubsystemTest() {
+    m_driverController.a()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+    m_driverController.b()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CUBE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+    m_driverController.x()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.RED, SignalLEDSubsystem.LedPreference.MAIN, false)));
+    m_driverController.y()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, true)));
+    m_driverController.back()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.BLUE, SignalLEDSubsystem.LedPreference.MAIN, true)));
+    m_driverController.start()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.KITT, SignalLEDSubsystem.LedPreference.MAIN, true)));
+
+    m_driverController.leftBumper()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.ALLIANCE, SignalLEDSubsystem.LedPreference.MAIN, true)));
+    m_driverController.leftTrigger()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.GREEN, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+    m_driverController.leftStick()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COLONELS, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+    m_driverController.rightBumper()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COLONELS, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+    m_driverController.rightTrigger()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COUNTDOWN, SignalLEDSubsystem.LedPreference.MAIN, true)));
+    m_driverController.rightStick()
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+  }
+
+  // Return the command to run in autonomous
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_AutoChooser.getSelected();
+      return m_AutoChooser.getSelected();
   }
+
+  public void autonomousInit() {
+    if (DriverStation.isFMSAttached()) {
+      m_robotDrive.burnFlash();
+      m_claw.burnFlash();
+      // m_arm.burnFlash();
+      m_armProfiled.burnFlash();
+      m_telescope.burnFlash();
+      m_groundIntake.burnFlash();
+    }
+  }
+
+  public void setGamePiece(OIConstants.GamePiece piece) {
+    m_groundIntake.setGamePiece(piece);
+    m_claw.setGamePiece(piece);
+  }
+
 }
-
-//   package frc.robot;
-//   import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-//   import edu.wpi.first.wpilibj2.command.Command;
-//   import edu.wpi.first.wpilibj2.command.InstantCommand;
-//   import frc.robot.subsystems.SignalLEDs;
-  
-//   public class RobotContainer {
-//     private final SignalLEDs m_signalLEDs = new SignalLEDs();
-//     private final CommandXboxController m_driverController = new CommandXboxController(Constants.OIConstants.kDriverControllerPort);
-//     private final Command m_autoCommand = null;
-//     public RobotContainer() {
-//       configureButtonBindings();
-//     }
-//     private void configureButtonBindings() {
-//       m_driverController.a()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
-//       m_driverController.b()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CUBE,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
-//       m_driverController.x()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.RED,SignalLEDs.LedPreference.MAIN,false)));
-//       m_driverController.y()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,true)));
-//       m_driverController.back().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.BLUE,SignalLEDs.LedPreference.MAIN,true)));
-//       m_driverController.start().onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.KITT,SignalLEDs.LedPreference.MAIN,true)));
-
-//       m_driverController.leftBumper()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.ALLIANCE,SignalLEDs.LedPreference.MAIN,true)));
-//       m_driverController.leftTrigger()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.GREEN,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
-//       m_driverController.leftStick()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
-//       m_driverController.rightBumper()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COLONELS,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
-//       m_driverController.rightTrigger()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.COUNTDOWN,SignalLEDs.LedPreference.MAIN,true)));
-//       m_driverController.rightStick()
-//         .onTrue(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.CONE,SignalLEDs.LedPreference.MAIN,false)))
-//         .onFalse(new InstantCommand(()-> m_signalLEDs.setMode(SignalLEDs.LedMode.OFF,SignalLEDs.LedPreference.MAIN,false)));
-//     }
-  
-//   public Command getAutonomousCommand() {
-//     return m_autoCommand;
-//   }
-// }

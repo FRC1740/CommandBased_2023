@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import frc.constants.OIConstants;
+
 // Comment to force commit
 // Using "import static an.enum.or.constants.inner.class.*;" helps reduce verbosity
 // this replaces "DoubleSolenoid.Value.kForward" with just kForward
@@ -20,22 +22,29 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.board.GroundIntakeTab;
 import frc.constants.GroundIntakeConstants;
 
-public class GroundIntake extends SubsystemBase {
+public class GroundIntakeSubsystem extends SubsystemBase {
   private final CANSparkMax m_intakeMotor = new CANSparkMax(GroundIntakeConstants.kIntakeMotorPort, CANSparkMax.MotorType.kBrushless);
-  private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, GroundIntakeConstants.kPneumaticPortA, GroundIntakeConstants.kPneumaticPortB);
+  private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, GroundIntakeConstants.kPneumaticPortA, GroundIntakeConstants.kPneumaticPortB);
   private final RelativeEncoder m_intakeEncoder;
-  private double m_intakeSetSpeed = 0.0;
+  private double m_intakeSetSpeed = GroundIntakeConstants.kDefaultIntakeSpeed;
 
   private GroundIntakeTab m_GroundIntakeTab;
 
+  private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
+
   /** Creates a new GroundIntake. */
-  public GroundIntake() {
+  public GroundIntakeSubsystem() {
     m_intakeEncoder = m_intakeMotor.getEncoder();
 
     m_GroundIntakeTab = GroundIntakeTab.getInstance();
     m_GroundIntakeTab.setIntakeSetSpeed(m_intakeSetSpeed);
     m_GroundIntakeTab.setIntakeSpeed(getIntakeVelocity());
+
+    m_gamePiece = OIConstants.kDefaultGamePiece;
 }
+
+  // Gamepiece Cone/Cube is a global mode
+  // FIXME: GroundIntake has state based on Gamepiece and task. First create the state machine for each GamePiece; only then implement
 
   public void deploy() {
     m_intakeSolenoid.set(kForward); // FIXME: May have to swap pneumatics orientation
@@ -45,6 +54,10 @@ public class GroundIntake extends SubsystemBase {
   public void stow() {
     m_intakeSolenoid.set(kReverse); // FIXME: May have to swap pneumatics orientation
     stopIntake();
+  }
+
+  public void eject() {
+    setIntakeSpeed(-m_intakeSetSpeed);
   }
 
   public double getIntakeVelocity() {
@@ -67,4 +80,13 @@ public class GroundIntake extends SubsystemBase {
     m_GroundIntakeTab.setIntakeSpeed(getIntakeVelocity());
     m_intakeSetSpeed = m_GroundIntakeTab.getIntakeSetSpeed();
   }
+
+  public void setGamePiece(OIConstants.GamePiece gamePiece) {
+    m_gamePiece = gamePiece;
+  }
+
+  public void burnFlash() {
+    m_intakeMotor.burnFlash();
+  }
+
 }

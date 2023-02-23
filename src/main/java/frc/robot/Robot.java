@@ -8,7 +8,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.board.RobotTab;
-import edu.wpi.first.networktables.*;
+import frc.network.RobotTable;
+
 import com.pathplanner.lib.server.PathPlannerServer;
 
 /**
@@ -22,11 +23,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  // Used to grab an instance of the global network tables
-  NetworkTableInstance inst;
-  NetworkTable m_nt;
-
   private RobotTab m_RobotTab;
+  private RobotTable m_RobotTable;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -38,10 +36,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-//    inst = NetworkTableInstance.getDefault();
-//    m_nt = inst.getTable(ShuffleboardConstants.RobotTab);
-
     m_RobotTab = RobotTab.getInstance();
+    m_RobotTable = RobotTable.getInstance();
 
     PathPlannerServer.startServer(5811);
   }
@@ -73,6 +69,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    m_robotContainer.autonomousInit();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

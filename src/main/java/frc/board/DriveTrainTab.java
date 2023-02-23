@@ -6,8 +6,6 @@ package frc.board;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -15,10 +13,6 @@ import frc.constants.ShuffleboardConstants;
 
 /** Add your docs here. */
 public class DriveTrainTab {
-    // Used to grab an instance of the global network tables
-    NetworkTableInstance inst;
-    NetworkTable m_nt;
-
     Field2d m_Field = new Field2d();
     
     Shuffleboard m_sb;
@@ -51,7 +45,6 @@ public class DriveTrainTab {
     private static DriveTrainTab instance = null;
 
     private DriveTrainTab() {
-        initNetworkTableInstance();
         initShuffleboardTab();
     }
 
@@ -60,24 +53,6 @@ public class DriveTrainTab {
             instance = new DriveTrainTab();
         }
         return instance;
-    }
-
-    private void initNetworkTableInstance() {
-        inst = NetworkTableInstance.getDefault();
-        m_nt = inst.getTable(ShuffleboardConstants.DriveTrainTab);
-
-        // get a topic from a NetworkTableInstance
-        // the topic name in this case is the full name
-        //DoubleTopic dblTopic = inst.getDoubleTopic("/drivetrain/gyro");
-
-        // get a topic from a NetworkTable
-        // the topic name in this case is the name within the table;
-        // this line and the one above reference the same topic
-        // DoubleTopic dtGyro = m_nt.getDoubleTopic("gyro");
-
-        // get a type-specific topic from a generic Topic
-        // Topic genericTopic = inst.getTopic("/datatable/X");
-        // DoubleTopic dblTopic = new DoubleTopic(genericTopic);
     }
 
     private void initShuffleboardTab() {

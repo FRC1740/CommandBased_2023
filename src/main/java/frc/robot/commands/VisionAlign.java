@@ -8,15 +8,15 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.LimeLight;
+import frc.robot.subsystems.LimeLightSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class VisionAlign extends ProfiledPIDCommand {
   /** Creates a new VisionAlign. */
-  LimeLight m_LimeLight;
-  public VisionAlign(DriveSubsystem drive, LimeLight limeLight) {
+  LimeLightSubsystem m_LimeLight;
+  public VisionAlign(DriveSubsystem drive, LimeLightSubsystem limeLight) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(

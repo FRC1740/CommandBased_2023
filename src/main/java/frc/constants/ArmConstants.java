@@ -14,6 +14,7 @@ public class ArmConstants {
     public static final double ArmRotationKv = 0.03583;
     public static final double ArmRotationKa = 0.0010212;
     public static final double ArmRotationKg = 0.24227;
+    public static final double ArmRotationAngleOffset = 86.042;
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 5 inches of extension
@@ -46,14 +47,14 @@ public class ArmConstants {
     public static final int kLowNodePosition = 8;  
     public static final int kSubStationPosition = 20; 
 
-    // ARM Rotation PID constants
-    public static final double kRotP = .05;
-    public static final double kRotI = 0.01;
-    public static final double kRotD = 0.005;
+    // // ARM Rotation PID constants
+    // public static final double kRotP = .05;
+    // public static final double kRotI = 0.01;
+    // public static final double kRotD = 0.005;
 
-    // ARM Extension PID constants
-    public static final double kExtP = .02;
-    public static final double kExtI = 0;
-    public static final double kExtD = 0;
+    // // ARM Extension PID constants
+    // public static final double kExtP = .02;
+    // public static final double kExtI = 0;
+    // public static final double kExtD = 0;
     
 }

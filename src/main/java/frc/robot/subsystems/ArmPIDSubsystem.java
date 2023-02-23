@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
+import frc.constants.ArmTunable;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class ArmPIDSubsystem extends PIDSubsystem {
@@ -26,7 +27,7 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   public ArmPIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(ArmConstants.kRotP, ArmConstants.kRotI, ArmConstants.kRotD));
+        new PIDController(ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD()));
 
     m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
         // The target angle for PID rotation control
@@ -40,8 +41,6 @@ public class ArmPIDSubsystem extends PIDSubsystem {
 
     m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
     m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
-    m_rotationLeader.burnFlash(); // Do we need to do this?
-    m_rotationFollower.burnFlash();
 
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedAngle);
@@ -72,7 +71,7 @@ public class ArmPIDSubsystem extends PIDSubsystem {
 
   @Override
   public void setSetpoint(double angle) {
-      System.out.println("Setting Setpoint to "+angle);
+      // System.out.println("Setting Setpoint to "+angle);
       super.setSetpoint(angle);
   }
 
@@ -80,4 +79,9 @@ public class ArmPIDSubsystem extends PIDSubsystem {
     return getMeasurement();
   }
 
+  public void burnFlash() {
+    m_rotationLeader.burnFlash();
+    m_rotationFollower.burnFlash();
+  }
+  
 }

@@ -72,7 +72,7 @@ public class DriveSubsystem extends SubsystemBase {
     String StraightTrajectoryJSON = "output/Straight.wpilib.json";
     Trajectory Straight = new Trajectory();
 
-    PhotonVision m_PhotonVision = new PhotonVision();
+    PhotonVisionSubsystem m_PhotonVision = new PhotonVisionSubsystem(); // FIXME: We should NOT be instantiating a new subsystem here! RobotContainer does that. use getInstance()!!
 
     LinearFilter speedFilter;
     LinearFilter rotationFilter;
@@ -95,11 +95,6 @@ public class DriveSubsystem extends SubsystemBase {
       m_leftEncoderFollower.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
       m_rightEncoder.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
       m_rightEncoderFollower.setVelocityConversionFactor(DriveConstants.VELOCITY_CONVERSION_FACTOR);
-
-      m_leftMotorLeader.burnFlash();
-      m_leftMotorFollower.burnFlash();
-      m_rightMotorLeader.burnFlash();
-      m_rightMotorFollower.burnFlash();
       
       m_gyro.reset();
       m_gyro.calibrate();
@@ -117,7 +112,7 @@ public class DriveSubsystem extends SubsystemBase {
 
       m_DriveTrainTab = DriveTrainTab.getInstance();
       
-      speedFilter = LinearFilter.movingAverage(11);
+      speedFilter = LinearFilter.movingAverage(30);
       rotationFilter = LinearFilter.movingAverage(5);
   }
 
@@ -283,7 +278,8 @@ public class DriveSubsystem extends SubsystemBase {
   //   m_rightEncoder.setPosition(0);
   // }
 
-  public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) {
+  
+  public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
     return new SequentialCommandGroup(
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
@@ -368,4 +364,10 @@ public class DriveSubsystem extends SubsystemBase {
 //   Trajectory testTrajectory = 
 //     TrajectoryGenerator.generateTrajectory(null, null, null, config)
 //   }
+  public void burnFlash() {
+    m_leftMotorLeader.burnFlash();
+    m_leftMotorFollower.burnFlash();
+    m_rightMotorLeader.burnFlash();
+    m_rightMotorFollower.burnFlash();
+  }
 }
