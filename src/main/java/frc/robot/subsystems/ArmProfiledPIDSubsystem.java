@@ -31,7 +31,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         new ProfiledPIDController(
           ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD(),
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(80, 80))); // FIXME: We are effectively NOT using profiling with these settings.
+            new TrapezoidProfile.Constraints(ArmTunable.rotateMaxVelocity, ArmTunable.rotateMaxAcceleration))); // FIXME: We are effectively NOT using profiling with these settings.
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 
@@ -56,10 +56,10 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void periodic(){
     super.periodic();
     m_ArmTab.setArmAngle(getArmRotationDegrees());
-    m_PIDController.setPID(m_ArmTab.getRotkP(),
-                          m_ArmTab.getRotkI(), 
-                          m_ArmTab.getRotkD());
-  }
+  //   m_PIDController.setPID(m_ArmTab.getRotkP(),
+  //                         m_ArmTab.getRotkI(), 
+  //                         m_ArmTab.getRotkD());
+   }
   
   private double getArmRotationDegrees() {  
     return getMeasurement();
@@ -71,7 +71,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
 
     // Calculate the feedforward from the setpoint. 
     // Note that sysid says to use horizontal as the reference position
-    // double feedforward = m_ArmFeedforward.calculate(setpoint.position - ArmConstants.ArmRotationAngleOffset, setpoint.velocity);
+    //double feedforward = m_ArmFeedforward.calculate(setpoint.position - ArmConstants.ArmRotationAngleOffset, setpoint.velocity);
     // FIXME: After PID tuning, add the feedforward back in
     double feedforward = 0;
 

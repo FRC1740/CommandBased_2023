@@ -64,6 +64,7 @@ public class ClawSubsystem extends SubsystemBase {
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
 
     m_gamePiece = OIConstants.kDefaultGamePiece;
+    m_timer.start();
   }
 
   // Gamepiece Cone/Cube is a global mode
@@ -73,13 +74,22 @@ public class ClawSubsystem extends SubsystemBase {
   // gamepiece mode (cube/cone)
   public void intakeCube() {
     m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
+    m_timer.reset();
+    m_timer.stop();
     Open();
     setMode(ClawMode.CUBE);
   }
 
+  public void setClawSpeed(double speed){
+    m_intakeMotor.set(speed);
+    // System.out.println(speed);
+    // System.out.println("intake speed " + m_intakeMotor.getMotorOutputPercent());
+  }
+
   public void ejectCube() {
     m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
-   m_intakeMotor.setExpiration(1);
+    m_timer.reset();
+    m_timer.start();
     setMode(ClawMode.READY);
   }
 
@@ -132,7 +142,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   private void Open() { // Open to release a cone or intake a cube
     m_grabberSolenoid.set(kForward); 
-    setMode(ClawMode.CUBE);
+    setMode(ClawMode.READY);
   }
 
   public void setIntakeSpeed(double speed) {

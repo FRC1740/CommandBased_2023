@@ -235,7 +235,9 @@ public class RobotContainer {
 
   private void bind_CoCubeOp(){
     m_codriverController.leftBumper()
-    .onTrue(new InstantCommand(() -> m_claw.intakeCube()));
+    .onTrue(new InstantCommand(() -> m_claw.intakeCube()))
+    .onFalse(new InstantCommand(() -> m_claw.setClawSpeed(0)));
+
     m_codriverController.start()
     .onTrue(new InstantCommand(() -> m_claw.ejectCube()));
   }
