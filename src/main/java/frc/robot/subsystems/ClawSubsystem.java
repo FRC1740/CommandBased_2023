@@ -65,27 +65,13 @@ public class ClawSubsystem extends SubsystemBase {
     m_intakeMotor.configPeakCurrentDuration(ClawConstants.IntakePeakDurationLimit, 10); // msec, timeout
     m_intakeMotor.configContinuousCurrentLimit(ClawConstants.IntakeContinuousCurrentLimit, 10); // Amps, timeout
     // m_intakeEncoder = m_intakeMotor.getEncoder();
-    // Set the colors appropriate for each game piece
-    // cube = new ConSignalLed.gamePiece(50, 0, 100);
-    // cone = new ConSignalLed.gamePiece(100, 50, 0);
+
     m_clawMode = ClawMode.READY;
     m_timer = new Timer();
 
     m_ClawTab = ClawTab.getInstance();
     m_ClawTab.setClawMode(getModeString());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
-  //   m_currentPixel = 0;
-  //   m_kittDelta = 1;
-  //   m_delay = 50; // Include a delay during Peridoc() if too processor intensive
-  //   m_led = new AddressableLED(kLedPwmPort);
-  //   m_ledBuffer = new AddressableLEDBuffer(kLedLength);
-  //   // Length is expensive to set, so only set it once, then just update data
-  //   m_led.setLength(m_ledBuffer.getLength());
-    
-  //   // Both LED strips MUST Be the same length
-  //   m_led.start();
-  //   m_led.setData(m_ledBuffer);
-  //   m_timer.start();
   }
 
   // The actual robot may have TWO separate mechanisms for cone/cube
@@ -170,63 +156,11 @@ public class ClawSubsystem extends SubsystemBase {
     // return m_clawMode.toString();
     return m_clawMode.name();
   }
-  // private void ShowLedPattern() {
-  //   // Note Colors are ACTUALLY in RBG order!!!
-  //   for (var i=0; i<m_ledBuffer.getLength(); i++) {
-  //     switch(m_ledMode) {
-  //       case CUBE: // Purplish (dark magenta)
-  //         m_ledBuffer.setRGB(i, cube.getRed(), cube.getBlue(), cube.getGreen()); // Note: RBG for our LEDs
-  //         break;
-  //       case CONE: // Yellow-orange
-  //         m_ledBuffer.setRGB(i, cone.getRed(), cone.getBlue(), cone.getGreen());  // Note: RBG for our LEDs
-  //         break;
-  //       case RED: // Error mode
-  //         m_ledBuffer.setRGB(i, 255, 0, 0);  // Note: RBG for our LEDs
-  //         break;
-  //       case KITT:
-  //         Kitt(); // Cylon Pattern
-  //         break;
-  //       case OFF:
-  //         m_ledBuffer.setRGB(i, 0, 0, 0);  // Note: RBG for our LEDs
-  //         break;
-  //     } 
-  //     m_led.setData(m_ledBuffer);
-  //   }
-  // }
-
-  // /* Disabled (orange) is too close to cone color  */
-  // public void Kitt() { 
-  //   for (int i = 0; i < m_ledBuffer.getLength(); i++) {
-  //     Color c = m_ledBuffer.getLED(i);
-  //     int r = (int)Math.round(c.red * 255);
-  //     int g = (int)Math.round(c.green * 255);
-  //     int b = (int)Math.round(c.blue * 255);
-
-  //     if (r >= 10) r -= 10; else r = 0;
-  //     if (g >= 20) g -= 20; else g = 0;
-  //     if (b >= 20) b -= 20; else b = 0;
-  //     m_ledBuffer.setRGB(i, r, b, g);
-  //   }
-  //   m_ledBuffer.setRGB(m_currentPixel, 64, 64, 64);
-  //   m_led.setData(m_ledBuffer);
-  //   // m_ledB.setData(m_ledBuffer);
-
-  //   m_currentPixel += m_kittDelta;
-  //   if ((m_currentPixel <= 0) || (m_currentPixel >= kLedLength - 1)) {
-  //     // Ensure valid even when switching modes
-  //     if (m_currentPixel < 0) m_currentPixel = 0;
-  //     if (m_currentPixel > kLedLength - 1) m_currentPixel = kLedLength - 1;
-  //     m_kittDelta = -m_kittDelta;
-  //   }
-  // }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // ShowLedPattern();
-    // if (--m_delay == 0) {
-    //   m_delay = 50;
-    // }
+
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
     if (m_timer.get() > ClawConstants.ShutdownDelay) {
       if (m_clawMode == ClawMode.CUBE) {
