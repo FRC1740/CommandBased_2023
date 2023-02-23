@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import frc.constants.OIConstants;
+
 // Comment to force commit
 // Using "import static an.enum.or.constants.inner.class.*;" helps reduce verbosity
 // this replaces "DoubleSolenoid.Value.kForward" with just kForward
@@ -28,6 +30,8 @@ public class GroundIntakeSubsystem extends SubsystemBase {
 
   private GroundIntakeTab m_GroundIntakeTab;
 
+  private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
+
   /** Creates a new GroundIntake. */
   public GroundIntakeSubsystem() {
     m_intakeEncoder = m_intakeMotor.getEncoder();
@@ -35,7 +39,12 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     m_GroundIntakeTab = GroundIntakeTab.getInstance();
     m_GroundIntakeTab.setIntakeSetSpeed(m_intakeSetSpeed);
     m_GroundIntakeTab.setIntakeSpeed(getIntakeVelocity());
+
+    m_gamePiece = OIConstants.kDefaultGamePiece;
 }
+
+  // Gamepiece Cone/Cube is a global mode
+  // FIXME: GroundIntake has state based on Gamepiece and task. First create the state machine for each GamePiece; only then implement
 
   public void deploy() {
     m_intakeSolenoid.set(kForward); // FIXME: May have to swap pneumatics orientation
@@ -70,6 +79,10 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     // Report the actual speed to the shuffleboard
     m_GroundIntakeTab.setIntakeSpeed(getIntakeVelocity());
     m_intakeSetSpeed = m_GroundIntakeTab.getIntakeSetSpeed();
+  }
+
+  public void setGamePiece(OIConstants.GamePiece gamePiece) {
+    m_gamePiece = gamePiece;
   }
 
   public void burnFlash() {

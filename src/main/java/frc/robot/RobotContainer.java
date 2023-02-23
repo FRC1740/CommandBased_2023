@@ -333,4 +333,9 @@ public class RobotContainer {
     }
   }
 
+  public void setGamePiece(OIConstants.GamePiece piece) {
+    m_groundIntake.setGamePiece(piece);
+    m_claw.setGamePiece(piece);
+  }
+
 }

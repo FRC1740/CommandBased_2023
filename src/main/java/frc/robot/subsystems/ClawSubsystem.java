@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import frc.constants.OIConstants;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 // Comment to force commit
 // Using "import static an.enum.or.constants.inner.class.*;" helps reduce verbosity
 // this replaces "DoubleSolenoid.Value.kForward" with just kForward
@@ -27,21 +30,6 @@ public class ClawSubsystem extends SubsystemBase {
   private final WPI_TalonSRX m_intakeMotor; // One Talon controlling TWO bag motors (hardwired)
   // private final RelativeEncoder m_intakeEncoder;
 
-  // public static final int kLedLength = 13;
-  // public static final int kLedPwmPort = 3;
-  // // Must be a PWM header, not MXP or DIO
-  // private final AddressableLED m_led;
-  // private final AddressableLEDBuffer m_ledBuffer;
-  // private int m_delay;
-
-  // public enum LedMode {
-  //   CUBE,
-  //   CONE,
-  //   KITT,
-  //   RED,
-  //   OFF,
-  // }
-
   public enum ClawMode {
     CUBE,
     CONE,
@@ -55,6 +43,8 @@ public class ClawSubsystem extends SubsystemBase {
   // private int m_kittDelta;
   private Timer m_timer;
   private ClawTab m_ClawTab;
+
+  private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
 
   /** Creates a new Manipulator. */
   public ClawSubsystem() {
@@ -72,10 +62,13 @@ public class ClawSubsystem extends SubsystemBase {
     m_ClawTab = ClawTab.getInstance();
     m_ClawTab.setClawMode(getModeString());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
+
+    m_gamePiece = OIConstants.kDefaultGamePiece;
   }
 
-  // The actual robot may have TWO separate mechanisms for cone/cube
-  // selected by the drive team via OI input TBD
+  // Gamepiece Cone/Cube is a global mode
+  // FIXME: Claw has state based on Gamepiece and task. First create the state machine for each GamePiece; only then implement
+
   // NOTE: The Grab() and Release() methods may do different things depending on the 
   // gamepiece mode (cube/cone)
   public void intakeCube() {
@@ -83,17 +76,20 @@ public class ClawSubsystem extends SubsystemBase {
     Open();
     setMode(ClawMode.CUBE);
   }
+
   public void ejectCube() {
     m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
     m_timer.reset(); // Reset timer to allow a delayed shutdown of Eject Motors
     m_timer.hasElapsed(2);
     setMode(ClawMode.READY);
   }
+
   public void grabCone() {
     m_intakeMotor.set(ClawConstants.InjectConeSpeed);
     close();
     setMode(ClawMode.CONE);
   }
+
   public void dropCone() {
     m_intakeMotor.set(0.0);
     Open();
@@ -107,16 +103,16 @@ public class ClawSubsystem extends SubsystemBase {
       dropCone();
     }
   }
+
   public void grabOrReleaseCube() {
     if (getMode() == ClawMode.READY) {
       intakeCube();
     }
     else {
       ejectCube();
-
     }
-
   }
+
   public void toggle() {
     switch(m_clawMode) {
       case CUBE: // We're currently set for a cube (or "READY")
@@ -133,25 +129,31 @@ public class ClawSubsystem extends SubsystemBase {
   private void close() { // Close to grab a cone
     m_grabberSolenoid.set(kReverse); 
     setMode(ClawMode.CONE);
-    }
+  }
+
   private void Open() { // Open to release a cone or intake a cube
     m_grabberSolenoid.set(kForward); 
     setMode(ClawMode.CUBE);
   }
+
   public void setIntakeSpeed(double speed) {
     m_intakeMotor.set(speed);
   }
+
   public double getIntakeCurrent() {
     return m_intakeMotor.getStatorCurrent();
   }
+
   private void setMode(ClawMode newMode) {
     m_clawMode = newMode;
     System.out.println(m_clawMode);
     m_ClawTab.setClawMode(getModeString());
   }
+
   private ClawMode getMode() {
     return m_clawMode;
   }
+
   private String getModeString() {
     // return m_clawMode.toString();
     return m_clawMode.name();
@@ -171,6 +173,10 @@ public class ClawSubsystem extends SubsystemBase {
     }
     // m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
+  }
+
+  public void setGamePiece(OIConstants.GamePiece gamePiece) {
+    m_gamePiece = gamePiece;
   }
 
   public void burnFlash() {
