@@ -7,6 +7,7 @@ package frc.board;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import frc.constants.ArmConstants;
 import frc.constants.ShuffleboardConstants;
 
@@ -46,9 +47,11 @@ public class ArmTab {
         m_sbt_Arm = Shuffleboard.getTab(ShuffleboardConstants.ArmTab);
 
         m_nte_ArmExtension = m_sbt_Arm.addPersistent("Current Arm Extension", 0.0)
-            .withSize(2, 1).withPosition(0, 1).getEntry();
+            .withWidget(BuiltInWidgets.kGraph)
+            .withSize(4, 2).withPosition(0, 1).getEntry();
         m_nte_ArmAngle = m_sbt_Arm.addPersistent("Current Arm Angle", 0.0)
-            .withSize(2, 1).withPosition(0, 0).getEntry();
+            .withWidget(BuiltInWidgets.kGraph)
+            .withSize(4, 2).withPosition(0, 3).getEntry();
   
         // Create widgets for TARGET Arm Position
         m_nte_HighNodeExtension = m_sbt_Arm.addPersistent("High Node Extension", ArmConstants.kHighNodePosition)
