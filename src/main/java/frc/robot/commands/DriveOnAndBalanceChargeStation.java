@@ -17,7 +17,7 @@ public class DriveOnAndBalanceChargeStation extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new DriveToChargeStation(drive),
-      new AutoBalancePID(drive, coDriver)
+      new AutoBalancePID(drive)
       );
   }
 }

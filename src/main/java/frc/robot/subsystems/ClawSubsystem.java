@@ -94,11 +94,13 @@ public class ClawSubsystem extends SubsystemBase {
   // gamepiece mode (cube/cone)
   public void intakeCube() {
     m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
+    Open();
     setMode(ClawMode.CUBE);
   }
   public void ejectCube() {
     m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
     m_timer.reset(); // Reset timer to allow a delayed shutdown of Eject Motors
+    m_timer.hasElapsed(2);
     setMode(ClawMode.READY);
   }
   public void grabCone() {
@@ -125,6 +127,7 @@ public class ClawSubsystem extends SubsystemBase {
     }
     else {
       ejectCube();
+
     }
 
   }

@@ -111,15 +111,15 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // bind_CircleTest();
     // bind_AutoDriveDistanceTest();
-    // bind_ManualArmTest();
+    bind_ManualArmTest();
     // bind_ResetGyro();
-    // bind_GroundIntakeTest();
+    bind_GroundIntakeTest();
     // bind_Limelight();
     // bind_HalfSpeed();
     // bind_PathWeaver();
-    // bind_CoAutoBalance();
+    bind_CoAutoBalance();
     // bind_CoLightToggle();
-
+    bind_CoCubeOp();
     // // Enable the Arm PID Subsystem
     // // m_arm.enable();
     m_armProfiled.enable();
@@ -178,11 +178,11 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
-    m_driverController.x()
-      .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(0.1)));
+    // m_driverController.x()
+    //   .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(0.1)));
 
-    m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(-0.1)));
+    // m_driverController.y()
+    //   .onTrue(new InstantCommand(() -> m_groundIntake.setIntakeSpeed(-0.1)));
   }
 
   private void bind_Limelight() {
@@ -207,14 +207,21 @@ public class RobotContainer {
     // Drive to autobalance on teetertotter when 'X' button is pressed on codriver
     // controller, 5 second timeout
     // FIXME: change AutoBalancePID second parameter to CommandXboxController
-    // m_codriverController.x()
-    //   .onTrue(new AutoBalancePID(m_robotDrive, m_codriverController));
+    m_codriverController.back()
+      .onTrue(new AutoBalancePID(m_robotDrive));
   }
 
   private void bind_CoLightToggle() {
     // When codriver button is pressed, toggle the light
     m_codriverController.y()
       .onTrue(new InstantCommand(() -> m_limelight.toggleLED()));
+  }
+
+  private void bind_CoCubeOp(){
+    m_codriverController.leftBumper()
+    .onTrue(new InstantCommand(() -> m_claw.intakeCube()));
+    m_codriverController.start()
+    .onTrue(new InstantCommand(() -> m_claw.ejectCube()));
   }
 
   private void bind_ArmPIDTest() {
@@ -232,6 +239,7 @@ public class RobotContainer {
     // m_driverController.y()
     //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
   }
+
 
   private void bind_ArmAndTelescope() {
     // Combination PID commands for Arm rotate & extend/retract
