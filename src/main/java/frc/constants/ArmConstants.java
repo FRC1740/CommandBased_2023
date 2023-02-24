@@ -23,13 +23,13 @@ public class ArmConstants {
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
     // Manual limits and speeds
-    public static final double kArmExtendMaxInches = 20.0;
-    public static final double kArmExtendMinInches = 0.0;
-    public static final double kArmExtendManualSpeed = 0.1;
+    public static final double kArmExtendMaxInches    = 20.0;
+    public static final double kArmExtendMinInches    = 0.0;
+    public static final double kArmExtendManualSpeed  = 0.1;
 
-    public static final double kArmRotateMaxDegrees = 129.0;
-    public static final double kArmRotateMinDegrees = 0.0;
-    public static final double kArmRotateManualSpeed = 0.1;
+    public static final double kArmRotateMaxDegrees   = 129.0;
+    public static final double kArmRotateMinDegrees   = 0.0;
+    public static final double kArmRotateManualSpeed  = 0.1;
 
     //public static final double kArmExtensionRotationToLinearDistance = 1.5;
     // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
@@ -44,26 +44,18 @@ public class ArmConstants {
         * Low Node Scoring: -22 deg (134); 4" Extension
         * Human player maybe same as mid-node (close)
         */
-    public static final double kStowedAngle = 0;
-    public static final double kHighNodeAngle = 66; // FIXME: Started at 71; Remounted w/ hardstop
-    public static final double kMidNodeAngle = 70;  // Started: 75
-    public static final double kLowNodeAngle = 129; // Started 134
-    public static final double kSubStationAngle = 70; // Same as Mid-node? [Started 75]
+    public static final double kStowedAngle          = 0;
+    public static final double kHighNodeAngle        = 66;  // FIXME: tune
+    public static final double kMidNodeAngle         = 70;
+    public static final double kLowNodeAngle         = 129;
+    public static final double kMidRetrieveAngle     = 70;
+    public static final double kLowRetrieveAngle     = 0;
     
-    public static final int kStowedPosition = 0;    // FIXME: Pseudo-wild guess at node distance
-    public static final int kHighNodePosition = 0;  // These values came from CAD and will likely
-    public static final int kMidNodePosition = 0;  // change once the arm is installed on the robot
-    public static final int kLowNodePosition = 0;  
-    public static final int kSubStationPosition = 0; 
-
-    // // ARM Rotation PID constants
-    // public static final double kRotP = .05;
-    // public static final double kRotI = 0.01;
-    // public static final double kRotD = 0.005;
-
-    // // ARM Extension PID constants
-    // public static final double kExtP = .02;
-    // public static final double kExtI = 0;
-    // public static final double kExtD = 0;
+    public static final double kStowedPosition       = 0;
+    public static final double kHighNodePosition     = 0; // FIXME: tune
+    public static final double kMidNodePosition      = 0;
+    public static final double kLowNodePosition      = 0;  
+    public static final double kMidRetrievePosition  = 0; 
+    public static final double kLowRetrievePosition  = 0; 
     
 }
