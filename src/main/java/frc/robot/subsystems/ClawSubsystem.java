@@ -14,10 +14,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 // Using "import static an.enum.or.constants.inner.class.*;" helps reduce verbosity
 // this replaces "DoubleSolenoid.Value.kForward" with just kForward
 // further reading is available at https://www.geeksforgeeks.org/static-import-java/
+
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
-// import edu.wpi.first.wpilibj.AddressableLED;
-// import edu.wpi.first.wpilibj.AddressableLEDBuffer;
-// import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Timer;
 import frc.board.ClawTab;
 import frc.constants.ClawConstants;
@@ -37,10 +35,7 @@ public class ClawSubsystem extends SubsystemBase {
   };    
 
   private ClawMode m_clawMode;
-  // private LedMode m_ledMode;
-  // ConSignalLed.gamePiece cube, cone;
-  // private int m_currentPixel;
-  // private int m_kittDelta;
+
   private Timer m_timer;
   private ClawTab m_ClawTab;
 
@@ -76,7 +71,7 @@ public class ClawSubsystem extends SubsystemBase {
     m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
     m_timer.reset();
     m_timer.stop();
-    Open();
+    open();
     setMode(ClawMode.CUBE);
   }
 
@@ -87,7 +82,7 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void ejectCube() {
-    m_intakeMotor.set(ClawConstants.EjectCubeSpeed);
+    m_intakeMotor.set(ClawConstants.EjectCubeLowSpeed);
     m_timer.reset();
     m_timer.start();
     setMode(ClawMode.READY);
@@ -101,7 +96,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void dropCone() {
     m_intakeMotor.set(0.0);
-    Open();
+    open();
   }
 
   public void grabOrReleaseCone() {
@@ -129,18 +124,18 @@ public class ClawSubsystem extends SubsystemBase {
         close();
         break;
       case CONE: // We're currently set for a cone
-        Open();
+        open();
         default: // Should be no other modes, but do nothing in any case
         break;
     }
   }
 
-  private void close() { // Close to grab a cone
+  public void close() { // Close to grab a cone
     m_grabberSolenoid.set(kReverse); 
     setMode(ClawMode.CONE);
   }
 
-  private void Open() { // Open to release a cone or intake a cube
+  public void open() { // Open to release a cone or intake a cube
     m_grabberSolenoid.set(kForward); 
     setMode(ClawMode.READY);
   }
@@ -166,6 +161,38 @@ public class ClawSubsystem extends SubsystemBase {
   private String getModeString() {
     // return m_clawMode.toString();
     return m_clawMode.name();
+  }
+
+  public void score() {
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      setIntakeSpeed(ClawConstants.EjectCubeLowSpeed);
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      open();
+    }
+  }
+
+  public void scoreDone() {
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      setIntakeSpeed(0.0);
+    }
+  }
+
+  public void hold() {
+    setIntakeSpeed(0.0);
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      open();
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      close();
+    }
+  }
+
+  public void retrieve() {
+    open();
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      setIntakeSpeed(ClawConstants.InjectCubeLowSpeed);
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      setIntakeSpeed(ClawConstants.InjectConeSpeed);
+    }    
   }
 
   @Override
