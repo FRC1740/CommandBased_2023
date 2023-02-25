@@ -21,6 +21,7 @@ public class ClawTab {
     private GenericEntry m_nte_ClawMode;
     // private GenericEntry m_nte_IntakeSpeed;
     private GenericEntry m_nte_IntakeCurrent;
+    private GenericEntry m_nte_TofRange;
 
     private static ClawTab instance = null;
 
@@ -47,6 +48,8 @@ public class ClawTab {
         m_nte_IntakeCurrent = m_sbt_Claw.addPersistent("Intake Current", 0.0)
             .withSize(2, 1).withPosition(0, 2).getEntry();
 
+        m_nte_TofRange = m_sbt_Claw.addPersistent("Range", 999)
+            .withSize(2, 1).withPosition(0, 3).getEntry();
     }
 
     public String getClawMode() {
@@ -63,6 +66,10 @@ public class ClawTab {
 
     public void setIntakeCurrent(Double value) {
         m_nte_IntakeCurrent.setDouble(value);
+    }
+
+    public void setTofRange(Double value) {
+        m_nte_TofRange.setDouble(value);
     }
 
     // public Double getIntakeSpeed() {
