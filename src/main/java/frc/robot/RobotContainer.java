@@ -118,23 +118,7 @@ public class RobotContainer {
    * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
-    // To use the D-Pad need to create a POVButton
-    // There are 8 different possible D-Pad buttons based on the angle
-    // 0 = up, 45 = up right, 90 = right ... 315 = up left
-    // 
-    // POVButton dPadUp = new POVButton(m_driverController.getHID(), 0);
-    // POVButton dPadUpRight = new POVButton(m_driverController.getHID(), 45);
-    // POVButton dPadRight = new POVButton(m_driverController.getHID(), 90);
-    // POVButton dPadDownRight = new POVButton(m_driverController.getHID(), 135);
-    // POVButton dPadDown = new POVButton(m_driverController.getHID(), 180);
-    // POVButton dPadDownLeft = new POVButton(m_driverController.getHID(), 225);
-    // POVButton dPadLeft = new POVButton(m_driverController.getHID(), 270);
-    // POVButton dPadUpLeft = new POVButton(m_driverController.getHID(), 315);
-    
-    // D-Pad down button temporarily used to switch GamePiece Mode
-    new POVButton(m_driverController.getHID(), 180)
-      .onTrue(new InstantCommand(() -> toggleGamePiece()));
-
+    bind_POVTest();
     // bind_CircleTest();
     // bind_AutoDriveDistanceTest();
     // bind_ManualArmTest();
@@ -295,8 +279,28 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> m_groundIntake.eject()));
   }
 
-  private void bind_CircleTest() {
-    // Turn to -90 degrees with a profile when the Circle button is pressed, with a
+  private void bind_POVTest() {
+    // To use the D-Pad need to create a POVButton
+    // There are 8 different possible D-Pad buttons based on the angle
+    // 0 = up, 45 = up right, 90 = right ... 315 = up left
+    // 
+    // POVButton dPadUp = new POVButton(m_driverController.getHID(), 0);
+    // POVButton dPadUpRight = new POVButton(m_driverController.getHID(), 45);
+    // POVButton dPadRight = new POVButton(m_driverController.getHID(), 90);
+    // POVButton dPadDownRight = new POVButton(m_driverController.getHID(), 135);
+    // POVButton dPadDown = new POVButton(m_driverController.getHID(), 180);
+    // POVButton dPadDownLeft = new POVButton(m_driverController.getHID(), 225);
+    // POVButton dPadLeft = new POVButton(m_driverController.getHID(), 270);
+    // POVButton dPadUpLeft = new POVButton(m_driverController.getHID(), 315);
+    
+    // D-Pad down button temporarily used to switch GamePiece Mode
+    new POVButton(m_driverController.getHID(), 180)
+      .onTrue(new InstantCommand(() -> toggleGamePiece()));
+
+  }
+
+    private void bind_CircleTest() {
+      // Turn to -90 degrees with a profile when the Circle button is pressed, with a
     // 5 second timeout
     m_driverController.a()
       .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
