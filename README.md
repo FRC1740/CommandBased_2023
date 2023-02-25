@@ -16,6 +16,7 @@ FRC Robot 2023 Java Code: Command-Based framework
 * Pneumatic Actuator for open/close
 * 1x CANbus/Talon controlled for intake/eject gamepiece
 * [CTRE CANTalon Vendor Library](https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2023-latest.json)
+* [Playing With Fusion Vendor Library](https://www.playingwithfusion.com/frc/playingwithfusion2023.json)
 
 #### GroundIntake
 * Pneumatic controlled extend/retract
