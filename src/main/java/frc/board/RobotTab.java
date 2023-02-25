@@ -5,9 +5,11 @@
 package frc.board;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.constants.ShuffleboardConstants;
+import frc.constants.OIConstants.GamePiece;
 import frc.robot.RobotProperties;
 
 /** Add your docs here. */
@@ -22,6 +24,7 @@ public class RobotTab {
     // Encoders/PID Feedback sensors
     GenericEntry m_nte_BuildTime;
     GenericEntry m_nte_BuildComputer;
+    GenericEntry m_nte_GamePiece;
 
     private static RobotTab instance = null;
 
@@ -49,6 +52,13 @@ public class RobotTab {
 
         m_nte_BuildComputer = m_sbt_Robot.addPersistent("Build Computer", RobotProperties.getComputer())
             .withSize(3, 1).withPosition(0, 1).getEntry();
+
+        m_nte_GamePiece = m_sbt_Robot
+            .addPersistent("Game Piece", true)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .withSize(1, 1)
+            .withPosition(4, 1)
+            .getEntry();
     }
 
     public String getBuildTime() {
@@ -65,5 +75,21 @@ public class RobotTab {
 
     public void setBuildComputer(String computer) {
         m_nte_BuildComputer.setString(computer);
+    }
+    
+    public GamePiece getGamePiece() {
+        if(m_nte_GamePiece.getBoolean(true)) {
+            return GamePiece.CUBE;
+        }
+        return GamePiece.CONE;
+    }    
+
+    public void setGamePiece(GamePiece piece) {
+        m_nte_GamePiece.setBoolean(piece.equals(GamePiece.CUBE));
+    }
+    
+    public GamePiece toggleGamePiece() {
+        m_nte_GamePiece.setBoolean(!m_nte_GamePiece.getBoolean(true));
+        return getGamePiece();
     }
 }
