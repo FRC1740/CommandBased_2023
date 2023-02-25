@@ -107,20 +107,20 @@ processResources {
 - [ ] Tune kCubeGraspSpeed  
 
 `Robot Controller UI`  
-- [] Test ManualArmUpDown
-- [] Test ManualArmExtendRetract
-- [] Test ManualRollerOut
-- [] Test ManualRollerIn
-- [] Test AllStow  
-- [] Test ManualClawOpen
-- [] Test ManualClawClose
-- [] Test ArmScore 
-- [] Test AutoArmScoreHigh
-- [] Test AutoArmScoreMedium
-- [] Test AutoArmScoreLow
-- [] Test GamePieceToggle
-- [] Test IntakeRetrieve
-- [] Test IntakeGrasp
-- [] Test IntakeScore
-- [] Test AutoArmRetrieveMedium
-- [] Test AutoArmRetrieveLow
+- [ ] Test ManualArmUpDown
+- [ ] Test ManualArmExtendRetract
+- [ ] Test ManualRollerOut
+- [ ] Test ManualRollerIn
+- [ ] Test AllStow  
+- [ ] Test ManualClawOpen
+- [ ] Test ManualClawClose
+- [ ] Test ArmScore 
+- [ ] Test AutoArmScoreHigh
+- [ ] Test AutoArmScoreMedium
+- [ ] Test AutoArmScoreLow
+- [ ] Test GamePieceToggle
+- [ ] Test IntakeRetrieve
+- [ ] Test IntakeGrasp
+- [ ] Test IntakeScore
+- [ ] Test AutoArmRetrieveMedium
+- [ ] Test AutoArmRetrieveLow
