@@ -189,7 +189,8 @@ public class ClawSubsystem extends SubsystemBase {
       setIntakeSpeed(ClawConstants.InjectCubeLowSpeed);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
       setIntakeSpeed(ClawConstants.InjectConeSpeed);
-    }    
+    }
+    m_timer.restart();
   }
 
   @Override
@@ -200,11 +201,15 @@ public class ClawSubsystem extends SubsystemBase {
 
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
     if (m_timer.get() > ClawConstants.ShutdownDelay) {
-      if (m_clawMode == ClawMode.CUBE) {
-        m_intakeMotor.set(ClawConstants.InjectCubeLowSpeed);
-      } else {
-        m_intakeMotor.set(0.0);
-      }
+      // Removed this section- only turn off at timeout, never turn on-
+      // leave to other methods
+      // might be injecting or ejecting
+      // if (m_clawMode == ClawMode.CUBE) {
+      //   m_intakeMotor.set(ClawConstants.InjectCubeLowSpeed);
+      // } else {
+      //   m_intakeMotor.set(0.0);
+      // }
+      m_intakeMotor.set(0.0);
     }
     // m_nte_IntakeSpeed.setDouble(getIntakeSpeed());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());

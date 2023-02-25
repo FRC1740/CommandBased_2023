@@ -30,6 +30,8 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.TelescopePIDSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem;
 import frc.robot.subsystems.SignalLEDSubsystem;
+import frc.robot.subsystems.SignalLEDSubsystem.LedMode;
+import frc.robot.subsystems.SignalLEDSubsystem.LedPreference;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -296,7 +298,6 @@ public class RobotContainer {
     // D-Pad down button temporarily used to switch GamePiece Mode
     new POVButton(m_driverController.getHID(), 180)
       .onTrue(new InstantCommand(() -> toggleGamePiece()));
-
   }
 
     private void bind_CircleTest() {
@@ -437,13 +438,13 @@ public class RobotContainer {
   private void bind_LedModeTest() {
     // Signal for a CUBE when held
     m_codriverController.a()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CUBE, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
 
     // Signal for a CONE when held
     m_codriverController.b()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
 
     m_codriverController.x()
       .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
@@ -454,36 +455,36 @@ public class RobotContainer {
 
   private void bind_LedSubsystemTest() {
     m_driverController.a()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
     m_driverController.b()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CUBE, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
     m_driverController.x()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.RED, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.RED, LedPreference.MAIN, false)));
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, true)));
     m_driverController.back()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.BLUE, SignalLEDSubsystem.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.BLUE, LedPreference.MAIN, true)));
     m_driverController.start()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.KITT, SignalLEDSubsystem.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.KITT, LedPreference.MAIN, true)));
 
     m_driverController.leftBumper()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.ALLIANCE, SignalLEDSubsystem.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.ALLIANCE, LedPreference.MAIN, true)));
     m_driverController.leftTrigger()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.GREEN, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.GREEN, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
     m_driverController.leftStick()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COLONELS, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
     m_driverController.rightBumper()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COLONELS, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
     m_driverController.rightTrigger()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.COUNTDOWN, SignalLEDSubsystem.LedPreference.MAIN, true)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COUNTDOWN, LedPreference.MAIN, true)));
     m_driverController.rightStick()
-      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.CONE, SignalLEDSubsystem.LedPreference.MAIN, false)))
-      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(SignalLEDSubsystem.LedMode.OFF, SignalLEDSubsystem.LedPreference.MAIN, false)));
+      .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
+      .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
   }
 
   // Return the command to run in autonomous
@@ -509,6 +510,11 @@ public class RobotContainer {
 
   public void setGamePiece(OIConstants.GamePiece piece) {
     m_gamePiece = piece;
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false);
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false);
+    }
     m_groundIntake.setGamePiece(piece);
     m_claw.setGamePiece(piece);
   }
