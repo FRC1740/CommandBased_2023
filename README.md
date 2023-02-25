@@ -107,6 +107,10 @@ processResources {
 - [ ] Tune kConeGraspSpeed 
 - [ ] Tune kCubeGraspSpeed  
 
+`Claw`
+- [ ] Add tof sensor hardware
+- [ ] Add tof to claw motor control
+
 `Robot Controller UI`  
 - [ ] Test ManualArmUpDown
 - [ ] Test ManualArmExtendRetract
@@ -115,6 +119,8 @@ processResources {
 - [ ] Test AllStow  
 - [ ] Test ManualClawOpen
 - [ ] Test ManualClawClose
+
+`_Cube`
 - [ ] Test ArmScore 
 - [ ] Test AutoArmScoreHigh
 - [ ] Test AutoArmScoreMedium
@@ -125,3 +131,34 @@ processResources {
 - [ ] Test IntakeScore
 - [ ] Test AutoArmRetrieveMedium
 - [ ] Test AutoArmRetrieveLow
+
+`_Cone`
+- [ ] Test ArmScore 
+- [ ] Test AutoArmScoreHigh
+- [ ] Test AutoArmScoreMedium
+- [ ] Test AutoArmScoreLow
+- [ ] Test GamePieceToggle
+- [ ] Test IntakeRetrieve
+- [ ] Test IntakeGrasp
+- [ ] Test IntakeScore
+- [ ] Test AutoArmRetrieveMedium
+- [ ] Test AutoArmRetrieveLow
+
+`DriveTrain`
+- [ ] Get sysId after ballast is finalized
+- [ ] Save sysId values to `DriveConstants.java`
+- [ ] Test AutoDrive `curvy path`
+- [ ] Test AutoDrive `straight`
+- [ ] Test AutoDrive `Short Straight path`
+- [ ] Test AutoDrive `more curvy path`
+- [ ] Test with AprilTags
+- [ ] Add Field display to Shuffleboard
+
+`LEDs`
+- [ ] Add one or two strings to robot
+- [ ] If needed, add SW support for second string
+
+`User Interface`
+- [ ] Update XBox button mappings for missing functionality
+- [ ] Add Robot Control device box
+- [ ] Create mappings for Robot Control device
