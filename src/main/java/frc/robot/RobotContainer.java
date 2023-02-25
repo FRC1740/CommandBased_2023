@@ -163,11 +163,6 @@ public class RobotContainer {
     bind_RC_RearIntake();
   }
 
-  private void toggleGamePiece() {
-    GamePiece newGamePiece = m_RobotTab.toggleGamePiece();
-    setGamePiece(newGamePiece);
-  }
-
   // See the Robot Control documents for the spec
   private void bind_RC_ManualArm() {
     // ManualArmUpDown
@@ -504,11 +499,8 @@ public class RobotContainer {
   }
 
   private void toggleGamePiece() {
-    if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      setGamePiece(OIConstants.GamePiece.CUBE);
-    } else {
-      setGamePiece(OIConstants.GamePiece.CONE);
-    }
+    GamePiece newGamePiece = m_RobotTab.toggleGamePiece();
+    setGamePiece(newGamePiece);
   }
 
   public void setGamePiece(OIConstants.GamePiece piece) {
