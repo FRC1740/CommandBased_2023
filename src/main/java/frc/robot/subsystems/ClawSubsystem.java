@@ -22,6 +22,7 @@ import frc.constants.ClawConstants;
 //import com.revrobotics.CANSparkMax;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 // import com.revrobotics.RelativeEncoder;
+import com.playingwithfusion.TimeOfFlight;
 
 public class ClawSubsystem extends SubsystemBase {
   private final DoubleSolenoid m_grabberSolenoid;
@@ -38,6 +39,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   private Timer m_timer;
   private ClawTab m_ClawTab;
+  private TimeOfFlight m_tof;
 
   private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
 
@@ -193,6 +195,8 @@ public class ClawSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    m_tof.getRange(); // FIXME: check this value and close the claw based on MODE.
 
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
     if (m_timer.get() > ClawConstants.ShutdownDelay) {
