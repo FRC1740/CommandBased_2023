@@ -120,10 +120,10 @@ public class RobotContainer {
    * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
-    bind_POVTest();
+    //bind_POVTest();
     // bind_CircleTest();
     // bind_AutoDriveDistanceTest();
-    // bind_ManualArmTest();
+    //bind_ManualArmTest();
     // bind_ResetGyro();
     // bind_GroundIntakeTest();
     // bind_Limelight();
@@ -139,14 +139,14 @@ public class RobotContainer {
     m_telescope.enable();
 
     // bind_ArmPIDTest();
-    // bind_ArmAndTelescope();
+    //bind_ArmAndTelescope();
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
 
-    bind_RC_ManualArm();
-    bind_RC_AutoArm();
-    bind_RC_GamePiece();
-    bind_RC_RearIntake();
+     bind_RC_ManualArm();
+     bind_RC_AutoArm();
+     bind_RC_GamePiece();
+     bind_RC_RearIntake();
   }
 
   // See the Robot Control documents for the spec
@@ -155,8 +155,8 @@ public class RobotContainer {
     // ManualArmExtendRetract
     m_codriverController.leftStick()
       .onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getRightX())),
-        new InstantCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY()))))
+        new InstantCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftX())),
+        new InstantCommand(() -> m_telescope.manualTelescope(m_codriverController.getLeftY()))))
       .onFalse(new ParallelCommandGroup(
         new InstantCommand(() -> m_armProfiled.manualDone()),
         new InstantCommand(() -> m_telescope.manualDone())));
