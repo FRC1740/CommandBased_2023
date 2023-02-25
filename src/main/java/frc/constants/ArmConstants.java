@@ -45,14 +45,14 @@ public class ArmConstants {
         * Human player maybe same as mid-node (close)
         */
     public static final double kStowedAngle          = 0;
-    public static final double kHighNodeAngle        = 66;  // FIXME: tune
+    public static final double kHighNodeAngle        = 66;  // FIXME: tune angles
     public static final double kMidNodeAngle         = 70;
     public static final double kLowNodeAngle         = 129;
     public static final double kMidRetrieveAngle     = 70;
     public static final double kLowRetrieveAngle     = 0;
     
     public static final double kStowedPosition       = 0;
-    public static final double kHighNodePosition     = 0; // FIXME: tune
+    public static final double kHighNodePosition     = 0; // FIXME: tune telescope
     public static final double kMidNodePosition      = 0;
     public static final double kLowNodePosition      = 0;  
     public static final double kMidRetrievePosition  = 0; 

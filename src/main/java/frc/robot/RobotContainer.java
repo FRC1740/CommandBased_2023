@@ -137,29 +137,30 @@ public class RobotContainer {
 
     // bind_CircleTest();
     // bind_AutoDriveDistanceTest();
-    bind_ManualArmTest();
+    // bind_ManualArmTest();
     // bind_ResetGyro();
-    bind_GroundIntakeTest();
+    // bind_GroundIntakeTest();
     // bind_Limelight();
     // bind_HalfSpeed();
     // bind_PathWeaver();
-    bind_CoAutoBalance();
+    // bind_CoAutoBalance();
     // bind_CoLightToggle();
-    bind_CoCubeOp();
-    // // Enable the Arm PID Subsystem
-    // // m_arm.enable();
+    // bind_CoCubeOp();
+
+    // Enable the Arm PID Subsystem
+    // m_arm.enable();
     m_armProfiled.enable();
     m_telescope.enable();
 
     // bind_ArmPIDTest();
-    bind_ArmAndTelescope();
+    // bind_ArmAndTelescope();
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
 
-    // bind_RC_ManualArm();
-    // bind_RC_AutoArm();
-    // bind_RC_GamePiece();
-    // bind_RC_RearIntake();
+    bind_RC_ManualArm();
+    bind_RC_AutoArm();
+    bind_RC_GamePiece();
+    bind_RC_RearIntake();
   }
 
   private void toggleGamePiece() {
@@ -278,16 +279,25 @@ public class RobotContainer {
 
   private void bind_RC_GamePiece() {
     // GamePieceToggle
-
+    m_codriverController.leftStick()
+      .onTrue(new InstantCommand(() -> toggleGamePiece()));
   }
 
   private void bind_RC_RearIntake() {
     // IntakeRetrieve
+    m_driverController.b()
+      // Operator must also stow the arm first!!
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     // IntakeGrasp
+    m_driverController.a()
+      .onTrue(new InstantCommand(() -> m_groundIntake.grasp()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
 
     // IntakeScore
-
+    m_driverController.y()
+      .onTrue(new InstantCommand(() -> m_groundIntake.eject()));
   }
 
   private void bind_CircleTest() {
@@ -359,7 +369,6 @@ public class RobotContainer {
   private void bind_CoAutoBalance() {
     // Drive to autobalance on teetertotter when 'X' button is pressed on codriver
     // controller, 5 second timeout
-    // FIXME: change AutoBalancePID second parameter to CommandXboxController
     m_codriverController.back()
       .onTrue(new AutoBalancePID(m_robotDrive));
   }
@@ -491,6 +500,14 @@ public class RobotContainer {
       m_armProfiled.burnFlash();
       m_telescope.burnFlash();
       m_groundIntake.burnFlash();
+    }
+  }
+
+  private void toggleGamePiece() {
+    if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      setGamePiece(OIConstants.GamePiece.CUBE);
+    } else {
+      setGamePiece(OIConstants.GamePiece.CONE);
     }
   }
 

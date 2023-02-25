@@ -62,11 +62,6 @@ public class ClawSubsystem extends SubsystemBase {
     m_timer.start();
   }
 
-  // Gamepiece Cone/Cube is a global mode
-  // FIXME: Claw has state based on Gamepiece and task. First create the state machine for each GamePiece; only then implement
-
-  // NOTE: The Grab() and Release() methods may do different things depending on the 
-  // gamepiece mode (cube/cone)
   public void intakeCube() {
     m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
     m_timer.reset();
