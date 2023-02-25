@@ -153,7 +153,7 @@ public class RobotContainer {
   private void bind_RC_ManualArm() {
     // ManualArmUpDown
     // ManualArmExtendRetract
-    m_codriverController.rightStick()
+    m_codriverController.leftStick()
       .onTrue(new ParallelCommandGroup(
         new InstantCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getRightX())),
         new InstantCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY()))))
@@ -162,12 +162,14 @@ public class RobotContainer {
         new InstantCommand(() -> m_telescope.manualDone())));
 
     // ManualRollerOut
-    m_codriverController.rightTrigger()
+    new POVButton(m_codriverController.getHID(), 0)
+    // m_codriverController.rightTrigger()
       .onTrue(new InstantCommand(() -> m_claw.setIntakeSpeed(ClawConstants.EjectCubeManualSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // ManualRollerIn
-    m_codriverController.rightTrigger()
+    new POVButton(m_codriverController.getHID(), 180)
+    // m_codriverController.rightTrigger()
       .onTrue(new InstantCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
@@ -178,22 +180,22 @@ public class RobotContainer {
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))));
 
     // ManualClawOpen
-    m_codriverController.rightBumper()
+    new POVButton(m_codriverController.getHID(), 90)
       .onTrue(new InstantCommand(() -> m_claw.open()));
 
     // ManualClawClose
-    m_codriverController.leftBumper()
+    new POVButton(m_codriverController.getHID(), 270)
       .onTrue(new InstantCommand(() -> m_claw.close()));
 
     // ArmScore 
-    m_driverController.x()
+    m_driverController.leftTrigger()
       .onTrue(new InstantCommand(() -> m_claw.score()))
       .onFalse(new InstantCommand(() -> m_claw.scoreDone()));
   }
 
   private void bind_RC_AutoArm() {
     // AutoArmScoreHigh
-    m_codriverController.y()
+    m_codriverController.x()
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle)),
@@ -206,7 +208,7 @@ public class RobotContainer {
         ));
   
     // AutoArmScoreMedium
-    m_codriverController.x()
+    m_codriverController.y()
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition)),
@@ -219,7 +221,7 @@ public class RobotContainer {
         ));
 
     // AutoArmScoreLow
-    m_codriverController.start()
+    m_codriverController.b()
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)),
@@ -232,7 +234,7 @@ public class RobotContainer {
         ));
 
     // AutoArmRetrieveMedium
-    m_codriverController.b()
+    m_codriverController.rightBumper()
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidRetrieveAngle)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidRetrievePosition)),
@@ -245,7 +247,7 @@ public class RobotContainer {
         ));
 
     // AutoArmRetrieveLow
-    m_codriverController.back()
+    m_codriverController.rightTrigger()
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowRetrieveAngle)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowRetrievePosition)),
@@ -260,7 +262,7 @@ public class RobotContainer {
 
   private void bind_RC_GamePiece() {
     // GamePieceToggle
-    m_codriverController.leftStick()
+    m_codriverController.start()
       .onTrue(new InstantCommand(() -> toggleGamePiece()));
   }
 
