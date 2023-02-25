@@ -79,3 +79,48 @@ processResources {
 }
 
 ```
+### Todo List
+`ArmConstants.java`  
+- [ ] Tune ManualArm Tele Max
+- [ ] Tune ManualArm Tele Min
+- [ ] Tune ManualArm Tele Speed
+- [ ] Tune ManualArm Rotate Max
+- [ ] Tune ManualArm Rotate Min
+- [ ] Tune ManualArm Rotate Speed
+- [ ] Tune AutoArm High Score Angle
+- [ ] Tune AutoArm Med Score Angle
+- [ ] Tune AutoArm Low Score Angle
+- [ ] Tune AutoArm Med Retrieve Angle
+- [ ] Tune AutoArm Low Retrieve Angle
+- [ ] Tune AutoArm High Score Position
+- [ ] Tune AutoArm Med Score Position
+- [ ] Tune AutoArm Low Score Position
+- [ ] Tune AutoArm Med Retrieve Position
+- [ ] Tune AutoArm Low Retrieve Position  
+
+`GroundIntakeConstants.java`  
+- [ ] Tune kConeIntakeSpeed
+- [ ] Tune kConeEjectSpeed
+- [ ] Tune kCubeIntakeSpeed
+- [ ] Tune kCubeEjectSpeed 
+- [ ] Tune kConeGraspSpeed 
+- [ ] Tune kCubeGraspSpeed  
+
+`Robot Controller UI`  
+- [] Test ManualArmUpDown
+- [] Test ManualArmExtendRetract
+- [] Test ManualRollerOut
+- [] Test ManualRollerIn
+- [] Test AllStow  
+- [] Test ManualClawOpen
+- [] Test ManualClawClose
+- [] Test ArmScore 
+- [] Test AutoArmScoreHigh
+- [] Test AutoArmScoreMedium
+- [] Test AutoArmScoreLow
+- [] Test GamePieceToggle
+- [] Test IntakeRetrieve
+- [] Test IntakeGrasp
+- [] Test IntakeScore
+- [] Test AutoArmRetrieveMedium
+- [] Test AutoArmRetrieveLow

@@ -31,7 +31,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         new ProfiledPIDController(
           ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD(),
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(ArmTunable.rotateMaxVelocity, ArmTunable.rotateMaxAcceleration))); // FIXME: We are effectively NOT using profiling with these settings.
+            new TrapezoidProfile.Constraints(ArmTunable.rotateMaxVelocity, ArmTunable.rotateMaxAcceleration)));
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 
