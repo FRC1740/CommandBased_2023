@@ -11,7 +11,6 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
-import frc.constants.ArmTunable;
 
 public class TelescopePIDSubsystem extends PIDSubsystem {
 
@@ -23,7 +22,10 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   public TelescopePIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(ArmTunable.getExtendP(), ArmTunable.getExtendI(), ArmTunable.getExtendD()));
+        new PIDController(
+          ArmConstants.extendPDefault,
+          ArmConstants.extendIDefault,
+          ArmConstants.extendDDefault));
 
     m_extensionEncoder = m_extensionMotor.getEncoder();
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);

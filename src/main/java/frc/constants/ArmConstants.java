@@ -58,4 +58,15 @@ public class ArmConstants {
     public static final double kMidRetrievePosition  = 0; 
     public static final double kLowRetrievePosition  = 0; 
     
+    public static final double rotatePDefault = 0.12149;
+    public static final double rotateIDefault = 0.0;
+    public static final double rotateDDefault = 0.039139*2;
+
+    public static final double extendPDefault = .02;
+    public static final double extendIDefault = 0;
+    public static final double extendDDefault = 0;
+
+    public static final double rotateMaxAcceleration = 800;
+    public static final double rotateMaxVelocity = 800;   
+
 }
