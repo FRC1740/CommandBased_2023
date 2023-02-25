@@ -12,7 +12,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.constants.ArmConstants;
-import frc.constants.ArmTunable;
 import frc.board.ArmTab;
 
 public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
@@ -29,9 +28,11 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     super(
         // The ProfiledPIDController used by the subsystem
         new ProfiledPIDController(
-          ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD(),
+            ArmConstants.rotatePDefault,
+            ArmConstants.rotateIDefault,
+            ArmConstants.rotateDDefault,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(ArmTunable.rotateMaxVelocity, ArmTunable.rotateMaxAcceleration)));
+            new TrapezoidProfile.Constraints(ArmConstants.rotateMaxVelocity, ArmConstants.rotateMaxAcceleration)));
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 
@@ -56,9 +57,9 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void periodic(){
     super.periodic();
     m_ArmTab.setArmAngle(getArmRotationDegrees());
-  //   m_PIDController.setPID(m_ArmTab.getRotkP(),
-  //                         m_ArmTab.getRotkI(), 
-  //                         m_ArmTab.getRotkD());
+    m_PIDController.setPID(m_ArmTab.getRotkP(),
+                          m_ArmTab.getRotkI(), 
+                          m_ArmTab.getRotkD());
    }
   
   private double getArmRotationDegrees() {  

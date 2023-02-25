@@ -11,7 +11,6 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
-import frc.constants.ArmTunable;
 import edu.wpi.first.math.controller.ArmFeedforward;
 
 public class ArmPIDSubsystem extends PIDSubsystem {
@@ -27,7 +26,10 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   public ArmPIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD()));
+        new PIDController(
+          ArmConstants.rotatePDefault,
+          ArmConstants.rotateIDefault,
+          ArmConstants.rotateDDefault));
 
     m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
         // The target angle for PID rotation control
