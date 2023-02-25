@@ -43,21 +43,34 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     m_gamePiece = OIConstants.kDefaultGamePiece;
 }
 
-  // Gamepiece Cone/Cube is a global mode
-  // FIXME: GroundIntake has state based on Gamepiece and task. First create the state machine for each GamePiece; only then implement
-
   public void deploy() {
-    m_intakeSolenoid.set(kForward); // FIXME: May have to swap pneumatics orientation
-    setIntakeSpeed(m_intakeSetSpeed);
+    m_intakeSolenoid.set(kForward);
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      setIntakeSpeed(GroundIntakeConstants.kCubeIntakeSpeed);
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      setIntakeSpeed(GroundIntakeConstants.kConeIntakeSpeed);
+    }   
   }
 
   public void stow() {
-    m_intakeSolenoid.set(kReverse); // FIXME: May have to swap pneumatics orientation
+    m_intakeSolenoid.set(kReverse);
     stopIntake();
   }
 
+  public void grasp() {
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      setIntakeSpeed(GroundIntakeConstants.kCubeGraspSpeed);
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      setIntakeSpeed(GroundIntakeConstants.kConeGraspSpeed);
+    }   
+  }
+
   public void eject() {
-    setIntakeSpeed(-m_intakeSetSpeed);
+    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      setIntakeSpeed(GroundIntakeConstants.kCubeEjectSpeed);
+    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      setIntakeSpeed(GroundIntakeConstants.kConeEjectSpeed);
+    }   
   }
 
   public double getIntakeVelocity() {
