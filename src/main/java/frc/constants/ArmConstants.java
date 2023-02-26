@@ -44,7 +44,7 @@ public class ArmConstants {
         * Low Node Scoring: -22 deg (134); 4" Extension
         * Human player maybe same as mid-node (close)
         */
-    public static final double kStowedAngle          = 0;
+    public static final double kStowedAngle          = 5;
     public static final double kHighNodeAngle        = 66;  // FIXME: tune angles
     public static final double kMidNodeAngle         = 70;
     public static final double kLowNodeAngle         = 129;
@@ -60,7 +60,7 @@ public class ArmConstants {
     
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
-    public static final double rotateDDefault = 0.039139*2;
+    public static final double rotateDDefault = 0.039139*2*0;
 
     public static final double extendPDefault = .02;
     public static final double extendIDefault = 0;
