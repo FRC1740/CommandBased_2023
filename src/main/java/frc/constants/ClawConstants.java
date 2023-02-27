@@ -7,7 +7,7 @@ public final class ClawConstants {
 
     // Cube
     public static final double InjectCubeHighSpeed   = 1.0; // Cube intake tested at full
-    public static final double InjectCubeLowSpeed    = 0.5;
+    public static final double InjectCubeLowSpeed    = 0.2;
     public static final double EjectCubeLowSpeed     = -InjectCubeLowSpeed;
 
     public static final double EjectCubeManualSpeed  = -1.0;
