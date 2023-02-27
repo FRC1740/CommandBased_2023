@@ -18,7 +18,7 @@ public class ArmConstants {
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 5 inches of extension
-    public static final double kArmExtensionOutputToInches = 5;
+    public static final double kArmExtensionOutputToInches = 5; //Should be pi * 1.5
     // Encoder output to inches of extension
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
@@ -45,17 +45,18 @@ public class ArmConstants {
         * Human player maybe same as mid-node (close)
         */
     public static final double kStowedAngle          = 5;
-    public static final double kHighNodeAngle        = 66;  // FIXME: tune angles
-    public static final double kMidNodeAngle         = 70;
-    public static final double kLowNodeAngle         = 129;
-    public static final double kMidRetrieveAngle     = 70;
-    public static final double kLowRetrieveAngle     = 0;
+    public static final double kHighNodeAngle        = 70;  // FIXME: tune angles
+    public static final double kMidNodeAngle         = 75;
+    public static final double kLowNodeAngle         = 140;
+    public static final double kMidRetrieveAngle     = 81;
+    public static final double kLowRetrieveAngle     = 173;
+
     
     public static final double kStowedPosition       = 0;
-    public static final double kHighNodePosition     = 20; // FIXME: tune telescope
-    public static final double kMidNodePosition      = 10;
+    public static final double kHighNodePosition     = 30; // FIXME: tune telescope
+    public static final double kMidNodePosition      = 9;
     public static final double kLowNodePosition      = 0;  
-    public static final double kMidRetrievePosition  = 20; 
+    public static final double kMidRetrievePosition  = 8; 
     public static final double kLowRetrievePosition  = 0; 
     
     public static final double rotatePDefault = 0.12149;

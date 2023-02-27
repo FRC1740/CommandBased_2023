@@ -155,8 +155,8 @@ public class RobotContainer {
     // ManualArmExtendRetract
     m_codriverController.leftStick()
       .onTrue(new ParallelCommandGroup(
-        new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftX())),
-        new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getLeftY()))))
+        new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftX())).until(() -> !m_codriverController.leftStick().getAsBoolean()),
+        new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getLeftY())).until(() -> !m_codriverController.leftStick().getAsBoolean())))
       .onFalse(new ParallelCommandGroup(
         new InstantCommand(() -> m_armProfiled.manualDone()),
         new InstantCommand(() -> m_telescope.manualDone())));
@@ -164,13 +164,13 @@ public class RobotContainer {
     // ManualRollerOut
     new POVButton(m_codriverController.getHID(), 0)
     // m_codriverController.rightTrigger()
-      .onTrue(new InstantCommand(() -> m_claw.setIntakeSpeed(ClawConstants.EjectCubeManualSpeed)))
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.EjectCubeManualSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // ManualRollerIn
     new POVButton(m_codriverController.getHID(), 180)
     // m_codriverController.rightTrigger()
-      .onTrue(new InstantCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed)))
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // AllStow  
@@ -188,8 +188,8 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> m_claw.close()));
 
     // ArmScore 
-    m_driverController.leftTrigger()
-      .onTrue(new InstantCommand(() -> m_claw.score()))
+    m_codriverController.leftTrigger()
+      .whileTrue(new RunCommand(() -> m_claw.score()))
       .onFalse(new InstantCommand(() -> m_claw.scoreDone()));
   }
 
