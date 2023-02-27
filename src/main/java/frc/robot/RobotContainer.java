@@ -155,8 +155,8 @@ public class RobotContainer {
     // ManualArmExtendRetract
     m_codriverController.leftStick()
       .onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getRightX())),
-        new InstantCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY()))))
+        new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftX())),
+        new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getLeftY()))))
       .onFalse(new ParallelCommandGroup(
         new InstantCommand(() -> m_armProfiled.manualDone()),
         new InstantCommand(() -> m_telescope.manualDone())));
