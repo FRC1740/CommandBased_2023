@@ -30,6 +30,7 @@ public class RobotTab {
 
     private RobotTab() {
         initShuffleboardTab();
+        setGamePiece(GamePiece.CUBE);
     }
 
     public static RobotTab getInstance() {

@@ -280,7 +280,8 @@ public class RobotContainer {
 
     // IntakeScore
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_groundIntake.eject()));
+      .whileTrue(new RunCommand(() -> m_groundIntake.eject()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
   }
 
   private void bind_POVTest() {
