@@ -120,7 +120,7 @@ public class RobotContainer {
    * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
-    bind_POVTest();
+    // bind_POVTest();
     // bind_CircleTest();
     // bind_AutoDriveDistanceTest();
     // bind_ManualArmTest();

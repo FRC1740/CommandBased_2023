@@ -41,8 +41,8 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationEncoder = m_rotationLeader.getEncoder();
         m_rotationFollowerEncoder = m_rotationFollower.getEncoder();
         // Reset encoders to Zero position for starting configuration
-        m_rotationEncoder.setPosition(ArmConstants.kStowedAngle);
-        m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
+        m_rotationEncoder.setPosition(ArmConstants.kStowedAngle-5);
+        m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle-5);
     
         m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);

@@ -10,14 +10,14 @@ public final class ClawConstants {
     public static final double InjectCubeLowSpeed    = 0.5;
     public static final double EjectCubeLowSpeed     = -InjectCubeLowSpeed;
 
-    public static final double EjectCubeManualSpeed  = 1.0;
+    public static final double EjectCubeManualSpeed  = -1.0;
     public static final double InjectCubeManualSpeed = -EjectCubeManualSpeed;
     
     //Cone
     public static final double InjectConeSpeed = 0.0;
     
     
-    public static final double ShutdownDelay = 1.0;
+    public static final double ShutdownDelay = 2.0;
     public static final int IntakePeakCurrentLimit = 35; // Amps
     public static final int IntakePeakDurationLimit = 200; // mSec
     public static final int IntakeContinuousCurrentLimit = 20; // Amps

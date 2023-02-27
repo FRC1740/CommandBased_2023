@@ -23,12 +23,12 @@ public class ArmConstants {
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
     // Manual limits and speeds
-    public static final double kArmExtendMaxInches    = 20.0;
+    public static final double kArmExtendMaxInches    = 30.0;
     public static final double kArmExtendMinInches    = 0.0;
-    public static final double kArmExtendManualSpeed  = 0.1;
+    public static final double kArmExtendManualSpeed  = 0.2;
 
     public static final double kArmRotateMaxDegrees   = 129.0;
-    public static final double kArmRotateMinDegrees   = 0.0;
+    public static final double kArmRotateMinDegrees   = 5;
     public static final double kArmRotateManualSpeed  = 0.1;
 
     //public static final double kArmExtensionRotationToLinearDistance = 1.5;
@@ -44,7 +44,7 @@ public class ArmConstants {
         * Low Node Scoring: -22 deg (134); 4" Extension
         * Human player maybe same as mid-node (close)
         */
-    public static final double kStowedAngle          = 0;
+    public static final double kStowedAngle          = 5;
     public static final double kHighNodeAngle        = 66;  // FIXME: tune angles
     public static final double kMidNodeAngle         = 70;
     public static final double kLowNodeAngle         = 129;
@@ -52,15 +52,15 @@ public class ArmConstants {
     public static final double kLowRetrieveAngle     = 0;
     
     public static final double kStowedPosition       = 0;
-    public static final double kHighNodePosition     = 0; // FIXME: tune telescope
-    public static final double kMidNodePosition      = 0;
+    public static final double kHighNodePosition     = 20; // FIXME: tune telescope
+    public static final double kMidNodePosition      = 10;
     public static final double kLowNodePosition      = 0;  
-    public static final double kMidRetrievePosition  = 0; 
+    public static final double kMidRetrievePosition  = 20; 
     public static final double kLowRetrievePosition  = 0; 
     
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
-    public static final double rotateDDefault = 0.039139*2;
+    public static final double rotateDDefault = 0.039139*2*0;
 
     public static final double extendPDefault = .02;
     public static final double extendIDefault = 0;
