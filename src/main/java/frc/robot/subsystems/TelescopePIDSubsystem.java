@@ -69,10 +69,12 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   public void manualTelescope(double speed) {
     double position = getArmExtensionInches();
     disable();
-    if ((speed > 0.0 && position < ArmConstants.kArmExtendMaxInches) ||
-        (speed < 0.0 && position > ArmConstants.kArmExtendMinInches)) {
-      m_extensionMotor.set(speed);
+    if (speed > 0.0 && position < ArmConstants.kArmExtendMaxInches) {
+      m_extensionMotor.set(ArmConstants.kArmExtendManualSpeed);
     }
+    else if (speed < 0.0 && position > ArmConstants.kArmExtendMinInches) {
+      m_extensionMotor.set(-ArmConstants.kArmExtendManualSpeed);
+    } 
     else {
       m_extensionMotor.set(0.0);
     }

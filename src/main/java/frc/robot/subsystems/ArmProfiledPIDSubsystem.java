@@ -88,10 +88,12 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void manualArmRotate(double speed){
     double position = getArmRotationDegrees();
     disable();
-    if ((speed > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) ||
-        (speed < 0.0 && position > ArmConstants.kArmRotateMinDegrees)) {
-      m_rotationLeader.set(speed);
-    }
+    if (speed > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) {
+      m_rotationLeader.set(ArmConstants.kArmRotateManualSpeed);
+    } 
+    else if (speed < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
+      m_rotationLeader.set(-ArmConstants.kArmRotateManualSpeed);
+    } 
     else {
       m_rotationLeader.set(0.0);
     }
