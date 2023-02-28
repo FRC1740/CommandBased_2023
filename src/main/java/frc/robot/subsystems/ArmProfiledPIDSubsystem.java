@@ -94,17 +94,20 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
   }
 
-  public void manualArmRotate(double speed){
+  public void manualArmRotate(double analogInput){
+    double adjustedSpeed = analogInput * ArmConstants.kArmRotateInputMultiplier;
     double position = getArmRotationDegrees();
     disable();
-    if (speed > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) {
-      m_rotationLeader.set(ArmConstants.kArmRotateManualSpeed);
-    } 
-    else if (speed < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
-      m_rotationLeader.set(-ArmConstants.kArmRotateManualSpeed);
-    } 
-    else {
+    if(analogInput > 0.1 || analogInput < - 0.1){ //deadzone
+      if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
+      m_rotationLeader.set(adjustedSpeed);
+      } 
+      else if (analogInput < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
+      m_rotationLeader.set(adjustedSpeed);
+      } 
+      else {
       m_rotationLeader.set(0.0);
+      }
     }
   }
 
