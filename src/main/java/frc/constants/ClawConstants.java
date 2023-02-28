@@ -7,14 +7,14 @@ public final class ClawConstants {
 
     // Cube
     public static final double InjectCubeHighSpeed   = 1.0; // Cube intake tested at full
-    public static final double InjectCubeLowSpeed    = 0.2;
+    public static final double InjectCubeLowSpeed    = 0.2; //positive is intake, negative is eject
     public static final double EjectCubeLowSpeed     = -InjectCubeLowSpeed;
 
     public static final double EjectCubeManualSpeed  = -1.0;
     public static final double InjectCubeManualSpeed = -EjectCubeManualSpeed;
     
     //Cone
-    public static final double InjectConeSpeed = 0.0;
+    public static final double InjectConeSpeed = 0.2;
     
     
     public static final double ShutdownDelay = 2.0;

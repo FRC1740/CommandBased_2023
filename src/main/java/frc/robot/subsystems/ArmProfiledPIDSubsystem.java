@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -46,6 +47,14 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     
         m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
+
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kForward, 173); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kReverse, 0); //reverse soft limit at stowed position
+        m_rotationLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+        m_rotationLeader.burnFlash();
+        m_rotationFollower.burnFlash();
 
         setGoal(ArmConstants.kStowedAngle);
 
