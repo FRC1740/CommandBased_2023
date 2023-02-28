@@ -192,6 +192,7 @@ public class ClawSubsystem extends SubsystemBase {
       setIntakeSpeed(ClawConstants.InjectConeSpeed);
     }
     m_timer.restart();
+    m_timer.stop();
   }
 
   @Override
