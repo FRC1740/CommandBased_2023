@@ -45,6 +45,10 @@ public class DriveConstants {
 
     public static final boolean kGyroReversed = false;
 
-
+    public static final double kRotationDeadzone      = 0.2;
+    public static final double kRotationVelocityLow   = kRotationDeadzone;
+    public static final double kRotationVelocityHigh  = 0.70;
+    public static final double kRotationBoostLow      = 0.40;
+    public static final double kRotationBoostHigh     = 1.0;
 
 }

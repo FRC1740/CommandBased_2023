@@ -116,6 +116,12 @@ public class DriveSubsystem extends SubsystemBase {
       rotationFilter = LinearFilter.movingAverage(5);
   }
 
+  // Helper for calculations below
+  private double mapRange(double value, double low1, double high1, double low2, double high2) {
+    double x = Math.max(low1, Math.min(value, high1));
+    return low2 + (high2 - low2) * (x - low1) / (high1 - low1);
+  }
+
   /**
    * Drives the robot using arcade controls.
    *
@@ -124,8 +130,16 @@ public class DriveSubsystem extends SubsystemBase {
    */
   
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
+    // Implement Kyle's option 2 for rotation modification
+    // Motor voltages are the best proxy we have for velocity [-1, 1]
+    double velocity = (m_leftMotorLeader.get() - m_rightMotorLeader.get()) / 2.0;
+    double rotDeadzone = Math.abs(rot) < DriveConstants.kRotationDeadzone? 0.0 : 1.0;
+    double rotBoost = mapRange(Math.abs(velocity),
+      DriveConstants.kRotationVelocityLow, DriveConstants.kRotationVelocityHigh,
+      DriveConstants.kRotationBoostLow, DriveConstants.kRotationBoostHigh);
+    
     double f_fwd = speedFilter.calculate(fwd);
-    double f_rot = rotationFilter.calculate(rot);
+    double f_rot = rotationFilter.calculate(rot * rotBoost * rotDeadzone);
     m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
 
