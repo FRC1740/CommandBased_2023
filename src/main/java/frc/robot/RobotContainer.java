@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -242,6 +243,8 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()),
+        new WaitCommand(.5),
+        new InstantCommand(() -> m_claw.setClawSpeed(0)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))
         ));
@@ -255,6 +258,8 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()),
+        new WaitCommand(.5),
+        new InstantCommand(() -> m_claw.setClawSpeed(0)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))
         ));
