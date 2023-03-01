@@ -501,14 +501,14 @@ public class RobotContainer {
   }
 
   public void autonomousInit() {
-    if (DriverStation.isFMSAttached()) {
+    // if (DriverStation.isFMSAttached()) {
       m_robotDrive.burnFlash();
       m_claw.burnFlash();
       // m_arm.burnFlash();
       m_armProfiled.burnFlash();
       m_telescope.burnFlash();
       m_groundIntake.burnFlash();
-    }
+    // }
   }
 
   private void toggleGamePiece() {
