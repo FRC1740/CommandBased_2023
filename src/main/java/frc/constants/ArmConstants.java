@@ -69,6 +69,8 @@ public class ArmConstants {
     public static final double extendDDefault = 0;
 
     public static final double rotateMaxAcceleration = 800;
-    public static final double rotateMaxVelocity = 800;   
+    public static final double rotateMaxVelocity = 800;
+
+    public static final double kArmRotateDeadzone = 0.1;
 
 }

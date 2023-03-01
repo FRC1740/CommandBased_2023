@@ -53,9 +53,6 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
         m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
-        m_rotationLeader.burnFlash();
-        m_rotationFollower.burnFlash();
-
         setGoal(ArmConstants.kStowedAngle);
 
         m_ArmTab = ArmTab.getInstance();
@@ -98,15 +95,16 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     double adjustedSpeed = analogInput * ArmConstants.kArmRotateInputMultiplier;
     double position = getArmRotationDegrees();
     disable();
-    if(analogInput > 0.1 || analogInput < - 0.1){ //deadzone
+    if (analogInput > ArmConstants.kArmRotateDeadzone || 
+        analogInput < -ArmConstants.kArmRotateDeadzone) {
       if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
-      m_rotationLeader.set(adjustedSpeed);
+        m_rotationLeader.set(adjustedSpeed);
       } 
       else if (analogInput < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
-      m_rotationLeader.set(adjustedSpeed);
+        m_rotationLeader.set(adjustedSpeed);
       } 
       else {
-      m_rotationLeader.set(0.0);
+        m_rotationLeader.set(0.0);
       }
     }
   }
