@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -47,6 +48,14 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
 
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kForward, 173); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kReverse, 0); //reverse soft limit at stowed position
+        m_rotationLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
+        m_rotationLeader.burnFlash();
+        m_rotationFollower.burnFlash();
+
         setGoal(ArmConstants.kStowedAngle);
 
         m_ArmTab = ArmTab.getInstance();
@@ -85,17 +94,20 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
   }
 
-  public void manualArmRotate(double speed){
+  public void manualArmRotate(double analogInput){
+    double adjustedSpeed = analogInput * ArmConstants.kArmRotateInputMultiplier;
     double position = getArmRotationDegrees();
     disable();
-    if (speed > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) {
-      m_rotationLeader.set(ArmConstants.kArmRotateManualSpeed);
-    } 
-    else if (speed < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
-      m_rotationLeader.set(-ArmConstants.kArmRotateManualSpeed);
-    } 
-    else {
+    if(analogInput > 0.1 || analogInput < - 0.1){ //deadzone
+      if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
+      m_rotationLeader.set(adjustedSpeed);
+      } 
+      else if (analogInput < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
+      m_rotationLeader.set(adjustedSpeed);
+      } 
+      else {
       m_rotationLeader.set(0.0);
+      }
     }
   }
 

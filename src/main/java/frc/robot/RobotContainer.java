@@ -154,12 +154,12 @@ public class RobotContainer {
     // ManualArmUpDown
     // ManualArmExtendRetract
     m_codriverController.leftStick()
-      .onTrue(new ParallelCommandGroup(
-        new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftX())).until(() -> !m_codriverController.leftStick().getAsBoolean()),
-        new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getLeftY())).until(() -> !m_codriverController.leftStick().getAsBoolean())))
-      .onFalse(new ParallelCommandGroup(
-        new InstantCommand(() -> m_armProfiled.manualDone()),
-        new InstantCommand(() -> m_telescope.manualDone())));
+      .whileTrue(new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftY())))
+      .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
+
+    m_codriverController.rightStick()
+    .whileTrue(new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY())))
+    .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
 
     // ManualRollerOut
     new POVButton(m_codriverController.getHID(), 0)
@@ -170,7 +170,7 @@ public class RobotContainer {
     // ManualRollerIn
     new POVButton(m_codriverController.getHID(), 180)
     // m_codriverController.rightTrigger()
-      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed)))
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed))) //use whileTrue and a run command to continue running
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // AllStow  
@@ -241,9 +241,9 @@ public class RobotContainer {
         new InstantCommand(() -> m_claw.retrieve())
         ))
       .onFalse(new SequentialCommandGroup(
+        new InstantCommand(() -> m_claw.hold()),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))
         ));
 
     // AutoArmRetrieveLow
@@ -254,9 +254,9 @@ public class RobotContainer {
         new InstantCommand(() -> m_claw.retrieve())
         ))
       .onFalse(new SequentialCommandGroup(
+        new InstantCommand(() -> m_claw.hold()),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))
         ));
   }
 
@@ -264,6 +264,11 @@ public class RobotContainer {
     // GamePieceToggle
     m_codriverController.start()
       .onTrue(new InstantCommand(() -> toggleGamePiece()));
+
+      //driver should be able to toggle Game Piece also since rear intake controls are on driver controller
+    m_driverController.start()
+      .onTrue(new InstantCommand(() -> toggleGamePiece())); 
+      
   }
 
   private void bind_RC_RearIntake() {

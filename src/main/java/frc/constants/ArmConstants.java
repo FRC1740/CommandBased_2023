@@ -26,11 +26,12 @@ public class ArmConstants {
     public static final double kArmExtendMaxInches    = 30.0;
     public static final double kArmExtendMinInches    = 0.0;
     public static final double kArmExtendManualSpeed  = 0.2;
+    public static final double kArmExtendInputMultiplier = 0.3; //used to dampen joystick input
 
     public static final double kArmRotateMaxDegrees   = 129.0;
     public static final double kArmRotateMinDegrees   = 5;
     public static final double kArmRotateManualSpeed  = 0.1;
-
+    public static final double kArmRotateInputMultiplier = 0.2; //used to dampen joystick input
     //public static final double kArmExtensionRotationToLinearDistance = 1.5;
     // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
     //public static final double kArmExtensionTicksPerRotationOutput = ConSparkMax.POSITION_CONVERSION_FACTOR * kArmExtensionGearRatio;
