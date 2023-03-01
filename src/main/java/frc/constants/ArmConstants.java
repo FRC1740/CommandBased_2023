@@ -18,7 +18,7 @@ public class ArmConstants {
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 5 inches of extension
-    public static final double kArmExtensionOutputToInches = 5; //Should be pi * 1.5
+    public static final double kArmExtensionOutputToInches = Math.PI * 1.5; //Should be pi * 1.5
     // Encoder output to inches of extension
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
@@ -27,6 +27,10 @@ public class ArmConstants {
     public static final double kArmExtendMinInches    = 0.0;
     public static final double kArmExtendManualSpeed  = 0.2;
     public static final double kArmExtendInputMultiplier = 0.3; //used to dampen joystick input
+
+    public static final double kDumbAutoTelescopeSpeed = 0.2;
+    public static final double kDumbAutoTelescopeDeadzone = 0.2;
+
 
     public static final double kArmRotateMaxDegrees   = 129.0;
     public static final double kArmRotateMinDegrees   = 5;
@@ -54,23 +58,25 @@ public class ArmConstants {
 
     
     public static final double kStowedPosition       = 0;
-    public static final double kHighNodePosition     = 30; // FIXME: tune telescope
-    public static final double kMidNodePosition      = 9;
+    public static final double kHighNodePosition     = 27.5; // FIXME: tune telescope
+    public static final double kMidNodePosition      = 8.5;
     public static final double kLowNodePosition      = 0;  
-    public static final double kMidRetrievePosition  = 8; 
+    public static final double kMidRetrievePosition  = 7.5; 
     public static final double kLowRetrievePosition  = 0; 
     
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
     public static final double rotateDDefault = 0.039139*2*0;
 
-    public static final double extendPDefault = .02;
-    public static final double extendIDefault = 0;
-    public static final double extendDDefault = 0;
+    public static final double extendPDefault = 0.08;
+    public static final double extendIDefault = 0.002;//0.005
+    public static final double extendDDefault = 0.0;
 
     public static final double rotateMaxAcceleration = 800;
     public static final double rotateMaxVelocity = 800;
 
     public static final double kArmRotateDeadzone = 0.1;
+
+    public static final double kArmExtendDeadzone = 0.1;
 
 }
