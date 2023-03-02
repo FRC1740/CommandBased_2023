@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.constants.ArmConstants;
-import frc.constants.OIConstants;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.TurnToAngleProfiled;
@@ -30,7 +29,9 @@ import frc.robot.commands.driver.AutoArmRetrieveMedium;
 import frc.robot.commands.driver.AutoArmScoreHigh;
 import frc.robot.commands.driver.AutoArmScoreLow;
 import frc.robot.commands.driver.AutoArmScoreMedium;
-import frc.robot.commands.driver.AutoArmStow;
+import frc.robot.commands.driver.ArmStow;
+import frc.robot.commands.driver.ArmStowHold;
+import frc.robot.commands.driver.ArmStowHoldDelay;
 import frc.robot.commands.driver.ManualArmMove;
 import frc.robot.commands.driver.ToggleGamePiece;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
@@ -94,17 +95,12 @@ public class ButtonBindings {
         Trigger driver_DPadDown = new POVButton(controller.getHID(), 180);
         Trigger driver_DPadLeft = new POVButton(controller.getHID(), 270);
 
-        // IntakeRetrieve
         driver_B.onTrue(new IntakeDeploy())
             .onFalse(new IntakeStow());
-        
-        // IntakeGrasp
         driver_A.onTrue(new IntakeGrasp())
             .onFalse(new IntakeStop());
-
-        // IntakeScore
         driver_Y.onTrue(new IntakeEject());
-
+        driver_Start.onTrue(new ToggleGamePiece());
         
     }
     
@@ -131,18 +127,18 @@ public class ButtonBindings {
         codriver_DPadUp.whileTrue(new ClawRollerOut());
         codriver_DPadDown.whileTrue(new ClawRollerIn());
         codriver_LeftStick.whileTrue(new ManualArmMove(m_codriverController));
-        codriver_A.onTrue(new AutoArmScoreHigh());
+        codriver_A.onTrue(new ArmStow());
         codriver_LeftTrigger.whileTrue(new ClawScore());
         codriver_X.onTrue(new AutoArmScoreHigh())
-            .onFalse(new AutoArmStow());
+            .onFalse(new ArmStowHold());
         codriver_Y.onTrue(new AutoArmScoreMedium())
-            .onFalse(new AutoArmStow());
+            .onFalse(new ArmStowHold());
         codriver_B.onTrue(new AutoArmScoreLow())
-            .onFalse(new AutoArmStow());
+            .onFalse(new ArmStowHold());
         codriver_RightBumper.onTrue(new AutoArmRetrieveMedium())
-            .onFalse(new AutoArmStow());
+            .onFalse(new ArmStowHoldDelay());
         codriver_RightTrigger.onTrue(new AutoArmRetrieveLow())
-            .onFalse(new AutoArmStow());
+            .onFalse(new ArmStowHoldDelay());
         codriver_Start.onTrue(new ToggleGamePiece());
     }
 
@@ -167,15 +163,15 @@ public class ButtonBindings {
           .onTrue(new InstantCommand(() -> robotShared.toggleGamePiece()));
       }
 
-        private void bind_CircleTest() {
-            RobotShared robotShared = RobotShared.getInstance();
-            DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+      private void bind_CircleTest() {
+        RobotShared robotShared = RobotShared.getInstance();
+        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-            // Turn to -90 degrees with a profile when the Circle button is pressed, with a
-            // 5 second timeout
-            m_driverController.a()
-                .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
-        }
+        // Turn to -90 degrees with a profile when the Circle button is pressed, with a
+        // 5 second timeout
+        m_driverController.a()
+            .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
+      }
     
       private void bind_AutoDriveDistanceTest() {
         RobotShared robotShared = RobotShared.getInstance();

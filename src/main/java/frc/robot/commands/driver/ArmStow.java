@@ -7,16 +7,14 @@ package frc.robot.commands.driver;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.constants.ArmConstants;
 import frc.robot.commands.basic.ArmToSetpoint;
-import frc.robot.commands.basic.ClawHold;
 import frc.robot.commands.basic.TelescopeToSetpoint;
 
-public class AutoArmStow extends SequentialCommandGroup {
+public class ArmStow extends SequentialCommandGroup {
 
   /** Creates a new AutoArmStow. */
-  public AutoArmStow() {
+  public ArmStow() {
 
     addCommands(
-      new ClawHold(),
       new TelescopeToSetpoint(ArmConstants.kStowedPosition),
       new ArmToSetpoint(ArmConstants.kStowedAngle));
   }

@@ -5,19 +5,15 @@
 package frc.robot.commands.driver;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.constants.ArmConstants;
-import frc.robot.commands.basic.ArmToSetpoint;
 import frc.robot.commands.basic.ClawHold;
-import frc.robot.commands.basic.TelescopeToSetpoint;
 
-public class AutoArmScoreHigh extends SequentialCommandGroup {
+public class ArmStowHold extends SequentialCommandGroup {
 
-  /** Creates a new AutoArmScoreHigh. */
-  public AutoArmScoreHigh() {
+  /** Creates a new ArmStowAndHold. */
+  public ArmStowHold() {
 
     addCommands(
-      new TelescopeToSetpoint(ArmConstants.kHighNodePosition),
-      new ArmToSetpoint(ArmConstants.kHighNodeAngle),
+      new ArmStow(),
       new ClawHold());
   }
 
