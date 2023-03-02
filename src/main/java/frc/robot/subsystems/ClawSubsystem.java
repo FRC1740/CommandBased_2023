@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import frc.constants.OIConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
@@ -182,7 +183,6 @@ public class ClawSubsystem extends SubsystemBase {
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
       close();
     }
-    
   }
 
   public void retrieve() {
@@ -194,6 +194,13 @@ public class ClawSubsystem extends SubsystemBase {
     }
     m_timer.restart();
     m_timer.stop();
+  }
+
+  public boolean pieceInClaw(){
+    if(m_tof.getRange() <= (Units.inchesToMeters(ClawConstants.kPieceRecognitionDistanceInches) * 1000)){
+      return true; 
+    }
+    else return false;
   }
 
   @Override

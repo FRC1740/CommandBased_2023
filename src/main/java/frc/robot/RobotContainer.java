@@ -39,6 +39,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -239,7 +240,9 @@ public class RobotContainer {
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidRetrieveAngle)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidRetrievePosition)),
-        new InstantCommand(() -> m_claw.retrieve())
+        new InstantCommand(() -> m_claw.retrieve()),
+        new WaitUntilCommand(m_claw::pieceInClaw),
+        new InstantCommand(() -> m_claw.hold())
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()),
@@ -254,7 +257,9 @@ public class RobotContainer {
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowRetrieveAngle)),
         new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowRetrievePosition)),
-        new InstantCommand(() -> m_claw.retrieve())
+        new InstantCommand(() -> m_claw.retrieve()),
+        new WaitUntilCommand(m_claw::pieceInClaw),
+        new InstantCommand(() -> m_claw.hold())
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()),
