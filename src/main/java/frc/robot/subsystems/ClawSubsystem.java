@@ -176,12 +176,13 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void hold() {
-    setIntakeSpeed(0.0);
+   
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
       open();
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
       close();
     }
+    
   }
 
   public void retrieve() {

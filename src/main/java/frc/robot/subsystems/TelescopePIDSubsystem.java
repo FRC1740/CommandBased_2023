@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
@@ -30,7 +31,11 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     m_extensionEncoder = m_extensionMotor.getEncoder();
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
- 
+    
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, 30);
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedPosition);
     
@@ -66,19 +71,16 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
       return;
   }
 
-  public void manualTelescope(double speed) {
-    double position = getArmExtensionInches();
+  public void manualTelescope(double analogInput) {
+    double adjustedSpeed = analogInput * ArmConstants.kArmExtendInputMultiplier;
     disable();
-    if (speed > 0.0 && position < ArmConstants.kArmExtendMaxInches) {
-      m_extensionMotor.set(ArmConstants.kArmExtendManualSpeed);
-    }
-    else if (speed < 0.0 && position > ArmConstants.kArmExtendMinInches) {
-      m_extensionMotor.set(-ArmConstants.kArmExtendManualSpeed);
-    } 
-    else {
-      m_extensionMotor.set(0.0);
-    }
+    if (analogInput > ArmConstants.kArmExtendDeadzone || 
+    analogInput < -ArmConstants.kArmExtendDeadzone){
+    m_extensionMotor.set(adjustedSpeed);
+  } else{
+      m_extensionMotor.set(0.0);}
   }
+  
 
   public void manualDone() {
     enable();

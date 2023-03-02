@@ -49,9 +49,13 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
 
         m_rotationLeader.setSoftLimit(SoftLimitDirection.kForward, 173); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kForward, 173); //forward soft limit at low retrieve position
         m_rotationFollower.setSoftLimit(SoftLimitDirection.kReverse, 0); //reverse soft limit at stowed position
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //reverse soft limit at stowed position
         m_rotationLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_rotationFollower.enableSoftLimit(SoftLimitDirection.kForward, true);
         m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        m_rotationLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         setGoal(ArmConstants.kStowedAngle);
 
@@ -93,21 +97,20 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
 
   public void manualArmRotate(double analogInput){
     double adjustedSpeed = analogInput * ArmConstants.kArmRotateInputMultiplier;
-    double position = getArmRotationDegrees();
     disable();
     if (analogInput > ArmConstants.kArmRotateDeadzone || 
         analogInput < -ArmConstants.kArmRotateDeadzone) {
-      if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
+      //if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
         m_rotationLeader.set(adjustedSpeed);
       } 
-      else if (analogInput < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
-        m_rotationLeader.set(adjustedSpeed);
-      } 
+      //else if (analogInput < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
+        //m_rotationLeader.set(adjustedSpeed);
+      //} 
       else {
         m_rotationLeader.set(0.0);
       }
     }
-  }
+  //}
 
   public void manualDone(){
     enable();
