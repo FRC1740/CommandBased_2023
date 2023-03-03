@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import frc.constants.OIConstants;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
@@ -198,11 +197,14 @@ public class ClawSubsystem extends SubsystemBase {
   
 
   public boolean pieceInClaw(){
-    if(m_tof.getRange() <= 100 && m_tof.getRange() > 0){
+    double range = m_tof.getRange();
+    if (range <= ClawConstants.kPieceRecognitionDistanceMm && range > 0) {
       System.out.println("piece in claw!");
       return true; 
     }
-    else return false;
+    else {
+      return false;
+    }
   }
 
   @Override
