@@ -143,6 +143,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
 
+  public void simpleArcadeDrive(double fwd, double rot, boolean squaredInput){
+    m_drive.arcadeDrive(fwd, rot, squaredInput);
+  }
   /**
   *    * Controls the left and right sides of the drive directly with voltages.
   *
