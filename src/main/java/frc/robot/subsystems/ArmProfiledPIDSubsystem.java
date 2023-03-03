@@ -48,10 +48,10 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
 
-        m_rotationLeader.setSoftLimit(SoftLimitDirection.kForward, 173); //forward soft limit at low retrieve position
-        m_rotationFollower.setSoftLimit(SoftLimitDirection.kForward, 173); //forward soft limit at low retrieve position
-        m_rotationFollower.setSoftLimit(SoftLimitDirection.kReverse, 0); //reverse soft limit at stowed position
-        m_rotationLeader.setSoftLimit(SoftLimitDirection.kReverse, 0); //reverse soft limit at stowed position
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitAngle); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitAngle); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitAngle); //reverse soft limit at stowed position
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitAngle); //reverse soft limit at stowed position
         m_rotationLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
         m_rotationFollower.enableSoftLimit(SoftLimitDirection.kForward, true);
         m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
