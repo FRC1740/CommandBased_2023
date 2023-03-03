@@ -5,6 +5,8 @@ public final class ClawConstants {
     public static final int kPneumaticPortB = 7;
     public static final int IntakeMotorCANID = 6;
 
+    public static final double kPieceRecognitionDistanceInches = 1;
+
     // Cube
     public static final double InjectCubeHighSpeed   = 1.0; // Cube intake tested at full
     public static final double InjectCubeLowSpeed    = 0.4; //positive is intake, negative is eject
