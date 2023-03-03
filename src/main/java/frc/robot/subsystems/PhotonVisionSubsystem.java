@@ -4,12 +4,15 @@
 
 package frc.robot.subsystems;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -50,10 +53,24 @@ public class PhotonVisionSubsystem extends SubsystemBase {
 }
 
   public double getXdeviationAprilTag(){
+
     if(m_camera.getLatestResult().hasTargets() == false){
       return 0;
     }else{
     return m_camera.getLatestResult().getBestTarget().getYaw();
     }
+  }
+
+  // public double getYawSpecificAprilTag(int ID){
+  //   double IDs[] = new double[0];
+  //   List<PhotonTrackedTarget> tags = m_camera.getLatestResult().getTargets();
+  //   for(PhotonTrackedTarget tag : tags){
+
+  //   }
+
+  // }
+
+  public double getDistanceFromTag(){
+    return m_camera.getLatestResult().getBestTarget().getBestCameraToTarget().getTranslation().getDistance(new Translation3d());
   }
 }

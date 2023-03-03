@@ -195,9 +195,11 @@ public class ClawSubsystem extends SubsystemBase {
     m_timer.restart();
     m_timer.stop();
   }
+  
 
   public boolean pieceInClaw(){
-    if(m_tof.getRange() <= (Units.inchesToMeters(ClawConstants.kPieceRecognitionDistanceInches) * 1000)){
+    if(m_tof.getRange() <= 100 && m_tof.getRange() > 0){
+      System.out.println("piece in claw!");
       return true; 
     }
     else return false;
