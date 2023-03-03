@@ -1,4 +1,5 @@
 package frc.constants;
+import edu.wpi.first.math.util.Units;
 
 public final class ClawConstants {
     public static final int kPneumaticPortA = 6;
@@ -6,7 +7,8 @@ public final class ClawConstants {
     public static final int IntakeMotorCANID = 6;
 
     public static final double kPieceRecognitionDistanceInches = 1;
-
+    public static final double kPieceRecognitionDistanceMm = 100;
+    
     // Cube
     public static final double InjectCubeHighSpeed   = 1.0; // Cube intake tested at full
     public static final double InjectCubeLowSpeed    = 0.4; //positive is intake, negative is eject

@@ -32,8 +32,8 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
     
-    m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, 30);
-    m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, 0);
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitPosition);
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitPosition);
     m_extensionMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     // Initial setpoint for starting configuration (stowed, 0.0)
@@ -75,10 +75,11 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     double adjustedSpeed = analogInput * ArmConstants.kArmExtendInputMultiplier;
     disable();
     if (analogInput > ArmConstants.kArmExtendDeadzone || 
-    analogInput < -ArmConstants.kArmExtendDeadzone){
-    m_extensionMotor.set(adjustedSpeed);
-  } else{
-      m_extensionMotor.set(0.0);}
+      analogInput < -ArmConstants.kArmExtendDeadzone) {
+      m_extensionMotor.set(adjustedSpeed);
+    } else {
+      m_extensionMotor.set(0.0);
+    }
   }
   
 

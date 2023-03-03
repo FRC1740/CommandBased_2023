@@ -18,7 +18,7 @@ public class ArmConstants {
     // Arm Extension Constants
     public static final double kArmExtensionGearRatio = 15; //Gear box is 5x3, Sprockets 1/1
     // One rotation of the output = 5 inches of extension
-    public static final double kArmExtensionOutputToInches = Math.PI * 1.5; //Should be pi * 1.5
+    public static final double kArmExtensionOutputToInches = Math.PI * 1.5;
     // Encoder output to inches of extension
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
@@ -55,6 +55,8 @@ public class ArmConstants {
     public static final double kLowNodeAngle         = 140;
     public static final double kMidRetrieveAngle     = 81;
     public static final double kLowRetrieveAngle     = 173;
+    public static final float kMinSoftLimitAngle    = 0;
+    public static final float kMaxSoftLimitAngle    = (float) kLowRetrieveAngle;
 
     
     public static final double kStowedPosition       = 0;
@@ -62,7 +64,9 @@ public class ArmConstants {
     public static final double kMidNodePosition      = 8.5;
     public static final double kLowNodePosition      = 0;  
     public static final double kMidRetrievePosition  = 7.5; 
-    public static final double kLowRetrievePosition  = 0; 
+    public static final double kLowRetrievePosition  = 0;
+    public static final float kMinSoftLimitPosition  = 0;
+    public static final float kMaxSoftLimitPosition  = 30;
     
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
