@@ -5,4 +5,18 @@
 package frc.board;
 
 /** Add your docs here. */
-public class VisionTab {}
+public class VisionTab {
+
+    private static VisionTab instance;
+
+    private VisionTab() {
+
+    }
+
+    public static VisionTab getInstance() {
+        if(instance == null) {
+            instance = new VisionTab();
+        }
+        return instance;
+    }
+}
