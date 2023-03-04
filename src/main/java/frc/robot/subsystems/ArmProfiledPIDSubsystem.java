@@ -123,6 +123,11 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     return m_rotationEncoder.getPosition();
   }
 
+  public boolean atGoal(){
+    return (m_rotationEncoder.getPosition() > m_PIDController.getGoal().position - ArmConstants.kArmRotateTolerance)
+     && (m_rotationEncoder.getPosition() < m_PIDController.getGoal().position + ArmConstants.kArmRotateTolerance);
+  }
+
   public void burnFlash() {
     m_rotationLeader.burnFlash();
     m_rotationFollower.burnFlash();

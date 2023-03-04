@@ -83,4 +83,7 @@ public class ArmConstants {
 
     public static final double kArmExtendDeadzone = 0.1;
 
+    public static final double kArmExtendTolerance = 1;
+    public static final double kArmRotateTolerance = 5;
+
 }
