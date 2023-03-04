@@ -7,7 +7,9 @@ package frc.robot.commands.driver;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.constants.ArmConstants;
 import frc.robot.commands.basic.ArmToSetpoint;
+import frc.robot.commands.basic.ClawHold;
 import frc.robot.commands.basic.ClawRetrieve;
+import frc.robot.commands.basic.ClawWaitOnPiece;
 import frc.robot.commands.basic.TelescopeToSetpoint;
 
 public class AutoArmRetrieveMedium extends SequentialCommandGroup {
@@ -18,7 +20,9 @@ public class AutoArmRetrieveMedium extends SequentialCommandGroup {
     addCommands(
       new ArmToSetpoint(ArmConstants.kMidRetrieveAngle),
       new TelescopeToSetpoint(ArmConstants.kMidRetrievePosition),
-      new ClawRetrieve());
+      new ClawRetrieve(),
+      new ClawWaitOnPiece(),
+      new ClawHold());
   }
 
 }

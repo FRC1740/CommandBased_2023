@@ -14,6 +14,7 @@ import frc.constants.ArmConstants;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.commands.basic.ArmManual;
 import frc.robot.commands.basic.ClawClose;
 import frc.robot.commands.basic.ClawOpen;
 import frc.robot.commands.basic.ClawRollerIn;
@@ -24,6 +25,7 @@ import frc.robot.commands.basic.IntakeEject;
 import frc.robot.commands.basic.IntakeGrasp;
 import frc.robot.commands.basic.IntakeStop;
 import frc.robot.commands.basic.IntakeStow;
+import frc.robot.commands.basic.TelescopeManual;
 import frc.robot.commands.driver.AutoArmRetrieveLow;
 import frc.robot.commands.driver.AutoArmRetrieveMedium;
 import frc.robot.commands.driver.AutoArmScoreHigh;
@@ -32,7 +34,6 @@ import frc.robot.commands.driver.AutoArmScoreMedium;
 import frc.robot.commands.driver.ArmStow;
 import frc.robot.commands.driver.ArmStowHold;
 import frc.robot.commands.driver.ArmStowHoldDelay;
-import frc.robot.commands.driver.ManualArmMove;
 import frc.robot.commands.driver.ToggleGamePiece;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
@@ -95,11 +96,19 @@ public class ButtonBindings {
         Trigger driver_DPadDown = new POVButton(controller.getHID(), 180);
         Trigger driver_DPadLeft = new POVButton(controller.getHID(), 270);
 
+        // IntakeRetrieve
         driver_B.onTrue(new IntakeDeploy())
             .onFalse(new IntakeStow());
+
+        // IntakeGrasp
         driver_A.onTrue(new IntakeGrasp())
             .onFalse(new IntakeStop());
-        driver_Y.onTrue(new IntakeEject());
+
+        // IntakeScore
+        driver_Y.whileTrue(new IntakeEject())
+            .onFalse(new IntakeStop());
+
+        // GamePieceToggle
         driver_Start.onTrue(new ToggleGamePiece());
         
     }
@@ -122,277 +131,323 @@ public class ButtonBindings {
         Trigger codriver_DPadDown = new POVButton(controller.getHID(), 180);
         Trigger codriver_DPadLeft = new POVButton(controller.getHID(), 270);
 
-        codriver_DPadRight.onTrue(new ClawOpen());
-        codriver_DPadLeft.onTrue(new ClawClose());
+        // ManualArmUpDown
+        codriver_LeftStick.whileTrue(new ArmManual(m_codriverController));
+        
+        // ManualArmExtendRetract
+        codriver_RightStick.whileTrue(new TelescopeManual(m_codriverController));
+        
+        // ManualRollerOut
         codriver_DPadUp.whileTrue(new ClawRollerOut());
+
+        // ManualRollerIn
         codriver_DPadDown.whileTrue(new ClawRollerIn());
-        codriver_LeftStick.whileTrue(new ManualArmMove(m_codriverController));
+
+        // AllStow  
         codriver_A.onTrue(new ArmStow());
+
+        // ManualClawOpen
+        codriver_DPadRight.onTrue(new ClawOpen());
+
+        // ManualClawClose
+        codriver_DPadLeft.onTrue(new ClawClose());
+
+        // ArmScore 
         codriver_LeftTrigger.whileTrue(new ClawScore());
+
+        // AutoArmScoreHigh
         codriver_X.onTrue(new AutoArmScoreHigh())
             .onFalse(new ArmStowHold());
+
+        // AutoArmScoreMedium
         codriver_Y.onTrue(new AutoArmScoreMedium())
             .onFalse(new ArmStowHold());
+
+        // AutoArmScoreLow
         codriver_B.onTrue(new AutoArmScoreLow())
             .onFalse(new ArmStowHold());
+
+        // AutoArmRetrieveMedium
         codriver_RightBumper.onTrue(new AutoArmRetrieveMedium())
             .onFalse(new ArmStowHoldDelay());
+
+        // AutoArmRetrieveLow
         codriver_RightTrigger.onTrue(new AutoArmRetrieveLow())
             .onFalse(new ArmStowHoldDelay());
+
+        // GamePieceToggle
         codriver_Start.onTrue(new ToggleGamePiece());
     }
 
-      private void bind_POVTest() {
-        RobotShared robotShared = RobotShared.getInstance();
+    private void bind_POVTest() {
+      RobotShared robotShared = RobotShared.getInstance();
 
-        // To use the D-Pad need to create a POVButton
-        // There are 8 different possible D-Pad buttons based on the angle
-        // 0 = up, 45 = up right, 90 = right ... 315 = up left
-        // 
-        // POVButton dPadUp = new POVButton(m_driverController.getHID(), 0);
-        // POVButton dPadUpRight = new POVButton(m_driverController.getHID(), 45);
-        // POVButton dPadRight = new POVButton(m_driverController.getHID(), 90);
-        // POVButton dPadDownRight = new POVButton(m_driverController.getHID(), 135);
-        // POVButton dPadDown = new POVButton(m_driverController.getHID(), 180);
-        // POVButton dPadDownLeft = new POVButton(m_driverController.getHID(), 225);
-        // POVButton dPadLeft = new POVButton(m_driverController.getHID(), 270);
-        // POVButton dPadUpLeft = new POVButton(m_driverController.getHID(), 315);
-        
-        // D-Pad down button temporarily used to switch GamePiece Mode
-        new POVButton(m_driverController.getHID(), 180)
-          .onTrue(new InstantCommand(() -> robotShared.toggleGamePiece()));
-      }
+      // To use the D-Pad need to create a POVButton
+      // There are 8 different possible D-Pad buttons based on the angle
+      // 0 = up, 45 = up right, 90 = right ... 315 = up left
+      // 
+      // POVButton dPadUp = new POVButton(m_driverController.getHID(), 0);
+      // POVButton dPadUpRight = new POVButton(m_driverController.getHID(), 45);
+      // POVButton dPadRight = new POVButton(m_driverController.getHID(), 90);
+      // POVButton dPadDownRight = new POVButton(m_driverController.getHID(), 135);
+      // POVButton dPadDown = new POVButton(m_driverController.getHID(), 180);
+      // POVButton dPadDownLeft = new POVButton(m_driverController.getHID(), 225);
+      // POVButton dPadLeft = new POVButton(m_driverController.getHID(), 270);
+      // POVButton dPadUpLeft = new POVButton(m_driverController.getHID(), 315);
+      
+      // D-Pad down button temporarily used to switch GamePiece Mode
+      new POVButton(m_driverController.getHID(), 180)
+        .onTrue(new InstantCommand(() -> robotShared.toggleGamePiece()));
+    }
+    
+    private void bind_CircleTest() {
+      RobotShared robotShared = RobotShared.getInstance();
+      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-      private void bind_CircleTest() {
-        RobotShared robotShared = RobotShared.getInstance();
-        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+      // Turn to -90 degrees with a profile when the Circle button is pressed, with a
+      // 5 second timeout
+      m_driverController.a()
+          .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
+    }
+    
+    private void bind_AutoDriveDistanceTest() {
+      RobotShared robotShared = RobotShared.getInstance();
+      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-        // Turn to -90 degrees with a profile when the Circle button is pressed, with a
-        // 5 second timeout
-        m_driverController.a()
-            .onTrue(new TurnToAngleProfiled(90, m_robotDrive).withTimeout(5));
-      }
-    
-      private void bind_AutoDriveDistanceTest() {
-        RobotShared robotShared = RobotShared.getInstance();
-        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+      // Auto-drive distance
+      m_driverController.b()
+        .onTrue(new DriveToDistance(5, m_robotDrive));
+    }
 
-        // Auto-drive distance
-        m_driverController.b()
-          .onTrue(new DriveToDistance(5, m_robotDrive));
-      }
-    
-      private void bind_ManualArmTest() {
-        RobotShared robotShared = RobotShared.getInstance();
-        ArmProfiledPIDSubsystem m_armProfiled = robotShared.getArmProfiledPIDSubsystem();
-        TelescopePIDSubsystem m_telescope = robotShared.getTelescopePIDSubsystem();
+    private void bind_ManualArmTest() {
+      RobotShared robotShared = RobotShared.getInstance();
+      ArmProfiledPIDSubsystem m_armProfiled = robotShared.getArmProfiledPIDSubsystem();
+      TelescopePIDSubsystem m_telescope = robotShared.getTelescopePIDSubsystem();
 
-        m_driverController.a()
-          .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotate(ArmConstants.kArmRotateManualSpeed)))
-          .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
+      m_driverController.a()
+        .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotate(ArmConstants.kArmRotateManualSpeed)))
+        .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
+  
+      m_driverController.b()
+        .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotate(-ArmConstants.kArmRotateManualSpeed)))
+        .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
+  
+      m_driverController.x()
+        .onTrue(new InstantCommand(() -> m_telescope.manualTelescope(ArmConstants.kArmExtendManualSpeed)))
+        .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
+  
+      m_driverController.y()
+        .onTrue(new InstantCommand(() -> m_telescope.manualTelescope(-ArmConstants.kArmExtendManualSpeed)))
+        .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
+    }
     
-        m_driverController.b()
-          .onTrue(new InstantCommand(() -> m_armProfiled.manualArmRotate(-ArmConstants.kArmRotateManualSpeed)))
-          .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
-    
-        m_driverController.x()
-          .onTrue(new InstantCommand(() -> m_telescope.manualTelescope(ArmConstants.kArmExtendManualSpeed)))
-          .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
-    
-        m_driverController.y()
-          .onTrue(new InstantCommand(() -> m_telescope.manualTelescope(-ArmConstants.kArmExtendManualSpeed)))
-          .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
-      }
-    
-      private void bind_ResetGyro() {
-        RobotShared robotShared = RobotShared.getInstance();
-        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+    private void bind_ResetGyro() {
+      RobotShared robotShared = RobotShared.getInstance();
+      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-        // Manually rsest the gyro
-        m_driverController.start()
-          .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
-      }
-    
-      private void bind_GroundIntakeTest() {
-        RobotShared robotShared = RobotShared.getInstance();
-        GroundIntakeSubsystem m_groundIntake = robotShared.getGroundIntakeSubsystem();
+      // Manually rsest the gyro
+      m_driverController.start()
+        .onTrue(new InstantCommand(() -> m_robotDrive.resetGyro()));
+    }
+  
+    private void bind_GroundIntakeTest() {
+      RobotShared robotShared = RobotShared.getInstance();
+      GroundIntakeSubsystem m_groundIntake = robotShared.getGroundIntakeSubsystem();
 
-        m_driverController.rightBumper()
-          // This command must also stow the arm first!!
-          .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
-          .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
-    
-        m_driverController.leftBumper()
-          .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
-          .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
-      }
-    
-      private void bind_Limelight() {
-        RobotShared robotShared = RobotShared.getInstance();
-        LimeLightSubsystem m_limelight = robotShared.getLimeLightSubsystem();
+      m_driverController.rightBumper()
+        // This command must also stow the arm first!!
+        .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+        .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
+  
+      m_driverController.leftBumper()
+        .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
+        .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
+    }
+  
+    private void bind_Limelight() {
+      RobotShared robotShared = RobotShared.getInstance();
+      LimeLightSubsystem m_limelight = robotShared.getLimeLightSubsystem();
 
-        m_driverController.y()
-          .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
-      }
-    
-      private void bind_HalfSpeed() {
-        RobotShared robotShared = RobotShared.getInstance();
-        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+      m_driverController.y()
+        .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
+    }
+  
+    private void bind_HalfSpeed() {
+      RobotShared robotShared = RobotShared.getInstance();
+      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-        // Drive at half speed when the right bumper is held
-        m_driverController.rightBumper()
-          .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
-          .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
-      }
-    
-      private void bind_PathWeaver() {
-        RobotShared robotShared = RobotShared.getInstance();
-        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+      // Drive at half speed when the right bumper is held
+      m_driverController.rightBumper()
+        .onTrue(new InstantCommand(() -> m_robotDrive.setMaxOutput(0.5)))
+        .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
+    }
+  
+    private void bind_PathWeaver() {
+      RobotShared robotShared = RobotShared.getInstance();
+      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-        m_driverController.x()
-          .onTrue(m_robotDrive.getPathWeaverCommand());
-      }
-    
-      /* ***************** CO-Driver Contols ************ */
-      private void bind_CoAutoBalance() {
-        RobotShared robotShared = RobotShared.getInstance();
-        DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+      m_driverController.x()
+        .onTrue(m_robotDrive.getPathWeaverCommand());
+    }
+  
+    /* ***************** CO-Driver Contols ************ */
+    private void bind_CoAutoBalance() {
+      RobotShared robotShared = RobotShared.getInstance();
+      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-        // Drive to autobalance on teetertotter when 'X' button is pressed on codriver
-        // controller, 5 second timeout
-        m_codriverController.back()
-          .onTrue(new AutoBalancePID(m_robotDrive));
-      }
-    
-      private void bind_CoLightToggle() {
-        RobotShared robotShared = RobotShared.getInstance();
-        LimeLightSubsystem m_limelight = robotShared.getLimeLightSubsystem();
+      // Drive to autobalance on teetertotter when 'X' button is pressed on codriver
+      // controller, 5 second timeout
+      m_codriverController.back()
+        .onTrue(new AutoBalancePID(m_robotDrive));
+    }
+  
+    private void bind_CoLightToggle() {
+      RobotShared robotShared = RobotShared.getInstance();
+      LimeLightSubsystem m_limelight = robotShared.getLimeLightSubsystem();
 
-        // When codriver button is pressed, toggle the light
-        m_codriverController.y()
-          .onTrue(new InstantCommand(() -> m_limelight.toggleLED()));
-      }
+      // When codriver button is pressed, toggle the light
+      m_codriverController.y()
+        .onTrue(new InstantCommand(() -> m_limelight.toggleLED()));
+    }
     
-      private void bind_CoCubeOp(){
-        RobotShared robotShared = RobotShared.getInstance();
-        ClawSubsystem m_claw = robotShared.getClawSubsystem();
+    private void bind_CoCubeOp(){
+      RobotShared robotShared = RobotShared.getInstance();
+      ClawSubsystem m_claw = robotShared.getClawSubsystem();
 
-        m_codriverController.leftBumper()
-        .onTrue(new InstantCommand(() -> m_claw.intakeCube()))
-        .onFalse(new InstantCommand(() -> m_claw.setClawSpeed(0)));
-    
-        m_codriverController.start()
-        .onTrue(new InstantCommand(() -> m_claw.ejectCube()));
-      }
-    
-      private void bind_ArmPIDTest() {
-        // Maybe need to enable/disable this when running commands
-        // that will utilize the ground intake? Or just ensure
-        // That the Arm setPoint remains at starting config setpoint?
-    
-        // Basic PID button commands for Arm Rotation
-        // m_driverController.a()
-        //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
-        // m_driverController.b()
-        //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
-        // m_driverController.x()
-        //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
-        // m_driverController.y()
-        //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
-      }
+      m_codriverController.leftBumper()
+      .onTrue(new InstantCommand(() -> m_claw.intakeCube()))
+      .onFalse(new InstantCommand(() -> m_claw.setClawSpeed(0)));
+  
+      m_codriverController.start()
+      .onTrue(new InstantCommand(() -> m_claw.ejectCube()));
+    }
+  
+    private void bind_ArmPIDTest() {
+      // Maybe need to enable/disable this when running commands
+      // that will utilize the ground intake? Or just ensure
+      // That the Arm setPoint remains at starting config setpoint?
+  
+      // Basic PID button commands for Arm Rotation
+      // m_driverController.a()
+      //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
+      // m_driverController.b()
+      //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
+      // m_driverController.x()
+      //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
+      // m_driverController.y()
+      //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
+    }
        
-      private void bind_ArmAndTelescope() {
-        RobotShared robotShared = RobotShared.getInstance();
-        TelescopePIDSubsystem m_telescope = robotShared.getTelescopePIDSubsystem();
-        ArmProfiledPIDSubsystem m_armProfiled = robotShared.getArmProfiledPIDSubsystem();
-        ClawSubsystem m_claw = robotShared.getClawSubsystem();
+    private void bind_ArmAndTelescope() {
+      RobotShared robotShared = RobotShared.getInstance();
+      TelescopePIDSubsystem m_telescope = robotShared.getTelescopePIDSubsystem();
+      ArmProfiledPIDSubsystem m_armProfiled = robotShared.getArmProfiledPIDSubsystem();
+      ClawSubsystem m_claw = robotShared.getClawSubsystem();
 
-        // Combination PID commands for Arm rotate & extend/retract
-        m_codriverController.a()
-          .onTrue(new SequentialCommandGroup(
-            new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-            // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))
-            new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))));
-    
-        m_codriverController.b()
-          .onTrue(new SequentialCommandGroup(
-            // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
-            new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
-            new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle))));
-    
-        m_codriverController.x()
-          .onTrue(new SequentialCommandGroup(
-            // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
-            new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
-            new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
-    
-        m_codriverController.y()
-          .onTrue(new SequentialCommandGroup(
-            // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
-            new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle))));
-            // new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)));
-    
-        m_codriverController.rightBumper()
-          .onTrue(new InstantCommand(() -> m_claw.toggle()));
-      }
-    
-      private void bind_LedModeTest() {
-        RobotShared robotShared = RobotShared.getInstance();
-        SignalLEDSubsystem m_signalLEDs = robotShared.getSignalLEDSubsystem();
-        ClawSubsystem m_claw = robotShared.getClawSubsystem();
+      // Combination PID commands for Arm rotate & extend/retract
+      m_codriverController.a()
+        .onTrue(new SequentialCommandGroup(
+          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
+          // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))
+          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))));
+  
+      m_codriverController.b()
+        .onTrue(new SequentialCommandGroup(
+          // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
+          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
+          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle))));
+  
+      m_codriverController.x()
+        .onTrue(new SequentialCommandGroup(
+          // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
+          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
+          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
+  
+      m_codriverController.y()
+        .onTrue(new SequentialCommandGroup(
+          // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
+          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle))));
+          // new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)));
+  
+      m_codriverController.rightBumper()
+        .onTrue(new InstantCommand(() -> m_claw.toggle()));
+    }
+  
+    private void bind_LedModeTest() {
+      RobotShared robotShared = RobotShared.getInstance();
+      SignalLEDSubsystem m_signalLEDs = robotShared.getSignalLEDSubsystem();
+      ClawSubsystem m_claw = robotShared.getClawSubsystem();
 
-        // Signal for a CUBE when held
-        m_codriverController.a()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-    
-        // Signal for a CONE when held
-        m_codriverController.b()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-    
-        m_codriverController.x()
-          .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
-    
-        m_codriverController.y()
-          .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCone()));
-      }
-    
-      private void bind_LedSubsystemTest() {
-        RobotShared robotShared = RobotShared.getInstance();
-        SignalLEDSubsystem m_signalLEDs = robotShared.getSignalLEDSubsystem();
+      // Signal for a CUBE when held
+      m_codriverController.a()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+  
+      // Signal for a CONE when held
+      m_codriverController.b()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+  
+      m_codriverController.x()
+        .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
+  
+      m_codriverController.y()
+        .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCone()));
+    }
+  
+    private void bind_LedSubsystemTest() {
+      RobotShared robotShared = RobotShared.getInstance();
+      SignalLEDSubsystem m_signalLEDs = robotShared.getSignalLEDSubsystem();
 
-        m_driverController.a()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-        m_driverController.b()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-        m_driverController.x()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.RED, LedPreference.MAIN, false)));
-        m_driverController.y()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, true)));
-        m_driverController.back()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.BLUE, LedPreference.MAIN, true)));
-        m_driverController.start()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.KITT, LedPreference.MAIN, true)));
+      m_driverController.a()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+      m_driverController.b()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+      m_driverController.x()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.RED, LedPreference.MAIN, false)));
+      m_driverController.y()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, true)));
+      m_driverController.back()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.BLUE, LedPreference.MAIN, true)));
+      m_driverController.start()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.KITT, LedPreference.MAIN, true)));
+  
+      m_driverController.leftBumper()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.ALLIANCE, LedPreference.MAIN, true)));
+      m_driverController.leftTrigger()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.GREEN, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+      m_driverController.leftStick()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+      m_driverController.rightBumper()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+      m_driverController.rightTrigger()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COUNTDOWN, LedPreference.MAIN, true)));
+      m_driverController.rightStick()
+        .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
+        .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
+    }
+  
+  
+  
+  
     
-        m_driverController.leftBumper()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.ALLIANCE, LedPreference.MAIN, true)));
-        m_driverController.leftTrigger()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.GREEN, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-        m_driverController.leftStick()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-        m_driverController.rightBumper()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-        m_driverController.rightTrigger()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.COUNTDOWN, LedPreference.MAIN, true)));
-        m_driverController.rightStick()
-          .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
-          .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
-      }
+      
+  
+  
+  
     
+    
+    
+    
+    
+    
+    
+
+
+
 }
