@@ -88,7 +88,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
 
   // Returns true when telescope is at setpoint
   public boolean atSetpoint() {
-    return (Math.abs(m_extensionEncoder.getPosition()) > getSetpoint() - ArmConstants.kArmExtendTolerance);
+    return (Math.abs(m_extensionEncoder.getPosition() - getSetpoint()) < ArmConstants.kArmExtendTolerance);
   }
 
   public void burnFlash() {
