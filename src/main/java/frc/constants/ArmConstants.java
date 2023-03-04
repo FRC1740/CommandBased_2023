@@ -50,10 +50,10 @@ public class ArmConstants {
         * Human player maybe same as mid-node (close)
         */
     public static final double kStowedAngle          = 5;
-    public static final double kHighNodeAngle        = 70;  // FIXME: tune angles
+    public static final double kHighNodeAngle        = 80;  // FIXME: tune angles
     public static final double kMidNodeAngle         = 75;
     public static final double kLowNodeAngle         = 140;
-    public static final double kMidRetrieveAngle     = 81;
+    public static final double kMidRetrieveAngle     = 87;
     public static final double kLowRetrieveAngle     = 173;
     public static final float kMinSoftLimitAngle    = 0;
     public static final float kMaxSoftLimitAngle    = (float) kLowRetrieveAngle;

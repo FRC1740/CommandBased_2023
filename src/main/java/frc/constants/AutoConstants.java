@@ -37,5 +37,7 @@ public class AutoConstants {
     public static final double kDriveToDistancePower = 0.3; //power for drive to distance command
 
     public static final double kSubStationSideDriveDistance = -4.29;
+    public static final double epsilon = 0.1; //meters
+
     
 }

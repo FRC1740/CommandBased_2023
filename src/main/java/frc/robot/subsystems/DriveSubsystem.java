@@ -113,7 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_DriveTrainTab = DriveTrainTab.getInstance();
       
       speedFilter = LinearFilter.movingAverage(30);
-      rotationFilter = LinearFilter.movingAverage(5);
+      rotationFilter = LinearFilter.movingAverage(3);
   }
 
   // Helper for calculations below
