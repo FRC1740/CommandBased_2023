@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DriverStation;
+
 import frc.board.RobotTab;
 import frc.network.RobotTable;
 
@@ -26,6 +28,8 @@ public class Robot extends TimedRobot {
   private RobotTab m_RobotTab;
   private RobotTable m_RobotTable;
 
+  private DriverStation.Alliance m_alliance;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -40,6 +44,8 @@ public class Robot extends TimedRobot {
     m_RobotTable = RobotTable.getInstance();
 
     PathPlannerServer.startServer(5811);
+
+    m_alliance = DriverStation.Alliance.Red;
   }
 
   /**
@@ -77,6 +83,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    // Can't get station position here- need to use April Tags or dashboard setting
+    // What we can do with alliance color information
+    //   call RobotContainer's autonomousInit, which calls driveTrain to set its value
+    m_alliance = DriverStation.getAlliance();
   }
 
   /** This function is called periodically during autonomous. */
