@@ -57,6 +57,7 @@ public class ClawSubsystem extends SubsystemBase {
     m_timer = new Timer();
     m_tof = new TimeOfFlight(0);
 
+    m_tof.setRangeOfInterest(8, 8, 12, 12);
     m_ClawTab = ClawTab.getInstance();
     m_ClawTab.setClawMode(getModeString());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
@@ -198,7 +199,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public boolean pieceInClaw() {
     double range = m_tof.getRange();
-    return (range > 0 && range <= ClawConstants.kPieceRecognitionDistanceMm);
+    return (range > ClawConstants.kPieceRecognitionDistanceMmMin && range <= ClawConstants.kPieceRecognitionDistanceMmMax);
   }
 
   @Override
