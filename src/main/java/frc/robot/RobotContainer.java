@@ -91,7 +91,7 @@ public class RobotContainer {
       // Triggers are Axis 2; RightStick X is axis 3
       // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
       new RunCommand(() ->
-        m_robotDrive.simpleArcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+        m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
         m_driverController.getLeftX(), true), m_robotDrive));
     
     m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path",

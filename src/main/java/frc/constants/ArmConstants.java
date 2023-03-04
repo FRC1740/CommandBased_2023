@@ -57,7 +57,8 @@ public class ArmConstants {
     public static final double kLowRetrieveAngle     = 173;
     public static final float kMinSoftLimitAngle    = 0;
     public static final float kMaxSoftLimitAngle    = (float) kLowRetrieveAngle;
-
+    //Cube hi node 80 angle, 27.5
+    //Cone hi node 77 angle 28.5
     
     public static final double kStowedPosition       = 0;
     public static final double kHighNodePosition     = 27.5; // FIXME: tune telescope
@@ -67,6 +68,7 @@ public class ArmConstants {
     public static final double kLowRetrievePosition  = 0;
     public static final float kMinSoftLimitPosition  = 0;
     public static final float kMaxSoftLimitPosition  = 30;
+
     
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
