@@ -12,15 +12,15 @@ public class DriveToDistance extends CommandBase {
   /** Creates a new DriveToDistance. */
   
   private final DriveSubsystem m_Drivesubsystem;
-  private double goal = 0;
-  private boolean Finished = false;
-  private double targetMeters = 0;
-  private double heading = 0;
-  private double error = 0;
+  private double m_goal = 0;
+  private boolean m_Finished = false;
+  private double m_targetMeters = 0;
+  private double m_heading = 0;
+  private double m_error = 0;
 
   public DriveToDistance(double meters, DriveSubsystem drive) {
     m_Drivesubsystem = drive;
-    targetMeters = meters;
+    m_targetMeters = meters;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -28,24 +28,24 @@ public class DriveToDistance extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Finished = false;
-    heading = m_Drivesubsystem.getAngle();
-    goal = targetMeters + m_Drivesubsystem.getAverageEncoderMeters();
-    System.out.println("goal " + goal);
-    System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
+    m_Finished = false;
+    m_heading = m_Drivesubsystem.getAngle();
+    m_goal = m_targetMeters + m_Drivesubsystem.getAverageEncoderMeters();
+    System.out.println("goal: " + m_goal);
+    System.out.println("Encoder position " + m_Drivesubsystem.getAverageEncoder());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    error = heading - m_Drivesubsystem.getAngle();
-    if(goal < m_Drivesubsystem.getAverageEncoderMeters()){
-      m_Drivesubsystem.arcadeDrive(-AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * error, false);
+    m_error = m_heading - m_Drivesubsystem.getAngle();
+    if(m_goal < m_Drivesubsystem.getAverageEncoderMeters()){
+      m_Drivesubsystem.arcadeDrive(-AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * m_error, false);
     }else{
-      m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * error, false);
+      m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * m_error, false);
     }
-    if(m_Drivesubsystem.getAverageEncoderMeters() >= goal - .1 && m_Drivesubsystem.getAverageEncoderMeters() <= goal + .1 ){
-      Finished = true;
+    if(m_Drivesubsystem.getAverageEncoderMeters() >= m_goal - .1 && m_Drivesubsystem.getAverageEncoderMeters() <= m_goal + .1 ){
+      m_Finished = true;
     }
   }
 
@@ -56,6 +56,6 @@ public class DriveToDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return Finished;
+      return m_Finished;
     }    
 }
