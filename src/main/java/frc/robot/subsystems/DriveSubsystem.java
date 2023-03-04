@@ -113,7 +113,7 @@ public class DriveSubsystem extends SubsystemBase {
       m_DriveTrainTab = DriveTrainTab.getInstance();
       
       speedFilter = LinearFilter.movingAverage(30);
-      rotationFilter = LinearFilter.movingAverage(5);
+      rotationFilter = LinearFilter.movingAverage(3);
   }
 
   // Helper for calculations below
@@ -297,6 +297,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   
   public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
+    m_DriveTrainTab.setTrajectory(trajectory);
     return new SequentialCommandGroup(
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto

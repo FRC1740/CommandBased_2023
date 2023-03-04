@@ -15,6 +15,7 @@ import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
 //import frc.robot.commands.RotateArmToAngle;
@@ -90,7 +91,7 @@ public class RobotContainer {
       // Triggers are Axis 2; RightStick X is axis 3
       // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
       new RunCommand(() ->
-        m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+        m_robotDrive.simpleArcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
         m_driverController.getLeftX(), true), m_robotDrive));
     
     m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path",
@@ -513,7 +514,7 @@ public class RobotContainer {
 
   // Return the command to run in autonomous
   public Command getAutonomousCommand() {
-      return m_AutoChooser.getSelected();
+      return new DriveToDistance(-4.29, m_robotDrive);
   }
 
   public void disabledInit() {
