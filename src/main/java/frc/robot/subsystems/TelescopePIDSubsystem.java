@@ -74,24 +74,21 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   public void manualTelescope(double analogInput) {
     double adjustedSpeed = analogInput * ArmConstants.kArmExtendInputMultiplier;
     disable();
-    if (analogInput > ArmConstants.kArmExtendDeadzone || 
-      analogInput < -ArmConstants.kArmExtendDeadzone) {
+    if (Math.abs(analogInput) > ArmConstants.kArmExtendDeadzone) {
       m_extensionMotor.set(adjustedSpeed);
     } else {
       m_extensionMotor.set(0.0);
     }
   }
   
-
   public void manualDone() {
     enable();
     setSetpoint(m_extensionEncoder.getPosition());
   }
 
-  //returns true when telescope is at setpoint
-  public boolean atSetpoint(){
-    return (m_extensionEncoder.getPosition() > getSetpoint() - ArmConstants.kArmExtendTolerance)
-     && (m_extensionEncoder.getPosition() < getSetpoint() + ArmConstants.kArmExtendTolerance);
+  // Returns true when telescope is at setpoint
+  public boolean atSetpoint() {
+    return (Math.abs(m_extensionEncoder.getPosition()) > getSetpoint() - ArmConstants.kArmExtendTolerance);
   }
 
   public void burnFlash() {
