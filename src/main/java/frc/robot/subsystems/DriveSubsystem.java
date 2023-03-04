@@ -297,6 +297,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   
   public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
+    m_DriveTrainTab.setTrajectory(trajectory);
     return new SequentialCommandGroup(
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto

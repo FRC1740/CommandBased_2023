@@ -15,6 +15,7 @@ import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
 //import frc.robot.commands.RotateArmToAngle;
@@ -513,7 +514,7 @@ public class RobotContainer {
 
   // Return the command to run in autonomous
   public Command getAutonomousCommand() {
-      return m_AutoChooser.getSelected();
+      return new DriveToDistance(-4.29, m_robotDrive);
   }
 
   public void disabledInit() {

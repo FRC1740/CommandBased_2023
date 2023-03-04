@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.constants.ArmConstants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.TelescopePIDSubsystem;
@@ -19,11 +18,8 @@ import frc.robot.subsystems.TelescopePIDSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PlaceGamePiece extends SequentialCommandGroup {
   /** Creates a new PlaceGamePiece. */
-  private TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
-  private ArmProfiledPIDSubsystem m_arm = new ArmProfiledPIDSubsystem();
-  private ClawSubsystem m_claw = new ClawSubsystem();
 
-  public PlaceGamePiece() {
+  public PlaceGamePiece(ArmProfiledPIDSubsystem m_arm, ClawSubsystem m_claw, TelescopePIDSubsystem m_telescope) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
