@@ -271,14 +271,20 @@ public class RobotContainer {
   }
 
   private void bind_RC_GamePiece() {
-    // GamePieceToggle
-    m_codriverController.start()
-      .onTrue(new InstantCommand(() -> toggleGamePiece()));
+    // Driver
+    m_driverController.back()
+      .onTrue(new InstantCommand(() -> setGamePieceCone()));
 
-      //driver should be able to toggle Game Piece also since rear intake controls are on driver controller
     m_driverController.start()
-      .onTrue(new InstantCommand(() -> toggleGamePiece())); 
-      
+      .onTrue(new InstantCommand(() -> setGamePieceCube()));
+
+    // Codriver
+    m_codriverController.back()
+      .onTrue(new InstantCommand(() -> setGamePieceCone()));
+
+    m_codriverController.start()
+      .onTrue(new InstantCommand(() -> setGamePieceCube()));
+
   }
 
   private void bind_RC_RearIntake() {
@@ -510,6 +516,10 @@ public class RobotContainer {
       return m_AutoChooser.getSelected();
   }
 
+  public void disabledInit() {
+    m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, true);
+  }
+
   public void autonomousInit() {
     // if (DriverStation.isFMSAttached()) {
       m_robotDrive.burnFlash();
@@ -519,6 +529,7 @@ public class RobotContainer {
       m_telescope.burnFlash();
       m_groundIntake.burnFlash();
     // }
+    m_signalLEDs.setMode(LedMode.ALLIANCE, LedPreference.MAIN, true);
   }
 
   private void toggleGamePiece() {
@@ -526,12 +537,22 @@ public class RobotContainer {
     setGamePiece(newGamePiece);
   }
 
+  private void setGamePieceCone() {
+    GamePiece newGamePiece = m_RobotTab.setGamePieceCone();
+    setGamePiece(newGamePiece);
+  }
+
+  private void setGamePieceCube() {
+    GamePiece newGamePiece = m_RobotTab.setGamePieceCube();
+    setGamePiece(newGamePiece);
+  }
+
   public void setGamePiece(OIConstants.GamePiece piece) {
     m_gamePiece = piece;
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false);
+      m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, true);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false);
+      m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, true);
     }
     m_groundIntake.setGamePiece(piece);
     m_claw.setGamePiece(piece);
