@@ -75,6 +75,8 @@ public class SignalLEDSubsystem extends SubsystemBase {
   public static final int kRefreshEvery = 2;
   gamePiece cube, cone;  // Stores RGB triplets
 
+  public static final double kEndgame = 30.0;
+
   // Encapsulate the details for each physical LED string here
   private class LedHwString {
     int m_port;
@@ -110,7 +112,7 @@ public class SignalLEDSubsystem extends SubsystemBase {
   private int m_secondsTick;
   private LedHwString[] m_hwStrings;
   private Alliance m_alliance;
-  private int m_matchTime;
+  private double m_matchTime;
 
   /** Create new SignalLED(s) */
   public SignalLEDSubsystem() {
@@ -230,8 +232,8 @@ public void Colonels(LedHwString hwString) {
   }
 
 public void Countdown(LedHwString hwString) {
-    if ((m_matchTime < 0) || (m_matchTime > 15)) return;
-    int last = m_matchTime * hwString.m_length / 15;
+    if ((m_matchTime < 0.0) || (m_matchTime > kEndgame)) return;
+    int last = (int) (m_matchTime * (double) hwString.m_length / kEndgame);
     if (last < 0) last = 0;
     if (last > hwString.m_length - 1) last = hwString.m_length - 1;
     // System.out.println("last " + last);
@@ -256,29 +258,13 @@ public void Countdown(LedHwString hwString) {
       m_secondsTick = 50;  // Assuming standard 20ms rate
       // Recommended to repeat getting alliance value to avoid missing a change
       m_alliance = DriverStation.getAlliance();
-      m_matchTime = (int)(DriverStation.getMatchTime() + 0.5);
-
+      m_matchTime = DriverStation.getMatchTime();
+      if (m_matchTime < kEndgame) {
+        setMode(LedMode.COUNTDOWN, LedPreference.MAIN, true);
+      }
     }
   }
 
-  /*  Implement this Logic
-      if a string does not exist at the index
-        return
-      else
-        if background is true
-          if currentMode is same as defaultdMode
-            replace currentMode with newMode
-          replace defaultMode with newMode
-          return
-        else
-          if newMode is same as currentMode
-            return
-          else
-            if newMode is OFF
-              replace currentMode with defaultMode
-            else
-              replace currentMode with newMode
-   */
   public void setMode(LedMode newMode, LedPreference preference, boolean background) {
     System.out.println("Change LED mode to " + newMode);
     LedHwString hwString;

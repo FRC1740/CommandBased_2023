@@ -93,4 +93,14 @@ public class RobotTab {
         m_nte_GamePiece.setBoolean(!m_nte_GamePiece.getBoolean(true));
         return getGamePiece();
     }
+    
+    public GamePiece setGamePieceCone() {
+        setGamePiece(GamePiece.CONE);
+        return getGamePiece();
+    }
+    
+    public GamePiece setGamePieceCube() {
+        setGamePiece(GamePiece.CUBE);
+        return getGamePiece();
+    }
 }
