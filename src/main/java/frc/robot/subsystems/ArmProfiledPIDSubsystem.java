@@ -98,8 +98,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void manualArmRotate(double analogInput){
     double adjustedSpeed = analogInput * ArmConstants.kArmRotateInputMultiplier;
     disable();
-    if (analogInput > ArmConstants.kArmRotateDeadzone || 
-        analogInput < -ArmConstants.kArmRotateDeadzone) {
+    if (Math.abs(analogInput) > ArmConstants.kArmRotateDeadzone) {
       //if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
         m_rotationLeader.set(adjustedSpeed);
       } 
