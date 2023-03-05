@@ -36,40 +36,71 @@ public class ArmConstants {
     public static final double kArmRotateMinDegrees   = 5;
     public static final double kArmRotateManualSpeed  = 0.1;
     public static final double kArmRotateInputMultiplier = 0.2; //used to dampen joystick input
-    //public static final double kArmExtensionRotationToLinearDistance = 1.5;
-    // Output rotation in 25-1 system: 25 rotations of the motor = 1 rotation of output
-    //public static final double kArmExtensionTicksPerRotationOutput = ConSparkMax.POSITION_CONVERSION_FACTOR * kArmExtensionGearRatio;
-    //public static final double kArmExtensionTicksToInches = kArmExtensionTicksPerRotationOutput / kArmExtensionRotationToLinearDistance;
 
-    /*
-        * All Angles based on Horizontal = 0
-        * Starting Configuration: 112 deg (0); Fully Retracted
-        * Mid Node Scoring: 41 deg (71); 4"  Extension
-        * High Node Scoring: 37 deg (75); 28" Extension
-        * Low Node Scoring: -22 deg (134); 4" Extension
-        * Human player maybe same as mid-node (close)
-        */
-    public static final double kStowedAngle          = 5;
-    public static final double kHighNodeAngle        = 80;  // FIXME: tune angles
-    public static final double kMidNodeAngle         = 75;
-    public static final double kLowNodeAngle         = 140;
-    public static final double kMidRetrieveAngle     = 87;
-    public static final double kLowRetrieveAngle     = 173;
-    public static final float kMinSoftLimitAngle    = 0;
-    public static final float kMaxSoftLimitAngle    = (float) kLowRetrieveAngle;
-    //Cube hi node 80 angle, 27.5
-    //Cone hi node 77 angle 28.5
-    
-    public static final double kStowedPosition       = 0;
-    public static final double kHighNodePosition     = 27.5; // FIXME: tune telescope
-    public static final double kMidNodePosition      = 8.5;
-    public static final double kLowNodePosition      = 0;  
-    public static final double kMidRetrievePosition  = 7.5; 
-    public static final double kLowRetrievePosition  = 0;
-    public static final float kMinSoftLimitPosition  = 0;
-    public static final float kMaxSoftLimitPosition  = 30;
+    // Auto limits and speeds
+    public static final double kStowedAngle           = 5.0;
+    public static final float kMinSoftLimitAngle      = 0;
+    public static final float kMaxSoftLimitAngle      = 173;
+    public static final double kStowedPosition        = 0.0;
+    public static final float kMinSoftLimitPosition   = 0;
+    public static final float kMaxSoftLimitPosition   = 30;
 
+    // New ----------------------------------------------------------------------------------------
+    // Cone
+    public static final double kConeHighAngle         = 77;
+    public static final double kConeMidAngle          = 75;
+    public static final double kConeLowAngle          = 140;
+    public static final double kConeShelfAngle        = 87;
+    public static final double kConeFloorAngle        = 173;
+
+    public static final double kConeHighPosition      = 28.5;
+    public static final double kConeMidPosition       = 8.5;
+    public static final double kConeLowPosition       = 0;
+    public static final double kConeShelfPosition     = 7.5;
+    public static final double kConeFloorPosition     = 0;
+
+    // Cube
+    public static final double kCubeHighAngle         = 80;
+    public static final double kCubeMidAngle          = 75;
+    public static final double kCubeLowAngle          = 140;
+    public static final double kCubeShelfAngle        = 87;
+    public static final double kCubeFloorAngle        = 173;
+
+    public static final double kCubeHighPosition      = 27.5;
+    public static final double kCubeMidPosition       = 8.5;
+    public static final double kCubeLowPosition       = 0;
+    public static final double kCubeShelfPosition     = 7.5;
+    public static final double kCubeFloorPosition     = 0;
+
+    // Temp- to be removed after further refactoring
+    public static final double kHighNodeAngle        = kConeHighAngle;
+    public static final double kMidNodeAngle         = kConeMidAngle;
+    public static final double kLowNodeAngle         = kConeLowAngle;
+    public static final double kMidRetrieveAngle     = kConeShelfAngle;
+    public static final double kLowRetrieveAngle     = kConeFloorAngle;
     
+    public static final double kHighNodePosition     = kConeHighPosition;
+    public static final double kMidNodePosition      = kConeMidPosition;
+    public static final double kLowNodePosition      = kConeLowPosition; 
+    public static final double kMidRetrievePosition  = kConeShelfPosition;
+    public static final double kLowRetrievePosition  = kConeFloorPosition;
+
+    // Old ----------------------------------------------------------------------------------------
+    // public static final double kHighNodeAngle        = 80;  // FIXME: tune angles
+    // public static final double kMidNodeAngle         = 75;
+    // public static final double kLowNodeAngle         = 140;
+    // public static final double kMidRetrieveAngle     = 87;
+    // public static final double kLowRetrieveAngle     = 173;
+    // //Cone hi node 77 angle 28.5
+    // //Cube hi node 80 angle, 27.5
+    
+    // public static final double kHighNodePosition     = 27.5; // FIXME: tune telescope
+    // public static final double kMidNodePosition      = 8.5;
+    // public static final double kLowNodePosition      = 0;  
+    // public static final double kMidRetrievePosition  = 7.5; 
+    // public static final double kLowRetrievePosition  = 0;
+    //---------------------------------------------------------------------------------------------
+
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
     public static final double rotateDDefault = 0.039139*2*0;

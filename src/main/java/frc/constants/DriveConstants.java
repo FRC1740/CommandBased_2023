@@ -45,6 +45,8 @@ public class DriveConstants {
 
     public static final boolean kGyroReversed = false;
 
+    // Used for Arcade driver input modifications (Kyle's option 2)
+    // Decreases rotation sensitivity at low speeds
     public static final double kRotationDeadzone      = 0.2;
     public static final double kRotationVelocityLow   = kRotationDeadzone;
     public static final double kRotationVelocityHigh  = 0.70;

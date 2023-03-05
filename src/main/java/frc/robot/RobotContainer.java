@@ -167,13 +167,13 @@ public class RobotContainer {
     // ManualRollerOut
     new POVButton(m_codriverController.getHID(), 0)
     // m_codriverController.rightTrigger()
-      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.EjectCubeManualSpeed)))
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.kManualEjectSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // ManualRollerIn
     new POVButton(m_codriverController.getHID(), 180)
     // m_codriverController.rightTrigger()
-      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed))) //use whileTrue and a run command to continue running
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.kManualInjectSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // AllStow  
@@ -514,7 +514,7 @@ public class RobotContainer {
 
   // Return the command to run in autonomous
   public Command getAutonomousCommand() {
-      return new DriveToDistance(-4.29, m_robotDrive);
+      return m_AutoChooser.getSelected();
   }
 
   public void disabledInit() {

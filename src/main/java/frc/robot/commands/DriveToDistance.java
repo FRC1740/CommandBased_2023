@@ -11,52 +11,46 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveToDistance extends CommandBase {
   /** Creates a new DriveToDistance. */
   
-  private final DriveSubsystem m_Drivesubsystem;
+  private final DriveSubsystem m_drive;
   private double m_goal;
-  private boolean m_Finished = false;
-  private double m_targetMeters;
-  private double m_heading;
-  private double m_error = 0;
+  private double m_initialHeading;
 
   public DriveToDistance(double meters, DriveSubsystem drive) {
-    m_Drivesubsystem = drive;
-    m_targetMeters = meters;
-    m_goal = m_targetMeters + m_Drivesubsystem.getAverageEncoderMeters();
-    m_Finished = false;
+    m_drive = drive;
+    m_goal = meters + m_drive.getAverageEncoderMeters();
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_Drivesubsystem);
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Finished = false;
-    m_heading = m_Drivesubsystem.getAngle();
-    m_goal = m_targetMeters + m_Drivesubsystem.getAverageEncoder();
-    System.out.println("goal: " + m_goal);
-    System.out.println("Encoder position " + m_Drivesubsystem.getAverageEncoder());
+    m_initialHeading = m_drive.getAngle();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_error = m_heading - m_Drivesubsystem.getAngle();
-    double distanceDelta = m_goal - m_Drivesubsystem.getAverageEncoder();
-    System.out.println(distanceDelta);
-    m_Drivesubsystem.simpleArcadeDrive(Math.signum(distanceDelta) * AutoConstants.kDriveToDistancePower, AutoConstants.kDriveCorrectionP * m_error*0, false);
+    double angleDelta = m_initialHeading - m_drive.getAngle();
+    if (Math.abs(angleDelta) < AutoConstants.kAngleEpsilonDegrees) {
+      angleDelta = 0.0;
+    }
+    double distanceDelta = m_goal - m_drive.getAverageEncoderMeters();
+    m_drive.simpleArcadeDrive(Math.signum(distanceDelta) * AutoConstants.kDriveToDistancePower,
+      AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("done");
-    System.out.println(interrupted);
-    m_Drivesubsystem.simpleArcadeDrive(0.0, 0.0, false);
+    m_drive.simpleArcadeDrive(0.0, 0.0, false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(m_goal - m_Drivesubsystem.getAverageEncoder()) < AutoConstants.epsilon);
-    }    
+    double distanceDelta = m_goal - m_drive.getAverageEncoderMeters();
+    return (Math.abs(distanceDelta) < AutoConstants.kDistanceEpsilonMeters);
+  }    
 }

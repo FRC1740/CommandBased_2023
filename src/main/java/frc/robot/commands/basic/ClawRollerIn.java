@@ -28,7 +28,7 @@ public class ClawRollerIn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed);
+    m_claw.setIntakeSpeed(ClawConstants.kManualInjectSpeed);
   }
 
   // Called once the command ends or is interrupted.

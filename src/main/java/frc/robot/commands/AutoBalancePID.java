@@ -36,7 +36,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
         // This should return the goal (can also be a constant)
         AutoConstants.kLevel,
         // This uses the output
-        (output, setpoint) -> drive.arcadeDrive(-output, AutoConstants.kDriveCorrectionP * error, false),
+        (output, setpoint) -> drive.arcadeDrive(-output, AutoConstants.kAngleCorrectionP * error, false),
         drive
         );
     // Use addRequirements() here to declare subsystem dependencies.
