@@ -59,19 +59,37 @@ import edu.wpi.first.wpilibj.DriverStation;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // New ------------------------------------------------------------------------------------------
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
-  //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
-  protected final ClawSubsystem m_claw = new ClawSubsystem();
-  // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
-  protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
-  protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
-  protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
-  private final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
+  private DriveSubsystem m_robotDrive;
+  private LimeLightSubsystem m_limelight;
+  //private PhotonVisionSubsystem m_photonVision;
+  protected ClawSubsystem m_claw;
+  // protected final ArmPIDSubsystem m_arm;
+  protected ArmProfiledPIDSubsystem m_armProfiled;
+  protected TelescopePIDSubsystem m_telescope;
+  protected GroundIntakeSubsystem m_groundIntake;
+  private SignalLEDSubsystem m_signalLEDs;
 
-  private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
+  private CommandXboxController m_driverController;
+  private CommandXboxController m_codriverController;
+
+  private RobotShared m_robotShared;
+  // Old ------------------------------------------------------------------------------------------
+  // // The robot's subsystems and commands are defined here...
+  // private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  // private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
+  // //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
+  // protected final ClawSubsystem m_claw = new ClawSubsystem();
+  // // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
+  // protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
+  // protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
+  // protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
+  // private final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
+
+  // private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  // private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
+  // ----------------------------------------------------------------------------------------------
   
   SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
@@ -120,6 +138,19 @@ public class RobotContainer {
           true));
 
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
+    // New ------------------------------------------------------------------------------------------
+    m_robotShared = RobotShared.getInstance();
+
+    m_robotDrive = m_robotShared.getDriveSubsystem();
+    m_limelight = m_robotShared.getLimeLightSubsystem();
+    m_claw = m_robotShared.getClawSubsystem();
+    m_armProfiled = m_robotShared.getArmProfiledPIDSubsystem();
+    m_telescope = m_robotShared.getTelescopePIDSubsystem();
+    m_groundIntake = m_robotShared.getGroundIntakeSubsystem();
+    m_signalLEDs = m_robotShared.getSignalLEDSubsystem();
+    m_driverController = m_robotShared.getDriverController();
+    m_codriverController = m_robotShared.getCodriverController();
+    // ----------------------------------------------------------------------------------------------
 
     m_RobotTab = RobotTab.getInstance();
   }
