@@ -33,9 +33,6 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getAngle();
-    if (Math.abs(angleDelta) < AutoConstants.kAngleEpsilonDegrees) {
-      angleDelta = 0.0;
-    }
     double distanceDelta = m_goal - m_drive.getAverageEncoderMeters();
     m_drive.simpleArcadeDrive(Math.signum(distanceDelta) * AutoConstants.kDriveToDistancePower,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
@@ -51,6 +48,6 @@ public class DriveToDistance extends CommandBase {
   @Override
   public boolean isFinished() {
     double distanceDelta = m_goal - m_drive.getAverageEncoderMeters();
-    return (Math.abs(distanceDelta) < AutoConstants.kDistanceEpsilonMeters);
+    return (Math.abs(distanceDelta) < AutoConstants.kAutoDriveToleranceMeters);
   }    
 }

@@ -35,7 +35,7 @@ public class DriveToAprilTag extends CommandBase {
   @Override
   public void execute() {
     double deltaDistance = m_vision.getDistanceFromTag() - m_goal;
-    m_drive.simpleArcadeDrive(Math.signum(deltaDistance) * AutoConstants.kDriveToAprilTag,
+    m_drive.simpleArcadeDrive(Math.signum(deltaDistance) * AutoConstants.kDriveToAprilTagPower,
       AutoConstants.kAngleCorrectionP * m_vision.getXdeviationAprilTag(), false);
   }
 
@@ -49,6 +49,6 @@ public class DriveToAprilTag extends CommandBase {
   @Override
   public boolean isFinished() {
     double deltaDistance = m_vision.getDistanceFromTag() - m_goal;
-    return (Math.abs(deltaDistance) < AutoConstants.kDistanceEpsilonMeters);
+    return (Math.abs(deltaDistance) < AutoConstants.kAutoDriveToleranceMeters);
   }
 }

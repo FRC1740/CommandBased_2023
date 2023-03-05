@@ -9,7 +9,9 @@ import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToChargeStation extends CommandBase {
-  /** Creates a new DriveToDistance. */
+  /** Creates a new DriveToChargeStation.
+   * Drives until Roll exceeds the Threshold (we are tilted)
+  */
   
   private final DriveSubsystem m_drive;
   private double m_initialRoll;
@@ -25,21 +27,21 @@ public class DriveToChargeStation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Assumes we are tilted?
     m_initialRoll = m_drive.getRoll();
     m_initialHeading = m_drive.getAngle();
-    System.out.println("Encoder position " + m_drive.getAverageEncoderMeters());
+    if (Math.abs(m_initialRoll) > AutoConstants.kRollThresholdDegrees) {
+      System.out.print("Starting assumption not met: Roll is " + m_initialRoll +
+        " Threshold is " + AutoConstants.kRollThresholdDegrees);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getAngle();
-    if (Math.abs(angleDelta) < AutoConstants.kAngleEpsilonDegrees) {
-      angleDelta = 0.0;
-    }
     double rollDelta = m_drive.getRoll() - m_initialRoll;
-    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower, AutoConstants.kAngleCorrectionP * angleDelta, false);
+    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower,
+      AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
@@ -52,7 +54,6 @@ public class DriveToChargeStation extends CommandBase {
   @Override
   public boolean isFinished() {
       double rollDelta = m_drive.getRoll() - m_initialRoll;
-      // FIXME: previous usage of the magic constant of 9 seemed to imply ">" here ???
-      return (Math.abs(rollDelta) < AutoConstants.kRollEpsilonDegrees);
+      return (Math.abs(rollDelta) > AutoConstants.kRollThresholdDegrees);
     }    
 }

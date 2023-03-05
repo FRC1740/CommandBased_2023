@@ -10,16 +10,14 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.constants.AutoConstants;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AutoBalancePID extends ProfiledPIDCommand {
-  /** Creates a new AutoBalancePID. */
+  /** Creates a new AutoBalancePID.
+   * Assumes starting Roll is greater than the tolerance for atGoal()
+   */
   
   private DriveSubsystem m_drive;
-  //private double initEncoderPos;
-  private double heading;
-  private static double error = 0;
+  private double m_initialHeading;
+  private static double m_headingDelta;
 
   public AutoBalancePID(DriveSubsystem drive) {
     super(
@@ -36,38 +34,43 @@ public class AutoBalancePID extends ProfiledPIDCommand {
         // This should return the goal (can also be a constant)
         AutoConstants.kLevel,
         // This uses the output
-        (output, setpoint) -> drive.arcadeDrive(-output, AutoConstants.kAngleCorrectionP * error, false),
+        (output, setpoint) -> drive.simpleArcadeDrive(-output, AutoConstants.kAngleCorrectionP * m_headingDelta, false),
         drive
         );
-    // Use addRequirements() here to declare subsystem dependencies.
-    // Configure additional PID options by calling `getController` here.
-  getController()
-      .setTolerance(AutoConstants.kBalanceToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
-      m_drive = drive;
 
+    m_drive = drive;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drive);
+
+    // Configure additional PID options by calling `getController` here.
+    getController()
+      .setTolerance(AutoConstants.kBalanceToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
   }
+
   @Override
   public void end(boolean interrupted) {
-
   }
-
 
   @Override
   public void initialize() {
     super.initialize();
-    heading = m_drive.getAngle();
-    //initEncoderPos = Math.abs(m_drive.getAverageEncoderInches());
-
+    m_headingDelta = 0;
+    m_initialHeading = m_drive.getAngle();
+    if (m_drive.getRoll() < AutoConstants.kBalanceToleranceDeg) {
+      System.out.print("Starting assumption not met: Roll is " + m_drive.getRoll() +
+        " Tolerance is " + AutoConstants.kBalanceToleranceDeg);
+    }
   }
+
   public void execute(){
     super.execute();
-    error = heading - m_drive.getAngle();
+    m_headingDelta = m_initialHeading - m_drive.getAngle();
   }
   
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //28 is max inches traveled to avoid flying off the ramp
-    return (getController().atGoal());/*||(initEncoderPos + 38) < Math.abs(m_drive.getAverageEncoderInches())*/
+    return (getController().atGoal());
   }
 }

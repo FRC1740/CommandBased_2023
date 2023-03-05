@@ -14,6 +14,11 @@ import frc.constants.DriveConstants;
 import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
+import frc.robot.commands.Auto_RB_1;
+import frc.robot.commands.Auto_RB_2;
+import frc.robot.commands.Auto_RB_2_Exit_Balance;
+import frc.robot.commands.Auto_RB_2_Pickup;
+import frc.robot.commands.Auto_RB_3;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
@@ -150,6 +155,29 @@ public class RobotContainer {
     bind_RC_AutoArm();
     bind_RC_GamePiece();
     bind_RC_RearIntake();
+
+    bind_Auto_Tests();
+  }
+
+  // expected to be temporary
+  private void bind_Auto_Tests() {
+    // Currently none of these are in use
+
+    new POVButton(m_driverController.getHID(), 0)
+      .onTrue(new Auto_RB_1());
+
+    new POVButton(m_driverController.getHID(), 90)
+      .onTrue(new Auto_RB_2());
+
+    new POVButton(m_driverController.getHID(), 180)
+      .onTrue(new Auto_RB_2_Pickup());
+
+    new POVButton(m_driverController.getHID(), 270)
+      .onTrue(new Auto_RB_2_Exit_Balance());
+
+    m_driverController.leftBumper()
+    .  onTrue(new Auto_RB_3());
+
   }
 
   // See the Robot Control documents for the spec
