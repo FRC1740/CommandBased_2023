@@ -44,7 +44,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 // import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.filter.LinearFilter;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -143,7 +142,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
 
-  public void simpleArcadeDrive(double fwd, double rot, boolean squaredInput){
+  public void simpleArcadeDrive(double fwd, double rot, boolean squaredInput) {
     m_drive.arcadeDrive(fwd, rot, squaredInput);
   }
   /**
@@ -264,20 +263,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftEncoderFollower.setPosition(0.0);
   }
 
-  // Account for two encoders per side
-  public double getRightDistanceInches() {
-    return Units.metersToInches(getAverageRightEncoders());
-  }
-
-  public double getLeftDistanceInches() {
-    return Units.metersToInches(getAverageLeftEncoders());
-  }
-
-  // Used by AutoDriveDistance
-  public double getAverageDistanceInches() {
-    return ((getLeftDistanceInches() + getRightDistanceInches()) / 2.0);
-  }
-
   public double getAverageLeftEncoders() {
     return (m_leftEncoder.getPosition() + m_leftEncoderFollower.getPosition() ) / 2.0;
   }
@@ -285,16 +270,6 @@ public class DriveSubsystem extends SubsystemBase {
   public double getAverageRightEncoders() {
     return (m_rightEncoder.getPosition() + m_rightEncoderFollower.getPosition() ) / 2.0;
   }
-
-  public double getAverageEncoder(){
-    return m_rightEncoder.getPosition() + m_leftEncoder.getPosition() / 2;
-  }
-
-  // public void ResetEncoders() {
-  //   m_leftEncoder.setPosition(0);
-  //   m_rightEncoder.setPosition(0);
-  // }
-
   
   public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
     m_DriveTrainTab.setTrajectory(trajectory);

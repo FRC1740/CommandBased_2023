@@ -14,42 +14,41 @@ public class DriveToAprilTag extends CommandBase {
 
   private DriveSubsystem m_drive;
   private PhotonVisionSubsystem m_vision;
-  private double goalDistanceFromTag;
-  private boolean atGoal = false;
+  private double m_goal;
 
   public DriveToAprilTag(double targetDistanceFromTag, DriveSubsystem drive, PhotonVisionSubsystem vision) {
-    // Use addRequirements() here to declare subsystem dependencies.
-
     m_drive = drive;
     m_vision = vision;
-    goalDistanceFromTag = targetDistanceFromTag;
+    m_goal = targetDistanceFromTag;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drive);
+    addRequirements(m_vision);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    if(m_vision.getDistanceFromTag() > goalDistanceFromTag){
-      m_drive.simpleArcadeDrive(0.3, AutoConstants.kDriveCorrectionP * m_vision.getXdeviationAprilTag(), false);
-    } else {
-      atGoal = true;
-    }
+    double deltaDistance = m_vision.getDistanceFromTag() - m_goal;
+    m_drive.simpleArcadeDrive(Math.signum(deltaDistance) * AutoConstants.kDriveToAprilTag,
+      AutoConstants.kAngleCorrectionP * m_vision.getXdeviationAprilTag(), false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.simpleArcadeDrive(0.0, 0.0, false);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return atGoal;
+    double deltaDistance = m_vision.getDistanceFromTag() - m_goal;
+    return (Math.abs(deltaDistance) < AutoConstants.kDistanceEpsilonMeters);
   }
 }

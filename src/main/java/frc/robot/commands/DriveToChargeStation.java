@@ -11,45 +11,48 @@ import frc.robot.subsystems.DriveSubsystem;
 public class DriveToChargeStation extends CommandBase {
   /** Creates a new DriveToDistance. */
   
-  private final DriveSubsystem m_Drivesubsystem;
-  private double startingRoll = 0;
-  private boolean Finished = false;
-  private double heading = 0;
-  private double error = 0;
+  private final DriveSubsystem m_drive;
+  private double m_initialRoll;
+  private double m_initialHeading;
 
   public DriveToChargeStation(DriveSubsystem drive) {
-    m_Drivesubsystem = drive;
+    m_drive = drive;
 
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Finished = false;
-    startingRoll = m_Drivesubsystem.getRoll();
-    heading = m_Drivesubsystem.getAngle();
-    System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
+    // Assumes we are tilted?
+    m_initialRoll = m_drive.getRoll();
+    m_initialHeading = m_drive.getAngle();
+    System.out.println("Encoder position " + m_drive.getAverageEncoderMeters());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_Drivesubsystem.getRoll() >= startingRoll - 9 && m_Drivesubsystem.getRoll() <= startingRoll + 9 ){
-       error = heading - m_Drivesubsystem.getAngle();
-      m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToChargeStationPower, AutoConstants.kDriveCorrectionP * error, false);
-    }else{
-      Finished = true;
+    double angleDelta = m_initialHeading - m_drive.getAngle();
+    if (Math.abs(angleDelta) < AutoConstants.kAngleEpsilonDegrees) {
+      angleDelta = 0.0;
     }
+    double rollDelta = m_drive.getRoll() - m_initialRoll;
+    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower, AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.simpleArcadeDrive(0.0, 0.0, false);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return Finished;
+      double rollDelta = m_drive.getRoll() - m_initialRoll;
+      // FIXME: previous usage of the magic constant of 9 seemed to imply ">" here ???
+      return (Math.abs(rollDelta) < AutoConstants.kRollEpsilonDegrees);
     }    
 }

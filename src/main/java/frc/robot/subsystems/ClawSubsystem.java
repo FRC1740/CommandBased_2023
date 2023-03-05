@@ -67,7 +67,7 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void intakeCube() {
-    m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
+    m_intakeMotor.set(ClawConstants.kCubeInjectHighSpeed);
     m_timer.reset();
     m_timer.stop();
     open();
@@ -81,14 +81,14 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void ejectCube() {
-    m_intakeMotor.set(ClawConstants.EjectCubeLowSpeed);
+    m_intakeMotor.set(ClawConstants.kCubeEjectLowSpeed);
     m_timer.reset();
     m_timer.start();
     setMode(ClawMode.READY);
   }
 
   public void grabCone() {
-    m_intakeMotor.set(ClawConstants.InjectConeSpeed);
+    m_intakeMotor.set(ClawConstants.kConeInjectSpeed);
     close();
     setMode(ClawMode.CONE);
   }
@@ -164,7 +164,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void score() {
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(ClawConstants.EjectCubeLowSpeed);
+      setIntakeSpeed(ClawConstants.kCubeEjectLowSpeed);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
       open();
     }
@@ -188,9 +188,9 @@ public class ClawSubsystem extends SubsystemBase {
   public void retrieve() {
     open();
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(ClawConstants.InjectCubeLowSpeed);
+      setIntakeSpeed(ClawConstants.kCubeInjectLowSpeed);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      setIntakeSpeed(ClawConstants.InjectConeSpeed);
+      setIntakeSpeed(ClawConstants.kConeInjectSpeed);
     }
     m_timer.restart();
     m_timer.stop();
