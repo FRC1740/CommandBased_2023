@@ -5,6 +5,7 @@
 package frc.robot.commands.basic;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.constants.ArmConstants.AutoMode;
 import frc.robot.RobotShared;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 
@@ -15,9 +16,9 @@ public class ArmToSetpoint extends CommandBase {
   private Double m_setpoint;
 
   /** Creates a new ArmToSetpoint. */
-  public ArmToSetpoint(Double setpoint) {
-    m_setpoint = setpoint;
+  public ArmToSetpoint(AutoMode mode) {
     m_robotShared = RobotShared.getInstance();
+    m_setpoint = m_robotShared.calculateArmSetpoint(mode);
     m_armProfiled = m_robotShared.getArmProfiledPIDSubsystem();
     addRequirements(m_armProfiled);
   }

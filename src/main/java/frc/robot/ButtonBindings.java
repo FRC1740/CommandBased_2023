@@ -369,8 +369,6 @@ public class ButtonBindings {
           new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle))));
           // new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)));
   
-      m_codriverController.rightBumper()
-        .onTrue(new InstantCommand(() -> m_claw.toggle()));
     }
   
     private void bind_LedModeTest() {
@@ -388,11 +386,6 @@ public class ButtonBindings {
         .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
         .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
   
-      m_codriverController.x()
-        .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
-  
-      m_codriverController.y()
-        .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCone()));
     }
   
     private void bind_LedSubsystemTest() {

@@ -18,8 +18,8 @@ public class AutoArmRetrieveMedium extends SequentialCommandGroup {
   public AutoArmRetrieveMedium() {
 
     addCommands(
-      new ArmToSetpoint(ArmConstants.kMidRetrieveAngle),
-      new TelescopeToSetpoint(ArmConstants.kMidRetrievePosition),
+      new ArmToSetpoint(ArmConstants.AutoMode.SHELF),
+      new TelescopeToSetpoint(ArmConstants.AutoMode.SHELF),
       new ClawRetrieve(),
       new ClawWaitOnPiece(),
       new ClawHold());

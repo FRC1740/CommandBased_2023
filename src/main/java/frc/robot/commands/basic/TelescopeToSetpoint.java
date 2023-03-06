@@ -5,6 +5,7 @@
 package frc.robot.commands.basic;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.constants.ArmConstants.AutoMode;
 import frc.robot.RobotShared;
 import frc.robot.subsystems.TelescopePIDSubsystem;
 
@@ -15,10 +16,11 @@ public class TelescopeToSetpoint extends CommandBase {
   private Double m_setpoint;
 
   /** Creates a new TelescopeToSetpoint. */
-  public TelescopeToSetpoint(Double setpoint) {
-    m_setpoint = setpoint;
+  public TelescopeToSetpoint(AutoMode mode) {
     m_robotShared = RobotShared.getInstance();
+    m_setpoint = m_robotShared.calculateTeleSetpoint(mode);
     m_telescope = m_robotShared.getTelescopePIDSubsystem();
+
     addRequirements(m_telescope);
   }
 

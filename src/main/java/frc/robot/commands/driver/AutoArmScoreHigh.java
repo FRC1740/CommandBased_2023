@@ -16,8 +16,8 @@ public class AutoArmScoreHigh extends SequentialCommandGroup {
   public AutoArmScoreHigh() {
 
     addCommands(
-      new TelescopeToSetpoint(ArmConstants.kHighNodePosition),
-      new ArmToSetpoint(ArmConstants.kHighNodeAngle),
+      new ArmToSetpoint(ArmConstants.AutoMode.HIGH),
+      new TelescopeToSetpoint(ArmConstants.AutoMode.HIGH),
       new ClawHold());
   }
 

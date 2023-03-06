@@ -16,8 +16,8 @@ public class AutoArmScoreLow extends SequentialCommandGroup {
   public AutoArmScoreLow() {
 
     addCommands(
-      new ArmToSetpoint(ArmConstants.kLowNodeAngle),
-      new TelescopeToSetpoint(ArmConstants.kLowNodePosition),
+      new ArmToSetpoint(ArmConstants.AutoMode.LOW),
+      new TelescopeToSetpoint(ArmConstants.AutoMode.LOW),
       new ClawHold());
   }
 

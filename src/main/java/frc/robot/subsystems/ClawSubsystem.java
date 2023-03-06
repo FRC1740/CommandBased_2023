@@ -87,48 +87,6 @@ public class ClawSubsystem extends SubsystemBase {
     setMode(ClawMode.READY);
   }
 
-  public void grabCone() {
-    m_intakeMotor.set(ClawConstants.kConeInjectSpeed);
-    close();
-    setMode(ClawMode.CONE);
-  }
-
-  public void dropCone() {
-    m_intakeMotor.set(0.0);
-    open();
-  }
-
-  public void grabOrReleaseCone() {
-    if (getMode() == ClawMode.READY) {
-      grabCone();
-    }
-    else {
-      dropCone();
-    }
-  }
-
-  public void grabOrReleaseCube() {
-    if (getMode() == ClawMode.READY) {
-      intakeCube();
-    }
-    else {
-      ejectCube();
-    }
-  }
-
-  public void toggle() {
-    switch(m_clawMode) {
-      case CUBE: // We're currently set for a cube (or "READY")
-      case READY:
-        close();
-        break;
-      case CONE: // We're currently set for a cone
-        open();
-        default: // Should be no other modes, but do nothing in any case
-        break;
-    }
-  }
-
   public void close() { // Close to grab a cone
     m_grabberSolenoid.set(kReverse); 
     setMode(ClawMode.CONE);
