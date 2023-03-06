@@ -284,8 +284,7 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
   
     // AutoArmScoreMedium
@@ -297,8 +296,7 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
 
     // AutoArmScoreLow
@@ -310,8 +308,7 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
 
     // AutoArmRetrieveMedium
@@ -319,16 +316,16 @@ public class RobotContainer {
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.SHELF))),
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.SHELF))),
-        new InstantCommand(() -> m_claw.retrieve()),
-        new WaitUntilCommand(m_claw::pieceInClaw),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_claw.retrieve())
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()),
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
         new WaitCommand(.5),
         new InstantCommand(() -> m_claw.setClawSpeed(0)),
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED)))
+        
         ));
 
     // AutoArmRetrieveLow
@@ -336,15 +333,14 @@ public class RobotContainer {
       .onTrue(new SequentialCommandGroup(
         new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.FLOOR))),
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.FLOOR))),
-        new InstantCommand(() -> m_claw.retrieve()),
-        new WaitUntilCommand(m_claw::pieceInClaw),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_claw.retrieve())
         ))
       .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_claw.hold()),
+        new InstantCommand(() -> m_claw.hold()), 
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
         new WaitCommand(.5),
         new InstantCommand(() -> m_claw.setClawSpeed(0)),
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
         new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
   }

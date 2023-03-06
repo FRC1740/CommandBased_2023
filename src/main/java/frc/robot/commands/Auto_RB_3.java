@@ -24,9 +24,9 @@ public class Auto_RB_3 extends SequentialCommandGroup {
 
     addCommands (
       new ClawScore(),
-      new DriveToDistance(Units.inchesToMeters(-138.875), m_drive),
-      new TurnToAngleProfiled(-10.0, m_drive),
-      new DriveToDistance(Units.inchesToMeters(-45.0), m_drive)
+      new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
+      new TurnToAngleProfiled(-13.217, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-57.35), m_drive)
     );
 
   }

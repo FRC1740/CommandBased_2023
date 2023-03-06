@@ -144,10 +144,11 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void retrieve() {
-    open();
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+      open();
       setIntakeSpeed(ClawConstants.kCubeInjectLowSpeed);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+      close();
       setIntakeSpeed(ClawConstants.kConeInjectSpeed);
     }
     m_timer.restart();

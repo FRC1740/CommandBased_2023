@@ -16,10 +16,15 @@ public class DriveToChargeStation extends CommandBase {
   private final DriveSubsystem m_drive;
   private double m_initialRoll;
   private double m_initialHeading;
+  private double m_direction;
 
-  public DriveToChargeStation(DriveSubsystem drive) {
+  public DriveToChargeStation(Boolean forward, DriveSubsystem drive) {
     m_drive = drive;
-
+    if (forward){
+      m_direction = 1;
+    } else {
+      m_direction = -1;
+    }
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive);
   }
@@ -41,7 +46,7 @@ public class DriveToChargeStation extends CommandBase {
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getAngle();
     double rollDelta = m_drive.getRoll() - m_initialRoll;
-    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower,
+    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower * m_direction,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
