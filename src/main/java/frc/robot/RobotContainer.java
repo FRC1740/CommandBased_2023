@@ -104,7 +104,7 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
+    initSubsystems();
     configureButtonBindings();
 
     // Configure default commands
@@ -138,6 +138,11 @@ public class RobotContainer {
           true));
 
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
+
+    m_RobotTab = RobotTab.getInstance();
+  }
+
+  private void initSubsystems() {
     // New ------------------------------------------------------------------------------------------
     m_robotShared = RobotShared.getInstance();
 
@@ -151,8 +156,6 @@ public class RobotContainer {
     m_driverController = m_robotShared.getDriverController();
     m_codriverController = m_robotShared.getCodriverController();
     // ----------------------------------------------------------------------------------------------
-
-    m_RobotTab = RobotTab.getInstance();
   }
 
   /**
