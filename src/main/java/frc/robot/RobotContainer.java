@@ -7,7 +7,13 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 
+import frc.board.ArmTab;
+import frc.board.AutonomousTab;
+import frc.board.ClawTab;
+import frc.board.DriveTrainTab;
+import frc.board.GroundIntakeTab;
 import frc.board.RobotTab;
+import frc.board.VisionTab;
 import frc.constants.ArmConstants;
 import frc.constants.ClawConstants;
 import frc.constants.DriveConstants;
@@ -105,6 +111,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     initSubsystems();
+    initShuffleboard();
     configureButtonBindings();
 
     // Configure default commands
@@ -139,7 +146,6 @@ public class RobotContainer {
 
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
 
-    m_RobotTab = RobotTab.getInstance();
   }
 
   private void initSubsystems() {
@@ -156,6 +162,16 @@ public class RobotContainer {
     m_driverController = m_robotShared.getDriverController();
     m_codriverController = m_robotShared.getCodriverController();
     // ----------------------------------------------------------------------------------------------
+  }
+
+  private void initShuffleboard() {
+    m_RobotTab = RobotTab.getInstance();
+    ArmTab.getInstance();
+    // AutonomousTab.getInstance();
+    ClawTab.getInstance();
+    DriveTrainTab.getInstance();
+    GroundIntakeTab.getInstance();
+    VisionTab.getInstance();
   }
 
   /**

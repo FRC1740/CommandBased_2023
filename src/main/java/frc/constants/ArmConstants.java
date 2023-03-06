@@ -82,17 +82,17 @@ public class ArmConstants {
     public static final double kCubeFloorPosition     = 0;
 
     // Temp- to be removed after further refactoring
-    public static final double kHighNodeAngle        = kConeHighAngle;
-    public static final double kMidNodeAngle         = kConeMidAngle;
-    public static final double kLowNodeAngle         = kConeLowAngle;
-    public static final double kMidRetrieveAngle     = kConeShelfAngle;
-    public static final double kLowRetrieveAngle     = kConeFloorAngle;
+    // public static final double kHighNodeAngle        = kConeHighAngle;
+    // public static final double kMidNodeAngle         = kConeMidAngle;
+    // public static final double kLowNodeAngle         = kConeLowAngle;
+    // public static final double kMidRetrieveAngle     = kConeShelfAngle;
+    // public static final double kLowRetrieveAngle     = kConeFloorAngle;
     
-    public static final double kHighNodePosition     = kConeHighPosition;
-    public static final double kMidNodePosition      = kConeMidPosition;
-    public static final double kLowNodePosition      = kConeLowPosition; 
-    public static final double kMidRetrievePosition  = kConeShelfPosition;
-    public static final double kLowRetrievePosition  = kConeFloorPosition;
+    // public static final double kHighNodePosition     = kConeHighPosition;
+    // public static final double kMidNodePosition      = kConeMidPosition;
+    // public static final double kLowNodePosition      = kConeLowPosition; 
+    // public static final double kMidRetrievePosition  = kConeShelfPosition;
+    // public static final double kLowRetrievePosition  = kConeFloorPosition;
 
     // Old ----------------------------------------------------------------------------------------
     // public static final double kHighNodeAngle        = 80;  // FIXME: tune angles

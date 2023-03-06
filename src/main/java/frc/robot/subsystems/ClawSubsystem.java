@@ -39,7 +39,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   private Timer m_timer;
   private ClawTab m_ClawTab;
-  private TimeOfFlight m_tof;
+  // private TimeOfFlight m_tof;
 
   private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
 
@@ -55,9 +55,9 @@ public class ClawSubsystem extends SubsystemBase {
 
     m_clawMode = ClawMode.READY;
     m_timer = new Timer();
-    m_tof = new TimeOfFlight(0);
+    // m_tof = new TimeOfFlight(0);
 
-    m_tof.setRangeOfInterest(8, 8, 12, 12);
+    // m_tof.setRangeOfInterest(8, 8, 12, 12);
     m_ClawTab = ClawTab.getInstance();
     m_ClawTab.setClawMode(getModeString());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
@@ -156,15 +156,16 @@ public class ClawSubsystem extends SubsystemBase {
   
 
   public boolean pieceInClaw() {
-    double range = m_tof.getRange();
-    return (range > ClawConstants.kPieceRecognitionDistanceMmMin && range <= ClawConstants.kPieceRecognitionDistanceMmMax);
+    return false;
+    // double range = m_tof.getRange();
+    // return (range > ClawConstants.kPieceRecognitionDistanceMmMin && range <= ClawConstants.kPieceRecognitionDistanceMmMax);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    m_ClawTab.setTofRange(m_tof.getRange()); // FIXME: check this value and close the claw based on MODE.
+    // m_ClawTab.setTofRange(m_tof.getRange()); // FIXME: check this value and close the claw based on MODE.
 
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
     if (m_timer.get() > ClawConstants.ShutdownDelay) {

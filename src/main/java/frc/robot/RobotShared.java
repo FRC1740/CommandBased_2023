@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.board.ArmTab;
 import frc.board.RobotTab;
 import frc.constants.ArmConstants;
 import frc.constants.OIConstants;
@@ -15,9 +16,9 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
 import frc.robot.subsystems.SignalLEDSubsystem;
-import frc.robot.subsystems.TelescopePIDSubsystem;
 import frc.robot.subsystems.SignalLEDSubsystem.LedMode;
 import frc.robot.subsystems.SignalLEDSubsystem.LedPreference;
+import frc.robot.subsystems.TelescopePIDSubsystem;
 
 /** Add your docs here. */
 public class RobotShared {
@@ -39,9 +40,11 @@ public class RobotShared {
     protected final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
 
     private RobotTab m_robotTab;
+    private ArmTab m_armTab;
     
     private RobotShared() {
         m_robotTab = RobotTab.getInstance();
+        m_armTab = ArmTab.getInstance();
     }
 
     public static RobotShared getInstance() {
@@ -97,29 +100,29 @@ public class RobotShared {
         switch (mode) {
             case HIGH:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeHighPosition;
+                    return m_armTab.getConeHighPosition();
                 else
-                    return ArmConstants.kCubeHighPosition;
+                    return m_armTab.getCubeHighPosition();
             case MID:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeMidPosition;
+                    return m_armTab.getConeMidPosition();
                 else
-                    return ArmConstants.kCubeMidPosition;
+                    return m_armTab.getCubeMidPosition();
             case LOW:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeLowPosition;
+                    return m_armTab.getConeLowPosition();
                 else
-                    return ArmConstants.kCubeLowPosition;
+                    return m_armTab.getCubeLowPosition();
             case SHELF:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeShelfPosition;
+                    return m_armTab.getConeShelfPosition();
                 else
-                    return ArmConstants.kCubeShelfPosition;
+                    return m_armTab.getCubeShelfPosition();
             case FLOOR:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeFloorPosition;
+                    return m_armTab.getConeFloorPosition();
                 else
-                    return ArmConstants.kCubeFloorPosition;
+                    return m_armTab.getCubeFloorPosition();
             case STOWED:
             default:
                 return ArmConstants.kStowedPosition;
@@ -131,29 +134,29 @@ public class RobotShared {
         switch (mode) {
             case HIGH:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeHighAngle;
+                    return m_armTab.getConeHighAngle();
                 else
-                    return ArmConstants.kCubeHighAngle;
+                    return m_armTab.getCubeHighAngle();
             case MID:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeMidAngle;
+                    return m_armTab.getConeMidAngle();
                 else
-                    return ArmConstants.kCubeMidAngle;
+                    return m_armTab.getCubeMidAngle();
             case LOW:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeLowAngle;
+                    return m_armTab.getConeLowAngle();
                 else
-                    return ArmConstants.kCubeLowAngle;
+                    return m_armTab.getCubeLowAngle();
             case SHELF:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeShelfAngle;
+                    return m_armTab.getConeShelfAngle();
                 else
-                    return ArmConstants.kCubeShelfAngle;
+                    return m_armTab.getCubeShelfAngle();
             case FLOOR:
                 if (piece == OIConstants.GamePiece.CONE)
-                    return ArmConstants.kConeFloorAngle;
+                    return m_armTab.getConeFloorAngle();
                 else
-                    return ArmConstants.kCubeFloorAngle;
+                    return m_armTab.getCubeFloorAngle();
             case STOWED:
             default:
                 return ArmConstants.kStowedAngle;

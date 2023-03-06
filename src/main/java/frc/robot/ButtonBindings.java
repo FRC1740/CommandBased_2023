@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.board.ArmTab;
 import frc.constants.ArmConstants;
+import frc.constants.ArmConstants.AutoMode;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.TurnToAngleProfiled;
@@ -354,19 +356,19 @@ public class ButtonBindings {
       m_codriverController.b()
         .onTrue(new SequentialCommandGroup(
           // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
-          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle))));
+          new InstantCommand(() -> m_telescope.setSetpoint(robotShared.calculateTeleSetpoint(AutoMode.HIGH))),
+          new InstantCommand(() -> m_armProfiled.setGoal(robotShared.calculateArmSetpoint(AutoMode.HIGH)))));
   
       m_codriverController.x()
         .onTrue(new SequentialCommandGroup(
           // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
-          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
-          new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
+          new InstantCommand(() -> m_armProfiled.setGoal(robotShared.calculateArmSetpoint(AutoMode.MID))),
+          new InstantCommand(() -> m_telescope.setSetpoint(robotShared.calculateTeleSetpoint(AutoMode.MID)))));
   
       m_codriverController.y()
         .onTrue(new SequentialCommandGroup(
           // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
-          new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle))));
+          new InstantCommand(() -> m_armProfiled.setGoal(robotShared.calculateArmSetpoint(AutoMode.LOW)))));
           // new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)));
   
     }
