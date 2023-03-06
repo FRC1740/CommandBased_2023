@@ -25,8 +25,7 @@ public class Auto_RB_2_Exit_Balance extends SequentialCommandGroup {
     addCommands (
       new ClawScore(),
       new DriveToDistance(Units.inchesToMeters(136.0), m_drive),
-      new DriveToDistance(Units.inchesToMeters(-17.0), m_drive),
-      new DriveOnAndBalanceChargeStation(m_drive)
+      new DriveOnAndBalanceChargeStation(true, m_drive)
     );
 
   }

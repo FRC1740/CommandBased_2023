@@ -18,7 +18,7 @@ public final class ClawConstants {
     public static final double kManualInjectSpeed = -kManualEjectSpeed;
     
     //Cone
-    public static final double kConeInjectSpeed = 0.3;
+    public static final double kConeInjectSpeed = 1.0;
     
     
     public static final double ShutdownDelay = 2.0;

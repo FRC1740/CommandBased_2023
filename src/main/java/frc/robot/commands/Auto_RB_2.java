@@ -24,8 +24,8 @@ public class Auto_RB_2 extends SequentialCommandGroup {
 
     addCommands (
       new ClawScore(),
-      new DriveToDistance(Units.inchesToMeters(49.0), m_drive),
-      new DriveOnAndBalanceChargeStation(m_drive)
+      new DriveToDistance(Units.inchesToMeters(32.0), m_drive),
+      new DriveOnAndBalanceChargeStation(true, m_drive)
     );
 
   }

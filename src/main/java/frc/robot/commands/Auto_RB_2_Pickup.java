@@ -44,7 +44,7 @@ public class Auto_RB_2_Pickup extends SequentialCommandGroup {
       new WaitCommand(0.5),
       new IntakeStow(),
       new DriveToDistance(Units.inchesToMeters(45.0), m_drive),
-      new DriveOnAndBalanceChargeStation(m_drive)
+      new DriveOnAndBalanceChargeStation(true, m_drive)
     );
 
   }

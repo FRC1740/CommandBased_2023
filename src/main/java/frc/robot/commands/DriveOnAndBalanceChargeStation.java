@@ -8,10 +8,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public class DriveOnAndBalanceChargeStation extends SequentialCommandGroup {
   /** Creates a new DriveOnAndBalanceChargeStation. */
-  public DriveOnAndBalanceChargeStation(DriveSubsystem m_drive) {
+  public DriveOnAndBalanceChargeStation(boolean forward, DriveSubsystem m_drive) {
 
     addCommands(
-      new DriveToChargeStation(m_drive),
+      new DriveToChargeStation(forward, m_drive),
       new AutoBalancePID(m_drive)
     );
   }
