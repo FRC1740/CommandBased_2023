@@ -16,8 +16,8 @@ public class AutoArmScoreMedium extends SequentialCommandGroup {
   public AutoArmScoreMedium() {
 
     addCommands(
-      new ArmToSetpoint(ArmConstants.kMidNodeAngle),
-      new TelescopeToSetpoint(ArmConstants.kMidNodePosition),
+      new ArmToSetpoint(ArmConstants.AutoMode.MID),
+      new TelescopeToSetpoint(ArmConstants.AutoMode.MID),
       new ClawHold());
   }
 

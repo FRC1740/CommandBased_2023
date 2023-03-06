@@ -15,8 +15,8 @@ public class ArmStow extends SequentialCommandGroup {
   public ArmStow() {
 
     addCommands(
-      new TelescopeToSetpoint(ArmConstants.kStowedPosition),
-      new ArmToSetpoint(ArmConstants.kStowedAngle));
+      new TelescopeToSetpoint(ArmConstants.AutoMode.STOWED),
+      new ArmToSetpoint(ArmConstants.AutoMode.STOWED));
   }
 
 }

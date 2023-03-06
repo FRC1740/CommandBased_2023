@@ -27,6 +27,7 @@ public class DriveToChargeStation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //  Consider setting m_initialRoll to 0 in case the command is started when already tilted
     m_initialRoll = m_drive.getRoll();
     m_initialHeading = m_drive.getAngle();
     if (Math.abs(m_initialRoll) > AutoConstants.kRollThresholdDegrees) {

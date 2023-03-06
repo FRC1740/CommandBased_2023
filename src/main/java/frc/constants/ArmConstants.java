@@ -46,6 +46,15 @@ public class ArmConstants {
     public static final float kMaxSoftLimitPosition   = 30;
 
     // New ----------------------------------------------------------------------------------------
+    public enum AutoMode {
+        HIGH,
+        MID,
+        LOW,
+        SHELF,
+        FLOOR,
+        STOWED
+    }    
+
     // Cone
     public static final double kConeHighAngle         = 77;
     public static final double kConeMidAngle          = 75;

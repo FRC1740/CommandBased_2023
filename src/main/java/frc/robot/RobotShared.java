@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.board.RobotTab;
+import frc.constants.ArmConstants;
 import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
@@ -88,6 +89,75 @@ public class RobotShared {
 
     public RobotTab getRobotTab() {
         return m_robotTab;
+    }
+
+    // This seems to be the best place- knows about GamePiece and Arm
+    public double calculateTeleSetpoint(ArmConstants.AutoMode mode) {
+        GamePiece piece = m_robotTab.getGamePiece();
+        switch (mode) {
+            case HIGH:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeHighPosition;
+                else
+                    return ArmConstants.kCubeHighPosition;
+            case MID:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeMidPosition;
+                else
+                    return ArmConstants.kCubeMidPosition;
+            case LOW:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeLowPosition;
+                else
+                    return ArmConstants.kCubeLowPosition;
+            case SHELF:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeShelfPosition;
+                else
+                    return ArmConstants.kCubeShelfPosition;
+            case FLOOR:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeFloorPosition;
+                else
+                    return ArmConstants.kCubeFloorPosition;
+            case STOWED:
+            default:
+                return ArmConstants.kStowedPosition;
+        }
+    }
+
+    public double calculateArmSetpoint(ArmConstants.AutoMode mode) {
+        GamePiece piece = m_robotTab.getGamePiece();
+        switch (mode) {
+            case HIGH:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeHighAngle;
+                else
+                    return ArmConstants.kCubeHighAngle;
+            case MID:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeMidAngle;
+                else
+                    return ArmConstants.kCubeMidAngle;
+            case LOW:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeLowAngle;
+                else
+                    return ArmConstants.kCubeLowAngle;
+            case SHELF:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeShelfAngle;
+                else
+                    return ArmConstants.kCubeShelfAngle;
+            case FLOOR:
+                if (piece == OIConstants.GamePiece.CONE)
+                    return ArmConstants.kConeFloorAngle;
+                else
+                    return ArmConstants.kCubeFloorAngle;
+            case STOWED:
+            default:
+                return ArmConstants.kStowedAngle;
+        }
     }
 
     public void toggleGamePiece() {
