@@ -46,8 +46,8 @@ public class LimeLightSubsystem extends SubsystemBase {
   }
 
   //Returns true if Limelight is in vision processing mode
-  public BooleanSupplier isVisionProcessing(){
-    BooleanSupplier camMode = () -> m_LimeLightTable.getCamMode() == 0;
+  public Boolean isVisionProcessing(){
+    Boolean camMode = m_LimeLightTable.getCamMode() == 0;
     return camMode;
     
   }

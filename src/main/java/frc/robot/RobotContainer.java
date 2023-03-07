@@ -28,6 +28,7 @@ import frc.robot.commands.Auto_RB_2_Pickup;
 import frc.robot.commands.Auto_RB_3;
 import frc.robot.commands.Auto_RB_3_Claw_Ready;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
@@ -186,7 +187,7 @@ public class RobotContainer {
     // bind_ManualArmTest();
     // bind_ResetGyro();
     // bind_GroundIntakeTest();
-    // bind_Limelight();
+    bind_Limelight();
     // bind_HalfSpeed();
     // bind_PathWeaver();
     // bind_CoAutoBalance();
@@ -372,18 +373,18 @@ public class RobotContainer {
 
   private void bind_RC_RearIntake() {
     // IntakeRetrieve
-    m_driverController.b()
+    m_driverController.a()
       // Operator must also stow the arm first!!
       .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     // IntakeGrasp
-    m_driverController.a()
+    m_driverController.y()
       .onTrue(new InstantCommand(() -> m_groundIntake.grasp()))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
 
     // IntakeScore
-    m_driverController.y()
+    m_driverController.b()
       .whileTrue(new RunCommand(() -> m_groundIntake.eject()))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
   }
@@ -456,8 +457,8 @@ public class RobotContainer {
   }
 
   private void bind_Limelight() {
-    m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_limelight.enableVisionProcessing()));
+    m_driverController.rightBumper()
+      .onTrue(new SequentialVisionAlign(m_robotDrive, m_limelight));
   }
 
   private void bind_HalfSpeed() {
