@@ -7,12 +7,10 @@ package frc.robot.commands.auto;
 import frc.robot.RobotShared;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.DriveOnAndBalanceChargeStation;
-import frc.robot.commands.AutoBalancePID;
-import frc.robot.commands.basic.*;
-import frc.robot.commands.driver.*;
+import frc.robot.commands.basic.ClawScore;
 import frc.robot.subsystems.DriveSubsystem;
 
-import edu.wpi.first.wpilibj2.command.*;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import edu.wpi.first.math.util.Units;
 
@@ -27,18 +25,10 @@ public class RB_2 extends SequentialCommandGroup {
     m_drive = m_robotShared.getDriveSubsystem();
 
     addCommands (
-      // new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      // new WaitCommand(1),
-      // new ParallelDeadlineGroup (
-      //   new WaitCommand(0.5),
-      //   new ClawScore()
-      //   // Automatically calls scoreDone at end
-      // ),
-      // new ArmStow(),
-      // new DriveToDistance(Units.inchesToMeters(-32.0), m_drive),
-      /// new DriveOnAndBalanceChargeStation(false, m_drive)
-      new AutoBalancePID(m_drive)
-   );
+      new ClawScore(),
+      new DriveToDistance(Units.inchesToMeters(-32.0), m_drive),
+      new DriveOnAndBalanceChargeStation(false, m_drive)
+    );
 
   }
 }
