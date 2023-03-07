@@ -85,6 +85,12 @@ public class DriveSubsystem extends SubsystemBase {
       m_leftMotorFollower.follow(m_leftMotorLeader);
       m_rightMotorFollower.follow(m_rightMotorLeader);
       
+      m_rightMotorLeader.setSmartCurrentLimit(50);
+      m_rightMotorFollower.setSmartCurrentLimit(50);
+      m_leftMotorLeader.setSmartCurrentLimit(50);
+      m_leftMotorFollower.setSmartCurrentLimit(50);
+
+
       m_leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_leftEncoderFollower.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);

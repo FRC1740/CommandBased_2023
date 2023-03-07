@@ -124,8 +124,8 @@ public class RobotContainer {
       // Triggers are Axis 2; RightStick X is axis 3
       // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
       new RunCommand(() ->
-        m_robotDrive.simpleArcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
-        m_driverController.getLeftX(), true), m_robotDrive));
+        m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+        m_driverController.getLeftX(), false), m_robotDrive));
     
     m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path",
         new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
@@ -331,7 +331,6 @@ public class RobotContainer {
         new InstantCommand(() -> m_claw.hold()),
         new WaitCommand(0.3),
         new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
-        new WaitCommand(.5),
         new InstantCommand(() -> m_claw.setClawSpeed(0)),
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED)))
         
@@ -348,7 +347,6 @@ public class RobotContainer {
         new InstantCommand(() -> m_claw.hold()), 
         new WaitCommand(0.3),
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new WaitCommand(.5),
         new InstantCommand(() -> m_claw.setClawSpeed(0)),
         new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
