@@ -20,7 +20,17 @@ import frc.constants.DriveConstants;
 import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
+<<<<<<< HEAD
 import frc.robot.commands.auto.*;
+=======
+import frc.robot.commands.Auto_RB_1;
+import frc.robot.commands.Auto_RB_1_Claw_Ready;
+import frc.robot.commands.Auto_RB_2;
+import frc.robot.commands.Auto_RB_2_Exit_Balance;
+import frc.robot.commands.Auto_RB_2_Pickup;
+import frc.robot.commands.Auto_RB_3;
+import frc.robot.commands.Auto_RB_3_Claw_Ready;
+>>>>>>> fb301925c8a885dfb30801bbe9f0c776baeaca77
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
@@ -210,6 +220,7 @@ public class RobotContainer {
     // Currently none of these are in use
 
     new POVButton(m_driverController.getHID(), 0)
+<<<<<<< HEAD
       .onTrue(new RB_1());
 
     new POVButton(m_driverController.getHID(), 90)
@@ -229,6 +240,27 @@ public class RobotContainer {
 
     m_driverController.rightStick()
       .onTrue(new RB_3_Claw_Ready());
+=======
+      .onTrue(new Auto_RB_1());
+
+    new POVButton(m_driverController.getHID(), 90)
+      .onTrue(new Auto_RB_2());
+
+    new POVButton(m_driverController.getHID(), 180)
+      .onTrue(new Auto_RB_2_Pickup());
+
+    new POVButton(m_driverController.getHID(), 270)
+      .onTrue(new Auto_RB_2_Exit_Balance());
+
+    m_driverController.leftBumper()
+      .onTrue(new Auto_RB_3());
+  
+    m_driverController.x()
+      .onTrue(new Auto_RB_1_Claw_Ready());
+
+    m_driverController.rightStick()
+      .onTrue(new Auto_RB_3_Claw_Ready());
+>>>>>>> fb301925c8a885dfb30801bbe9f0c776baeaca77
 
       }
 
