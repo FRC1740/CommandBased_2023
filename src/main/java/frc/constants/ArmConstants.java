@@ -45,7 +45,6 @@ public class ArmConstants {
     public static final float kMinSoftLimitPosition   = 0;
     public static final float kMaxSoftLimitPosition   = 30;
 
-    // New ----------------------------------------------------------------------------------------
     public enum AutoMode {
         HIGH,
         MID,
@@ -70,8 +69,8 @@ public class ArmConstants {
 
     // Cube
     public static final double kCubeHighAngle         = 89;
-    public static final double kCubeMidAngle          = 92;
-    public static final double kCubeLowAngle          = 140;
+    public static final double kCubeMidAngle          = 95;
+    public static final double kCubeLowAngle          = 142;
     public static final double kCubeShelfAngle        = 87;
     public static final double kCubeFloorAngle        = 173;
 
@@ -81,34 +80,6 @@ public class ArmConstants {
     public static final double kCubeShelfPosition     = 7.5;
     public static final double kCubeFloorPosition     = 0;
 
-    // Temp- to be removed after further refactoring
-    // public static final double kHighNodeAngle        = kConeHighAngle;
-    // public static final double kMidNodeAngle         = kConeMidAngle;
-    // public static final double kLowNodeAngle         = kConeLowAngle;
-    // public static final double kMidRetrieveAngle     = kConeShelfAngle;
-    // public static final double kLowRetrieveAngle     = kConeFloorAngle;
-    
-    // public static final double kHighNodePosition     = kConeHighPosition;
-    // public static final double kMidNodePosition      = kConeMidPosition;
-    // public static final double kLowNodePosition      = kConeLowPosition; 
-    // public static final double kMidRetrievePosition  = kConeShelfPosition;
-    // public static final double kLowRetrievePosition  = kConeFloorPosition;
-
-    // Old ----------------------------------------------------------------------------------------
-    // public static final double kHighNodeAngle        = 80;  // FIXME: tune angles
-    // public static final double kMidNodeAngle         = 75;
-    // public static final double kLowNodeAngle         = 140;
-    // public static final double kMidRetrieveAngle     = 87;
-    // public static final double kLowRetrieveAngle     = 173;
-    // //Cone hi node 77 angle 28.5
-    // //Cube hi node 80 angle, 27.5
-    
-    // public static final double kHighNodePosition     = 27.5; // FIXME: tune telescope
-    // public static final double kMidNodePosition      = 8.5;
-    // public static final double kLowNodePosition      = 0;  
-    // public static final double kMidRetrievePosition  = 7.5; 
-    // public static final double kLowRetrievePosition  = 0;
-    //---------------------------------------------------------------------------------------------
 
     public static final double rotatePDefault = 0.12149;
     public static final double rotateIDefault = 0.0;
