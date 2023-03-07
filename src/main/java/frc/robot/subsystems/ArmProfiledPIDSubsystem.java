@@ -6,13 +6,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.constants.ArmConstants;
-import frc.constants.ArmTunable;
 import frc.board.ArmTab;
 
 public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
@@ -29,9 +29,11 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     super(
         // The ProfiledPIDController used by the subsystem
         new ProfiledPIDController(
-          ArmTunable.getRotateP(), ArmTunable.getRotateI(), ArmTunable.getRotateD(),
+            ArmConstants.rotatePDefault,
+            ArmConstants.rotateIDefault,
+            ArmConstants.rotateDDefault,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(ArmTunable.rotateMaxVelocity, ArmTunable.rotateMaxAcceleration)));
+            new TrapezoidProfile.Constraints(ArmConstants.rotateMaxVelocity, ArmConstants.rotateMaxAcceleration)));
 
          m_ArmFeedforward = new ArmFeedforward(ArmConstants.ArmRotationKs, ArmConstants.ArmRotationKg, ArmConstants.ArmRotationKv, ArmConstants.ArmRotationKa);
 
@@ -40,11 +42,20 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationEncoder = m_rotationLeader.getEncoder();
         m_rotationFollowerEncoder = m_rotationFollower.getEncoder();
         // Reset encoders to Zero position for starting configuration
-        m_rotationEncoder.setPosition(ArmConstants.kStowedAngle);
-        m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
+        m_rotationEncoder.setPosition(ArmConstants.kStowedAngle-5);
+        m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle-5);
     
         m_rotationEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
         m_rotationFollowerEncoder.setPositionConversionFactor(ArmConstants.ARM_ROTATION_POSITION_CONVERSION_FACTOR);
+
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitAngle); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitAngle); //forward soft limit at low retrieve position
+        m_rotationFollower.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitAngle); //reverse soft limit at stowed position
+        m_rotationLeader.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitAngle); //reverse soft limit at stowed position
+        m_rotationLeader.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_rotationFollower.enableSoftLimit(SoftLimitDirection.kForward, true);
+        m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        m_rotationLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
         setGoal(ArmConstants.kStowedAngle);
 
@@ -56,9 +67,9 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public void periodic(){
     super.periodic();
     m_ArmTab.setArmAngle(getArmRotationDegrees());
-  //   m_PIDController.setPID(m_ArmTab.getRotkP(),
-  //                         m_ArmTab.getRotkI(), 
-  //                         m_ArmTab.getRotkD());
+    m_PIDController.setPID(m_ArmTab.getRotkP(),
+                          m_ArmTab.getRotkI(), 
+                          m_ArmTab.getRotkD());
    }
   
   private double getArmRotationDegrees() {  
@@ -84,17 +95,21 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     m_rotationFollowerEncoder.setPosition(ArmConstants.kStowedAngle);
   }
 
-  public void manualArmRotate(double speed){
-    double position = getArmRotationDegrees();
+  public void manualArmRotate(double analogInput){
+    double adjustedSpeed = analogInput * ArmConstants.kArmRotateInputMultiplier;
     disable();
-    if ((speed > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) ||
-        (speed < 0.0 && position > ArmConstants.kArmRotateMinDegrees)) {
-      m_rotationLeader.set(speed);
+    if (Math.abs(analogInput) > ArmConstants.kArmRotateDeadzone) {
+      //if (analogInput > 0.0 && position < ArmConstants.kArmRotateMaxDegrees) { //shouldn't need soft limit here since soft limit is set in SparkMax
+        m_rotationLeader.set(adjustedSpeed);
+      } 
+      //else if (analogInput < 0.0 && position > ArmConstants.kArmRotateMinDegrees) {
+        //m_rotationLeader.set(adjustedSpeed);
+      //} 
+      else {
+        m_rotationLeader.set(0.0);
+      }
     }
-    else {
-      m_rotationLeader.set(0.0);
-    }
-  }
+  //}
 
   public void manualDone(){
     enable();
@@ -105,6 +120,11 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
   public double getMeasurement() {
     // Return the process variable measurement here
     return m_rotationEncoder.getPosition();
+  }
+
+  public boolean atGoal(){
+    return (m_rotationEncoder.getPosition() > m_PIDController.getGoal().position - ArmConstants.kArmRotateTolerance)
+     && (m_rotationEncoder.getPosition() < m_PIDController.getGoal().position + ArmConstants.kArmRotateTolerance);
   }
 
   public void burnFlash() {

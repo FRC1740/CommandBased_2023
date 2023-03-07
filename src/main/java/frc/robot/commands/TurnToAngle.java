@@ -42,6 +42,8 @@ public class TurnToAngle extends PIDCommand {
   @Override
   public boolean isFinished() {
     // End when the controller is at the reference.
-    return getController().atSetpoint();
+    // return getController().atSetpoint();
+    System.out.println("TurnToAngle is deprecated. Use TurnToAngleProfiled!");
+    return true;
   }
 }

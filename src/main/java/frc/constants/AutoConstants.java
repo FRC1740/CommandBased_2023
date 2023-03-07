@@ -22,7 +22,6 @@ public class AutoConstants {
     public static final double kBalanceI = 0;
     public static final double kBalanceD = 0;  
     
-    public static final double kAutoDriveTolerance = 1;
     public static final double kAutoDriveP = 0.01;
     public static final double kAutoDriveI = 0;
     public static final double kAutoDriveD = 0;  
@@ -30,10 +29,16 @@ public class AutoConstants {
     public static final double kTurnToleranceDeg = 5;
     public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
 
-    public static final double kDriveCorrectionP = .01; //coefficient for course correction in autoDrive commands
+    public static final double kAngleCorrectionP = .01; //coefficient for course correction in autoDrive commands
 
-    public static final double kDriveToChargeStationPower = .4; //power for drive to charge station command
+    public static final double kDriveToChargeStationPower  = 0.4; //power for drive to charge station command
+    public static final double kDriveToDistancePower       = 0.3; //power for drive to distance command
+    public static final double kDriveToAprilTagPower       = 0.3; //power for drive to April tag command
 
-    public static final double kDriveToDistancePower = 0.3; //power for drive to distance command
+    public static final double kSubStationSideDriveDistance = -4.29;
+
+    // Tolerances for Autonomous driving
+    public static final double kAutoDriveToleranceMeters = 0.05;
+    public static final double kRollThresholdDegrees = 9.0;
     
 }

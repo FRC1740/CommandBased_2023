@@ -9,47 +9,57 @@ import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToChargeStation extends CommandBase {
-  /** Creates a new DriveToDistance. */
+  /** Creates a new DriveToChargeStation.
+   * Drives until Roll exceeds the Threshold (we are tilted)
+  */
   
-  private final DriveSubsystem m_Drivesubsystem;
-  private double startingRoll = 0;
-  private boolean Finished = false;
-  private double heading = 0;
-  private double error = 0;
+  private final DriveSubsystem m_drive;
+  private double m_initialRoll;
+  private double m_initialHeading;
+  private double m_direction;
 
-  public DriveToChargeStation(DriveSubsystem drive) {
-    m_Drivesubsystem = drive;
-
+  public DriveToChargeStation(Boolean forward, DriveSubsystem drive) {
+    m_drive = drive;
+    if (forward){
+      m_direction = 1;
+    } else {
+      m_direction = -1;
+    }
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Finished = false;
-    startingRoll = m_Drivesubsystem.getRoll();
-    heading = m_Drivesubsystem.getAngle();
-    System.out.println("Encoder posotion " + m_Drivesubsystem.getAverageEncoder());
+    //  Consider setting m_initialRoll to 0 in case the command is started when already tilted
+    m_initialRoll = m_drive.getRoll();
+    m_initialHeading = m_drive.getAngle();
+    if (Math.abs(m_initialRoll) > AutoConstants.kRollThresholdDegrees) {
+      System.out.print("Starting assumption not met: Roll is " + m_initialRoll +
+        " Threshold is " + AutoConstants.kRollThresholdDegrees);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_Drivesubsystem.getRoll() >= startingRoll - 9 && m_Drivesubsystem.getRoll() <= startingRoll + 9 ){
-       error = heading - m_Drivesubsystem.getAngle();
-      m_Drivesubsystem.arcadeDrive(AutoConstants.kDriveToChargeStationPower, AutoConstants.kDriveCorrectionP * error, false);
-    }else{
-      Finished = true;
-    }
+    double angleDelta = m_initialHeading - m_drive.getAngle();
+    double rollDelta = m_drive.getRoll() - m_initialRoll;
+    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower * m_direction,
+      AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.simpleArcadeDrive(0.0, 0.0, false);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return Finished;
+      double rollDelta = m_drive.getRoll() - m_initialRoll;
+      return (Math.abs(rollDelta) > AutoConstants.kRollThresholdDegrees);
     }    
 }

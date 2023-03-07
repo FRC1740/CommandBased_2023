@@ -39,7 +39,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   private Timer m_timer;
   private ClawTab m_ClawTab;
-  private TimeOfFlight m_tof;
+  // private TimeOfFlight m_tof;
 
   private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
 
@@ -55,8 +55,9 @@ public class ClawSubsystem extends SubsystemBase {
 
     m_clawMode = ClawMode.READY;
     m_timer = new Timer();
-    m_tof = new TimeOfFlight(0);
+    // m_tof = new TimeOfFlight(0);
 
+    // m_tof.setRangeOfInterest(8, 8, 12, 12);
     m_ClawTab = ClawTab.getInstance();
     m_ClawTab.setClawMode(getModeString());
     m_ClawTab.setIntakeCurrent(getIntakeCurrent());
@@ -66,7 +67,7 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void intakeCube() {
-    m_intakeMotor.set(ClawConstants.InjectCubeHighSpeed);
+    m_intakeMotor.set(ClawConstants.kCubeInjectHighSpeed);
     m_timer.reset();
     m_timer.stop();
     open();
@@ -80,52 +81,10 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void ejectCube() {
-    m_intakeMotor.set(ClawConstants.EjectCubeLowSpeed);
+    m_intakeMotor.set(ClawConstants.kCubeEjectLowSpeed);
     m_timer.reset();
     m_timer.start();
     setMode(ClawMode.READY);
-  }
-
-  public void grabCone() {
-    m_intakeMotor.set(ClawConstants.InjectConeSpeed);
-    close();
-    setMode(ClawMode.CONE);
-  }
-
-  public void dropCone() {
-    m_intakeMotor.set(0.0);
-    open();
-  }
-
-  public void grabOrReleaseCone() {
-    if (getMode() == ClawMode.READY) {
-      grabCone();
-    }
-    else {
-      dropCone();
-    }
-  }
-
-  public void grabOrReleaseCube() {
-    if (getMode() == ClawMode.READY) {
-      intakeCube();
-    }
-    else {
-      ejectCube();
-    }
-  }
-
-  public void toggle() {
-    switch(m_clawMode) {
-      case CUBE: // We're currently set for a cube (or "READY")
-      case READY:
-        close();
-        break;
-      case CONE: // We're currently set for a cone
-        open();
-        default: // Should be no other modes, but do nothing in any case
-        break;
-    }
   }
 
   public void close() { // Close to grab a cone
@@ -163,7 +122,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void score() {
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(ClawConstants.EjectCubeLowSpeed);
+      setIntakeSpeed(ClawConstants.kCubeEjectLowSpeed);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
       open();
     }
@@ -176,7 +135,7 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void hold() {
-    setIntakeSpeed(0.0);
+   
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
       open();
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
@@ -185,20 +144,29 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void retrieve() {
-    open();
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(ClawConstants.InjectCubeLowSpeed);
+      open();
+      setIntakeSpeed(ClawConstants.kCubeInjectLowSpeed);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      setIntakeSpeed(ClawConstants.InjectConeSpeed);
+      close();
+      setIntakeSpeed(ClawConstants.kConeInjectSpeed);
     }
     m_timer.restart();
+    m_timer.stop();
+  }
+  
+
+  public boolean pieceInClaw() {
+    return false;
+    // double range = m_tof.getRange();
+    // return (range > ClawConstants.kPieceRecognitionDistanceMmMin && range <= ClawConstants.kPieceRecognitionDistanceMmMax);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
 
-    m_ClawTab.setTofRange(m_tof.getRange()); // FIXME: check this value and close the claw based on MODE.
+    // m_ClawTab.setTofRange(m_tof.getRange()); // FIXME: check this value and close the claw based on MODE.
 
     // Shutdown the Cube Eject Motor after a delay if we're not intaking a cube
     if (m_timer.get() > ClawConstants.ShutdownDelay) {

@@ -30,6 +30,7 @@ public class RobotTab {
 
     private RobotTab() {
         initShuffleboardTab();
+        setGamePiece(GamePiece.CUBE);
     }
 
     public static RobotTab getInstance() {
@@ -90,6 +91,16 @@ public class RobotTab {
     
     public GamePiece toggleGamePiece() {
         m_nte_GamePiece.setBoolean(!m_nte_GamePiece.getBoolean(true));
+        return getGamePiece();
+    }
+    
+    public GamePiece setGamePieceCone() {
+        setGamePiece(GamePiece.CONE);
+        return getGamePiece();
+    }
+    
+    public GamePiece setGamePieceCube() {
+        setGamePiece(GamePiece.CUBE);
         return getGamePiece();
     }
 }

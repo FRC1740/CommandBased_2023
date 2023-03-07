@@ -5,6 +5,7 @@
 package frc.board;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -192,5 +193,9 @@ public class DriveTrainTab {
 
     public void setRobotPose(Pose2d pose2d) {
         m_Field.setRobotPose(pose2d);
+    }
+
+    public void setTrajectory(Trajectory traj){
+        m_Field.getObject("trajectory").setTrajectory(traj);
     }
 }

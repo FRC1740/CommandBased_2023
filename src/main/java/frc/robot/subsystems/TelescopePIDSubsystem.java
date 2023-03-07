@@ -8,10 +8,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
-import frc.constants.ArmTunable;
 
 public class TelescopePIDSubsystem extends PIDSubsystem {
 
@@ -23,12 +23,19 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   public TelescopePIDSubsystem() {
     super(
         // The PIDController used by the subsystem
-        new PIDController(ArmTunable.getExtendP(), ArmTunable.getExtendI(), ArmTunable.getExtendD()));
+        new PIDController(
+          ArmConstants.extendPDefault,
+          ArmConstants.extendIDefault,
+          ArmConstants.extendDDefault));
 
     m_extensionEncoder = m_extensionMotor.getEncoder();
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
- 
+    
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitPosition);
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitPosition);
+    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedPosition);
     
@@ -64,21 +71,24 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
       return;
   }
 
-  public void manualTelescope(double speed) {
-    double position = getArmExtensionInches();
+  public void manualTelescope(double analogInput) {
+    double adjustedSpeed = analogInput * ArmConstants.kArmExtendInputMultiplier;
     disable();
-    if ((speed > 0.0 && position < ArmConstants.kArmExtendMaxInches) ||
-        (speed < 0.0 && position > ArmConstants.kArmExtendMinInches)) {
-      m_extensionMotor.set(speed);
-    }
-    else {
+    if (Math.abs(analogInput) > ArmConstants.kArmExtendDeadzone) {
+      m_extensionMotor.set(adjustedSpeed);
+    } else {
       m_extensionMotor.set(0.0);
     }
   }
-
+  
   public void manualDone() {
     enable();
     setSetpoint(m_extensionEncoder.getPosition());
+  }
+
+  // Returns true when telescope is at setpoint
+  public boolean atSetpoint() {
+    return (Math.abs(m_extensionEncoder.getPosition() - getSetpoint()) < ArmConstants.kArmExtendTolerance);
   }
 
   public void burnFlash() {

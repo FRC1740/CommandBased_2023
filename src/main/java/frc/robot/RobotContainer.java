@@ -7,14 +7,22 @@ package frc.robot;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 
+import frc.board.ArmTab;
+import frc.board.AutonomousTab;
+import frc.board.ClawTab;
+import frc.board.DriveTrainTab;
+import frc.board.GroundIntakeTab;
 import frc.board.RobotTab;
+import frc.board.VisionTab;
 import frc.constants.ArmConstants;
 import frc.constants.ClawConstants;
 import frc.constants.DriveConstants;
 import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
+import frc.robot.commands.auto.*;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
 //import frc.robot.commands.RotateArmToAngle;
@@ -38,6 +46,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -51,19 +61,37 @@ import edu.wpi.first.wpilibj.DriverStation;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+  // New ------------------------------------------------------------------------------------------
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
-  //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
-  protected final ClawSubsystem m_claw = new ClawSubsystem();
-  // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
-  protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
-  protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
-  protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
-  private final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
+  private DriveSubsystem m_robotDrive;
+  private LimeLightSubsystem m_limelight;
+  //private PhotonVisionSubsystem m_photonVision;
+  protected ClawSubsystem m_claw;
+  // protected final ArmPIDSubsystem m_arm;
+  protected ArmProfiledPIDSubsystem m_armProfiled;
+  protected TelescopePIDSubsystem m_telescope;
+  protected GroundIntakeSubsystem m_groundIntake;
+  private SignalLEDSubsystem m_signalLEDs;
 
-  private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-  private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
+  private CommandXboxController m_driverController;
+  private CommandXboxController m_codriverController;
+
+  private RobotShared m_robotShared;
+  // Old ------------------------------------------------------------------------------------------
+  // // The robot's subsystems and commands are defined here...
+  // private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  // private final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
+  // //private final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
+  // protected final ClawSubsystem m_claw = new ClawSubsystem();
+  // // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
+  // protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
+  // protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
+  // protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
+  // private final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
+
+  // private final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  // private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
+  // ----------------------------------------------------------------------------------------------
   
   SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
 
@@ -78,7 +106,8 @@ public class RobotContainer {
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
+    initSubsystems();
+    initShuffleboard();
     configureButtonBindings();
 
     // Configure default commands
@@ -88,7 +117,7 @@ public class RobotContainer {
       // Triggers are Axis 2; RightStick X is axis 3
       // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
       new RunCommand(() ->
-        m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+        m_robotDrive.simpleArcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
         m_driverController.getLeftX(), true), m_robotDrive));
     
     m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path",
@@ -113,14 +142,39 @@ public class RobotContainer {
 
     Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
 
+  }
+
+  private void initSubsystems() {
+    // New ------------------------------------------------------------------------------------------
+    m_robotShared = RobotShared.getInstance();
+
+    m_robotDrive = m_robotShared.getDriveSubsystem();
+    m_limelight = m_robotShared.getLimeLightSubsystem();
+    m_claw = m_robotShared.getClawSubsystem();
+    m_armProfiled = m_robotShared.getArmProfiledPIDSubsystem();
+    m_telescope = m_robotShared.getTelescopePIDSubsystem();
+    m_groundIntake = m_robotShared.getGroundIntakeSubsystem();
+    m_signalLEDs = m_robotShared.getSignalLEDSubsystem();
+    m_driverController = m_robotShared.getDriverController();
+    m_codriverController = m_robotShared.getCodriverController();
+    // ----------------------------------------------------------------------------------------------
+  }
+
+  private void initShuffleboard() {
     m_RobotTab = RobotTab.getInstance();
+    ArmTab.getInstance();
+    // AutonomousTab.getInstance();
+    ClawTab.getInstance();
+    DriveTrainTab.getInstance();
+    GroundIntakeTab.getInstance();
+    VisionTab.getInstance();
   }
 
   /**
    * Use this method to define your button->command mappings.
    */
   private void configureButtonBindings() {
-    bind_POVTest();
+    // bind_POVTest();
     // bind_CircleTest();
     // bind_AutoDriveDistanceTest();
     // bind_ManualArmTest();
@@ -147,37 +201,66 @@ public class RobotContainer {
     bind_RC_AutoArm();
     bind_RC_GamePiece();
     bind_RC_RearIntake();
+
+    bind_Auto_Tests();
   }
+
+  // expected to be temporary
+  private void bind_Auto_Tests() {
+    // Currently none of these are in use
+
+    new POVButton(m_driverController.getHID(), 0)
+      .onTrue(new RB_1());
+
+    new POVButton(m_driverController.getHID(), 90)
+      .onTrue(new RB_2());
+
+    new POVButton(m_driverController.getHID(), 180)
+      .onTrue(new RB_2_Pickup());
+
+    new POVButton(m_driverController.getHID(), 270)
+      .onTrue(new RB_2_Exit_Balance());
+
+    m_driverController.leftBumper()
+      .onTrue(new RB_3());
+  
+    m_driverController.x()
+      .onTrue(new RB_1_Claw_Ready());
+
+    m_driverController.rightStick()
+      .onTrue(new RB_3_Claw_Ready());
+
+      }
 
   // See the Robot Control documents for the spec
   private void bind_RC_ManualArm() {
     // ManualArmUpDown
-    // ManualArmExtendRetract
     m_codriverController.leftStick()
-      .onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getRightX())),
-        new InstantCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY()))))
-      .onFalse(new ParallelCommandGroup(
-        new InstantCommand(() -> m_armProfiled.manualDone()),
-        new InstantCommand(() -> m_telescope.manualDone())));
+      .whileTrue(new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftY())))
+      .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
+
+    // ManualArmExtendRetract
+    m_codriverController.rightStick()
+    .whileTrue(new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY())))
+    .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
 
     // ManualRollerOut
     new POVButton(m_codriverController.getHID(), 0)
     // m_codriverController.rightTrigger()
-      .onTrue(new InstantCommand(() -> m_claw.setIntakeSpeed(ClawConstants.EjectCubeManualSpeed)))
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.kManualEjectSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // ManualRollerIn
     new POVButton(m_codriverController.getHID(), 180)
     // m_codriverController.rightTrigger()
-      .onTrue(new InstantCommand(() -> m_claw.setIntakeSpeed(ClawConstants.InjectCubeManualSpeed)))
+      .whileTrue(new RunCommand(() -> m_claw.setIntakeSpeed(ClawConstants.kManualInjectSpeed)))
       .onFalse(new InstantCommand(() -> m_claw.setIntakeSpeed(0.0)));
 
     // AllStow  
     m_codriverController.a()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))));
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))));
 
     // ManualClawOpen
     new POVButton(m_codriverController.getHID(), 90)
@@ -188,8 +271,8 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> m_claw.close()));
 
     // ArmScore 
-    m_driverController.leftTrigger()
-      .onTrue(new InstantCommand(() -> m_claw.score()))
+    m_codriverController.leftTrigger()
+      .whileTrue(new RunCommand(() -> m_claw.score()))
       .onFalse(new InstantCommand(() -> m_claw.scoreDone()));
   }
 
@@ -197,73 +280,88 @@ public class RobotContainer {
     // AutoArmScoreHigh
     m_codriverController.x()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle)),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.HIGH))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.HIGH))),
         new InstantCommand(() -> m_claw.hold())
         ))
       .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
   
     // AutoArmScoreMedium
     m_codriverController.y()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition)),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.MID))),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.MID))),
         new InstantCommand(() -> m_claw.hold())
         ))
       .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
 
     // AutoArmScoreLow
     m_codriverController.b()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle)),
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.LOW))),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.LOW))),
         new InstantCommand(() -> m_claw.hold())
         ))
       .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
 
     // AutoArmRetrieveMedium
     m_codriverController.rightBumper()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidRetrieveAngle)),
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidRetrievePosition)),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.SHELF))),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.SHELF))),
         new InstantCommand(() -> m_claw.retrieve())
         ))
       .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_claw.hold()),
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
+        new WaitCommand(.5),
+        new InstantCommand(() -> m_claw.setClawSpeed(0)),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED)))
+        
         ));
 
     // AutoArmRetrieveLow
     m_codriverController.rightTrigger()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowRetrieveAngle)),
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowRetrievePosition)),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.FLOOR))),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.FLOOR))),
         new InstantCommand(() -> m_claw.retrieve())
         ))
       .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle)),
-        new InstantCommand(() -> m_claw.hold())
+        new InstantCommand(() -> m_claw.hold()), 
+        new WaitCommand(0.3),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        new WaitCommand(.5),
+        new InstantCommand(() -> m_claw.setClawSpeed(0)),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
         ));
   }
 
   private void bind_RC_GamePiece() {
-    // GamePieceToggle
+    // Driver
+    m_driverController.back()
+      .onTrue(new InstantCommand(() -> setGamePieceCone()));
+
+    m_driverController.start()
+      .onTrue(new InstantCommand(() -> setGamePieceCube()));
+
+    // Codriver
+    m_codriverController.back()
+      .onTrue(new InstantCommand(() -> setGamePieceCone()));
+
     m_codriverController.start()
-      .onTrue(new InstantCommand(() -> toggleGamePiece()));
+      .onTrue(new InstantCommand(() -> setGamePieceCube()));
+
   }
 
   private void bind_RC_RearIntake() {
@@ -280,7 +378,8 @@ public class RobotContainer {
 
     // IntakeScore
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_groundIntake.eject()));
+      .whileTrue(new RunCommand(() -> m_groundIntake.eject()))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
   }
 
   private void bind_POVTest() {
@@ -397,13 +496,13 @@ public class RobotContainer {
 
     // Basic PID button commands for Arm Rotation
     // m_driverController.a()
-    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle)));
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))));
     // m_driverController.b()
-    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)));
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.HIGH))));
     // m_driverController.x()
-    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)));
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.MID))));
     // m_driverController.y()
-    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)));
+    //   .onTrue(new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.LOW))));
   }
 
 
@@ -411,30 +510,28 @@ public class RobotContainer {
     // Combination PID commands for Arm rotate & extend/retract
     m_codriverController.a()
       .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kStowedPosition)),
-        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kStowedAngle))
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kStowedAngle))));
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        // new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))));
 
     m_codriverController.b()
       .onTrue(new SequentialCommandGroup(
-        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kHighNodeAngle)),
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kHighNodePosition)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kHighNodeAngle))));
+        // new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.HIGH))),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.HIGH))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.HIGH)))));
 
     m_codriverController.x()
       .onTrue(new SequentialCommandGroup(
-        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kMidNodeAngle)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kMidNodeAngle)),
-        new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kMidNodePosition))));
+        // new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.MID))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.MID))),
+        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.MID)))));
 
     m_codriverController.y()
       .onTrue(new SequentialCommandGroup(
-        // new InstantCommand(() -> m_arm.setSetpoint(ArmConstants.kLowNodeAngle)),
-        new InstantCommand(() -> m_armProfiled.setGoal(ArmConstants.kLowNodeAngle))));
-        // new InstantCommand(() -> m_telescope.setSetpoint(ArmConstants.kLowNodePosition)));
+        // new InstantCommand(() -> m_arm.setSetpoint(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.LOW))),
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.LOW)))));
+        // new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.LOW))));
 
-    m_codriverController.rightBumper()
-      .onTrue(new InstantCommand(() -> m_claw.toggle()));
   }
 
   private void bind_LedModeTest() {
@@ -448,11 +545,6 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false)))
       .onFalse(new InstantCommand(() -> m_signalLEDs.setMode(LedMode.OFF, LedPreference.MAIN, false)));
 
-    m_codriverController.x()
-      .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCube()));
-
-    m_codriverController.y()
-      .toggleOnTrue(new InstantCommand(() -> m_claw.grabOrReleaseCone()));
   }
 
   private void bind_LedSubsystemTest() {
@@ -494,15 +586,20 @@ public class RobotContainer {
       return m_AutoChooser.getSelected();
   }
 
+  public void disabledInit() {
+    m_signalLEDs.setMode(LedMode.COLONELS, LedPreference.MAIN, true);
+  }
+
   public void autonomousInit() {
-    if (DriverStation.isFMSAttached()) {
+    // if (DriverStation.isFMSAttached()) {
       m_robotDrive.burnFlash();
       m_claw.burnFlash();
       // m_arm.burnFlash();
       m_armProfiled.burnFlash();
       m_telescope.burnFlash();
       m_groundIntake.burnFlash();
-    }
+    // }
+    m_signalLEDs.setMode(LedMode.ALLIANCE, LedPreference.MAIN, true);
   }
 
   private void toggleGamePiece() {
@@ -510,12 +607,22 @@ public class RobotContainer {
     setGamePiece(newGamePiece);
   }
 
+  private void setGamePieceCone() {
+    GamePiece newGamePiece = m_RobotTab.setGamePieceCone();
+    setGamePiece(newGamePiece);
+  }
+
+  private void setGamePieceCube() {
+    GamePiece newGamePiece = m_RobotTab.setGamePieceCube();
+    setGamePiece(newGamePiece);
+  }
+
   public void setGamePiece(OIConstants.GamePiece piece) {
     m_gamePiece = piece;
     if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false);
+      m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, true);
     } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false);
+      m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, true);
     }
     m_groundIntake.setGamePiece(piece);
     m_claw.setGamePiece(piece);

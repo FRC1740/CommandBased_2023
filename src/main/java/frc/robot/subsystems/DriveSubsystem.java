@@ -44,7 +44,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 // import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.filter.LinearFilter;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -113,7 +112,13 @@ public class DriveSubsystem extends SubsystemBase {
       m_DriveTrainTab = DriveTrainTab.getInstance();
       
       speedFilter = LinearFilter.movingAverage(30);
-      rotationFilter = LinearFilter.movingAverage(5);
+      rotationFilter = LinearFilter.movingAverage(3);
+  }
+
+  // Helper for calculations below
+  private double mapRange(double value, double low1, double high1, double low2, double high2) {
+    double x = Math.max(low1, Math.min(value, high1));
+    return low2 + (high2 - low2) * (x - low1) / (high1 - low1);
   }
 
   /**
@@ -124,11 +129,22 @@ public class DriveSubsystem extends SubsystemBase {
    */
   
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
+    // Implement Kyle's option 2 for rotation modification
+    // Motor voltages are the best proxy we have for velocity [-1, 1]
+    double velocity = (m_leftMotorLeader.get() - m_rightMotorLeader.get()) / 2.0;
+    double rotDeadzone = Math.abs(rot) < DriveConstants.kRotationDeadzone? 0.0 : 1.0;
+    double rotBoost = mapRange(Math.abs(velocity),
+      DriveConstants.kRotationVelocityLow, DriveConstants.kRotationVelocityHigh,
+      DriveConstants.kRotationBoostLow, DriveConstants.kRotationBoostHigh);
+    
     double f_fwd = speedFilter.calculate(fwd);
-    double f_rot = rotationFilter.calculate(rot);
+    double f_rot = rotationFilter.calculate(rot * rotBoost * rotDeadzone);
     m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
 
+  public void simpleArcadeDrive(double fwd, double rot, boolean squaredInput) {
+    m_drive.arcadeDrive(fwd, rot, squaredInput);
+  }
   /**
   *    * Controls the left and right sides of the drive directly with voltages.
   *
@@ -247,20 +263,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftEncoderFollower.setPosition(0.0);
   }
 
-  // Account for two encoders per side
-  public double getRightDistanceInches() {
-    return Units.metersToInches(getAverageRightEncoders());
-  }
-
-  public double getLeftDistanceInches() {
-    return Units.metersToInches(getAverageLeftEncoders());
-  }
-
-  // Used by AutoDriveDistance
-  public double getAverageDistanceInches() {
-    return ((getLeftDistanceInches() + getRightDistanceInches()) / 2.0);
-  }
-
   public double getAverageLeftEncoders() {
     return (m_leftEncoder.getPosition() + m_leftEncoderFollower.getPosition() ) / 2.0;
   }
@@ -268,18 +270,9 @@ public class DriveSubsystem extends SubsystemBase {
   public double getAverageRightEncoders() {
     return (m_rightEncoder.getPosition() + m_rightEncoderFollower.getPosition() ) / 2.0;
   }
-
-  public double getAverageEncoder(){
-    return m_rightEncoder.getPosition() + m_leftEncoder.getPosition() / 2;
-  }
-
-  // public void ResetEncoders() {
-  //   m_leftEncoder.setPosition(0);
-  //   m_rightEncoder.setPosition(0);
-  // }
-
   
   public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
+    m_DriveTrainTab.setTrajectory(trajectory);
     return new SequentialCommandGroup(
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
