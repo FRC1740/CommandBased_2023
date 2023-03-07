@@ -21,10 +21,12 @@ import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.Auto_RB_1;
+import frc.robot.commands.Auto_RB_1_Claw_Ready;
 import frc.robot.commands.Auto_RB_2;
 import frc.robot.commands.Auto_RB_2_Exit_Balance;
 import frc.robot.commands.Auto_RB_2_Pickup;
 import frc.robot.commands.Auto_RB_3;
+import frc.robot.commands.Auto_RB_3_Claw_Ready;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
@@ -226,18 +228,24 @@ public class RobotContainer {
       .onTrue(new Auto_RB_2_Exit_Balance());
 
     m_driverController.leftBumper()
-    .  onTrue(new Auto_RB_3());
+      .onTrue(new Auto_RB_3());
+  
+    m_driverController.x()
+      .onTrue(new Auto_RB_1_Claw_Ready());
 
-  }
+    m_driverController.rightStick()
+      .onTrue(new Auto_RB_3_Claw_Ready());
+
+      }
 
   // See the Robot Control documents for the spec
   private void bind_RC_ManualArm() {
     // ManualArmUpDown
-    // ManualArmExtendRetract
     m_codriverController.leftStick()
       .whileTrue(new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftY())))
       .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
 
+    // ManualArmExtendRetract
     m_codriverController.rightStick()
     .whileTrue(new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY())))
     .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
