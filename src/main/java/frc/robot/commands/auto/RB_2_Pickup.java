@@ -2,9 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.auto;
 
 import frc.robot.RobotShared;
+import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.DriveOnAndBalanceChargeStation;
 import frc.robot.commands.driver.AutoArmScoreHigh;
 import frc.robot.commands.driver.ArmStow;
 import frc.robot.commands.basic.ClawScore;
@@ -19,12 +21,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.util.Units;
 
 
-public class Auto_RB_2_Pickup extends SequentialCommandGroup {
+public class RB_2_Pickup extends SequentialCommandGroup {
 // import frc.robot.commands.basic.ClawScore;
   private DriveSubsystem m_drive;
   private RobotShared m_robotShared;
 
-  public Auto_RB_2_Pickup() {
+  public RB_2_Pickup() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
