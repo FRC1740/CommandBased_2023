@@ -7,7 +7,12 @@ package frc.robot.commands.auto;
 import frc.robot.RobotShared;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.TurnToAngleProfiled;
+<<<<<<< HEAD:src/main/java/frc/robot/commands/auto/RB_1.java
 import frc.robot.commands.basic.ClawScore;
+=======
+import frc.robot.commands.basic.*;
+import frc.robot.commands.driver.*;
+>>>>>>> b677542be353c1a3b7ee01d3be27ebd487798342:src/main/java/frc/robot/commands/Auto_RB_1.java
 import frc.robot.subsystems.DriveSubsystem;
 // import frc.robot.subsystems.*;
 
@@ -26,7 +31,9 @@ public class RB_1 extends SequentialCommandGroup {
     m_drive = m_robotShared.getDriveSubsystem();
 
     addCommands (
+      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
       new ClawScore(),
+      new ArmStow(),
       new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
       new TurnToAngleProfiled(13.217, m_drive),
       new DriveToDistance(Units.inchesToMeters(-57.35), m_drive)

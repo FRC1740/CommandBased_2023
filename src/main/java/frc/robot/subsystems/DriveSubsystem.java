@@ -85,6 +85,12 @@ public class DriveSubsystem extends SubsystemBase {
       m_leftMotorFollower.follow(m_leftMotorLeader);
       m_rightMotorFollower.follow(m_rightMotorLeader);
       
+      m_rightMotorLeader.setSmartCurrentLimit(50);
+      m_rightMotorFollower.setSmartCurrentLimit(50);
+      m_leftMotorLeader.setSmartCurrentLimit(50);
+      m_leftMotorFollower.setSmartCurrentLimit(50);
+
+
       m_leftEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_leftEncoderFollower.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
       m_rightEncoder.setPositionConversionFactor(DriveConstants.DRIVE_POSITION_CONVERSION_FACTOR);
@@ -105,8 +111,8 @@ public class DriveSubsystem extends SubsystemBase {
       m_PoseEstimator = new DifferentialDrivePoseEstimator(
         DriveConstants.kDriveKinematics, 
         getRotation2d(), 
-        0.0, 
-        0.0, 
+        getLeftEncoderMeters(), 
+        getRightEncoderMeters(), 
         new Pose2d());
 
       m_DriveTrainTab = DriveTrainTab.getInstance();
@@ -189,7 +195,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetPoseEstimation(Pose2d pose){
-    resetEncoders();
     m_PoseEstimator.resetPosition(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
 
@@ -219,7 +224,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   public Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(-m_gyro.getAngle());
+    return Rotation2d.fromDegrees(getHeading());
   }
 
   public DifferentialDriveKinematics getDriveKinematics(){
@@ -233,13 +238,14 @@ public class DriveSubsystem extends SubsystemBase {
   public double getRoll(){
     return m_gyro.getRoll();
   }
+  
   /**
    * Returns the heading of the robot.
    *
-   * @return the robot's heading in degrees, from 180 to 180
+   * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
+    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
@@ -277,7 +283,7 @@ public class DriveSubsystem extends SubsystemBase {
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
-          resetPoseEstimation(trajectory.getInitialPose());
+          this.resetPoseEstimation(trajectory.getInitialPose());
         }
       }),
       new PPRamseteCommand(

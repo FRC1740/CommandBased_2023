@@ -9,7 +9,12 @@ import frc.constants.ArmConstants.AutoMode;
 
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.TurnToAngleProfiled;
+<<<<<<< HEAD:src/main/java/frc/robot/commands/auto/RB_1_Claw_Ready.java
 import frc.robot.commands.basic.ClawScore;
+=======
+import frc.robot.commands.basic.*;
+import frc.robot.commands.driver.*;
+>>>>>>> b677542be353c1a3b7ee01d3be27ebd487798342:src/main/java/frc/robot/commands/Auto_RB_1_Claw_Ready.java
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 import frc.robot.subsystems.TelescopePIDSubsystem;
@@ -35,7 +40,9 @@ public class RB_1_Claw_Ready extends SequentialCommandGroup {
     m_telescope = m_robotShared.getTelescopePIDSubsystem();
 
     addCommands (
+      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
       new ClawScore(),
+      new ArmStow(),
       new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
       new TurnToAngleProfiled(-166.883, m_drive),
       new DriveToDistance(Units.inchesToMeters(20.0), m_drive),

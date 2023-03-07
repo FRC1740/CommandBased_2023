@@ -20,7 +20,7 @@ public class SequentialVisionAlign extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new InstantCommand(() -> m_LimeLight.enableVisionProcessing()),
-        new WaitUntilCommand(m_LimeLight.isVisionProcessing()),
+        new WaitUntilCommand(m_LimeLight::isVisionProcessing),
         new VisionAlign(drive, m_LimeLight)
     );
   }
