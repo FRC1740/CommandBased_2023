@@ -28,6 +28,7 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void initialize() {
     m_initialHeading = m_drive.getAngle();
+    // Goal = distance to travel + current position
     m_goal = m_meters + m_drive.getAverageEncoderMeters();
   }
 
@@ -49,6 +50,7 @@ public class DriveToDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // Eror = goal - current position
     double distanceDelta = m_goal - m_drive.getAverageEncoderMeters();
     return (Math.abs(distanceDelta) < AutoConstants.kAutoDriveToleranceMeters);
   }    

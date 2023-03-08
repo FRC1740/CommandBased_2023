@@ -17,8 +17,8 @@ public class AutoConstants {
     public static final double kMaxAccelerationMetersPerSSquared = 25; //Also somewhat random number
 
     public static final double kLevel = 0; //0 degrees is level
-    public static final double kBalanceToleranceDeg = 1.5;
-    public static final double kBalanceP = 0.006;//0.01
+    public static final double kBalanceToleranceDeg = 3.5; // 1.5;
+    public static final double kBalanceP = .01; //0.006; //0.01
     public static final double kBalanceI = 0;
     public static final double kBalanceD = 0;  
     
@@ -35,10 +35,10 @@ public class AutoConstants {
     public static final double kDriveToDistancePower       = 0.3; //power for drive to distance command
     public static final double kDriveToAprilTagPower       = 0.3; //power for drive to April tag command
 
-    public static final double kSubStationSideDriveDistance = -4.29;
+    // public static final double kSubStationSideDriveDistance = -4.29; // FIXME: Units? (Only Used by deprecated command)
 
     // Tolerances for Autonomous driving
-    public static final double kAutoDriveToleranceMeters = 0.05;
+    public static final double kAutoDriveToleranceMeters = 0.05; // About 2 inches
     public static final double kRollThresholdDegrees = 9.0;
     
 }
