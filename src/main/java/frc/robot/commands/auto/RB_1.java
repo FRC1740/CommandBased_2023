@@ -7,14 +7,9 @@ package frc.robot.commands.auto;
 import frc.robot.RobotShared;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.TurnToAngleProfiled;
-<<<<<<< HEAD:src/main/java/frc/robot/commands/auto/RB_1.java
-import frc.robot.commands.basic.ClawScore;
-=======
 import frc.robot.commands.basic.*;
 import frc.robot.commands.driver.*;
->>>>>>> b677542be353c1a3b7ee01d3be27ebd487798342:src/main/java/frc/robot/commands/Auto_RB_1.java
 import frc.robot.subsystems.DriveSubsystem;
-// import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
