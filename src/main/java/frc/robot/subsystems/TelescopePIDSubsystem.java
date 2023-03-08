@@ -32,15 +32,22 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
     
-    m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitPosition);
-    m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitPosition);
-    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    setSoftLimits(
+      ArmConstants.kMinSoftLimitPosition,
+      ArmConstants.kMaxSoftLimitPosition);
+      
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedPosition);
     
     m_ArmTab = ArmTab.getInstance();
     m_ArmTab.setArmExtension(getArmExtensionInches());
+  }
+
+  private void setSoftLimits(float minLimit, float maxLimit) {
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, maxLimit);
+    m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, minLimit);
+    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
   }
 
   @Override
@@ -72,6 +79,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   }
 
   public void manualTelescope(double analogInput) {
+    updateManualLimits();
     double adjustedSpeed = analogInput * ArmConstants.kArmExtendInputMultiplier;
     disable();
     if (Math.abs(analogInput) > ArmConstants.kArmExtendDeadzone) {
@@ -81,8 +89,22 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     }
   }
   
+  private void updateManualLimits() {
+    if(m_ArmTab.getArmAngle() <= ArmConstants.kArmRotateLowerDegrees) {
+      setSoftLimits(
+        ArmConstants.kArmExtendMinInches,
+        ArmConstants.kArmExtendUpperMaxInches);
+    }
+    else {
+      setSoftLimits(
+        ArmConstants.kArmExtendMinInches,
+        ArmConstants.kArmExtendLowerMaxInches);
+    }
+  }
+
   public void manualDone() {
     enable();
+    setSoftLimits(ArmConstants.kMinSoftLimitPosition, ArmConstants.kMaxSoftLimitPosition);
     setSetpoint(m_extensionEncoder.getPosition());
   }
 

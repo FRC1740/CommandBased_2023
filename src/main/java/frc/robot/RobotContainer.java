@@ -21,6 +21,7 @@ import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.auto.*;
+import frc.robot.commands.driver.ManualArmCombined;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.SubStationSideAuto;
@@ -237,13 +238,15 @@ public class RobotContainer {
   private void bind_RC_ManualArm() {
     // ManualArmUpDown
     m_codriverController.leftStick()
-      .whileTrue(new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftY())))
-      .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
+      .whileTrue(new ManualArmCombined(m_codriverController));
+      // .whileTrue(new RunCommand(() -> m_armProfiled.manualArmRotate(m_codriverController.getLeftY())))
+      // .onFalse(new InstantCommand(() -> m_armProfiled.manualDone()));
 
     // ManualArmExtendRetract
     m_codriverController.rightStick()
-    .whileTrue(new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY())))
-    .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
+      .whileTrue(new ManualArmCombined(m_codriverController));
+    // .whileTrue(new RunCommand(() -> m_telescope.manualTelescope(m_codriverController.getRightY())))
+    // .onFalse(new InstantCommand(() -> m_telescope.manualDone()));
 
     // ManualRollerOut
     new POVButton(m_codriverController.getHID(), 0)

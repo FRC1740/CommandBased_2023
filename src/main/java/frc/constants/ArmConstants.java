@@ -23,14 +23,17 @@ public class ArmConstants {
     public static final double ARM_EXTENSION_POSITION_CONVERSION_FACTOR = kArmExtensionOutputToInches/kArmExtensionGearRatio;
 
     // Manual limits and speeds
-    public static final double kArmExtendMaxInches    = 30.0;
-    public static final double kArmExtendMinInches    = 0.0;
+    public static final float kArmExtendUpperMaxInches    = 29.0f;
+    public static final float kArmExtendLowerMaxInches    = 0.0f;
+    public static final float kArmExtendMinInches    = 0.0f;
     public static final double kArmExtendManualSpeed  = 0.2;
     public static final double kArmExtendInputMultiplier = 0.3; //used to dampen joystick input
 
     public static final double kDumbAutoTelescopeSpeed = 0.2;
     public static final double kDumbAutoTelescopeDeadzone = 0.2;
 
+
+    public static final double kArmRotateLowerDegrees   = 90.0;
 
     public static final double kArmRotateMaxDegrees   = 129.0;
     public static final double kArmRotateMinDegrees   = 5;
