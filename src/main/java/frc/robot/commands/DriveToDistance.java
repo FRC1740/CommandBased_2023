@@ -12,12 +12,13 @@ public class DriveToDistance extends CommandBase {
   /** Creates a new DriveToDistance. */
   
   private final DriveSubsystem m_drive;
+  private double m_meters;
   private double m_goal;
   private double m_initialHeading;
 
   public DriveToDistance(double meters, DriveSubsystem drive) {
+    m_meters = meters;
     m_drive = drive;
-    m_goal = meters + m_drive.getAverageEncoderMeters();
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive);
@@ -27,6 +28,7 @@ public class DriveToDistance extends CommandBase {
   @Override
   public void initialize() {
     m_initialHeading = m_drive.getAngle();
+    m_goal = m_meters + m_drive.getAverageEncoderMeters();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
