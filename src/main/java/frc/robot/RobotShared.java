@@ -27,15 +27,15 @@ public class RobotShared {
     private static RobotShared instance;
 
     // The robot's subsystems and commands are defined here...
-    protected final DriveSubsystem m_robotDrive = new DriveSubsystem();
-    protected final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
-    protected final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
-    protected final ClawSubsystem m_claw = new ClawSubsystem();
+    protected DriveSubsystem m_robotDrive = null;
+    protected LimeLightSubsystem m_limelight = null;
+    protected PhotonVisionSubsystem m_photonVision = null;
+    protected ClawSubsystem m_claw = null;
     // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
-    protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
-    protected final TelescopePIDSubsystem m_telescope = new TelescopePIDSubsystem();
-    protected final GroundIntakeSubsystem m_groundIntake = new GroundIntakeSubsystem();
-    protected final SignalLEDSubsystem m_signalLEDs = new SignalLEDSubsystem();
+    protected ArmProfiledPIDSubsystem m_armProfiled = null;
+    protected TelescopePIDSubsystem m_telescope = null;
+    protected GroundIntakeSubsystem m_groundIntake = null;
+    protected SignalLEDSubsystem m_signalLEDs = null;
 
     protected final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     protected final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
@@ -56,34 +56,58 @@ public class RobotShared {
     }
 
     public DriveSubsystem getDriveSubsystem() {
+        if(m_robotDrive == null) {
+            m_robotDrive = new DriveSubsystem();
+        }
         return m_robotDrive;
     }
 
     public LimeLightSubsystem getLimeLightSubsystem() {
+        if(m_limelight == null) {
+            m_limelight = new LimeLightSubsystem();
+        }
         return m_limelight;
     }
 
     public PhotonVisionSubsystem getPhotonVisionSubsystem() {
+        if(m_photonVision == null) {
+            m_photonVision = new PhotonVisionSubsystem();
+        }
         return m_photonVision;
     }
 
     public ClawSubsystem getClawSubsystem() {
+        if(m_claw == null) {
+            m_claw = new ClawSubsystem();
+        }
         return m_claw;
     }
 
     public ArmProfiledPIDSubsystem getArmProfiledPIDSubsystem() {
+        if(m_armProfiled == null) {
+            m_armProfiled = new ArmProfiledPIDSubsystem();
+        }
         return m_armProfiled;
     }
 
     public TelescopePIDSubsystem getTelescopePIDSubsystem() {
+        if(m_telescope == null) {
+            m_telescope = new TelescopePIDSubsystem();
+        }
         return m_telescope;
     }
 
     public GroundIntakeSubsystem getGroundIntakeSubsystem() {
+        if(m_groundIntake == null) {
+            m_groundIntake = new GroundIntakeSubsystem();
+        }
         return m_groundIntake;
     }
 
     public SignalLEDSubsystem getSignalLEDSubsystem() {
+        if(m_signalLEDs == null) {
+            m_signalLEDs = new SignalLEDSubsystem();
+        }
         return m_signalLEDs;
     }
 
@@ -174,6 +198,9 @@ public class RobotShared {
       }
     
     public void setGamePiece(OIConstants.GamePiece piece) {
+        getSignalLEDSubsystem();
+        getGroundIntakeSubsystem();
+        getClawSubsystem();
         if (piece == OIConstants.GamePiece.CUBE) {
             m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false);
         } else if (piece == OIConstants.GamePiece.CONE) {

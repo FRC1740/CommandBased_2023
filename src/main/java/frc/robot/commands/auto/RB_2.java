@@ -27,7 +27,7 @@ public class RB_2 extends SequentialCommandGroup {
 
     addCommands (
       // new ClawScore(),
-      // new DriveToDistance(Units.inchesToMeters(-32.0), m_drive),
+      new DriveToDistance(Units.inchesToMeters(-30.0), m_drive),
       // new DriveOnAndBalanceChargeStation(false, m_drive)
       new AutoBalancePID(m_drive)
     );
