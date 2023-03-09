@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotShared;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -71,12 +73,13 @@ public class DriveSubsystem extends SubsystemBase {
     String StraightTrajectoryJSON = "output/Straight.wpilib.json";
     Trajectory Straight = new Trajectory();
 
-    PhotonVisionSubsystem m_PhotonVision = new PhotonVisionSubsystem(); // FIXME: We should NOT be instantiating a new subsystem here! RobotContainer does that. use getInstance()!!
-
     LinearFilter speedFilter;
     LinearFilter rotationFilter;
 
     private DriveTrainTab m_DriveTrainTab;
+
+    private RobotShared m_robotShared;
+    private PhotonVisionSubsystem m_PhotonVision;
     
     public DriveSubsystem() {
       m_rightMotorLeader.setInverted(false);
@@ -119,6 +122,9 @@ public class DriveSubsystem extends SubsystemBase {
       
       speedFilter = LinearFilter.movingAverage(30);
       rotationFilter = LinearFilter.movingAverage(3);
+
+      m_robotShared = RobotShared.getInstance();
+      m_PhotonVision = m_robotShared.getPhotonVisionSubsystem();
   }
 
   // Helper for calculations below
