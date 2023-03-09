@@ -239,6 +239,10 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getPitch();
   }
 
+  public double getRawGyroX(){
+    return m_gyro.getRawGyroX();
+  }
+
   public double getRoll(){
     return m_gyro.getRoll();
   }

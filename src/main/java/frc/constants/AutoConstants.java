@@ -41,4 +41,19 @@ public class AutoConstants {
     public static final double kAutoDriveToleranceMeters = 0.05; // About 2 inches
     public static final double kRollThresholdDegrees = 9.0;
     
+    // Simple Balance strategy - stop immediately when seeing a high rate of rotation
+    // While we are CLIMBING at ths drive motor power (adjust)
+    public static final double kSimpleBalanceClimbingPower = 0.4;
+    // We exceed this angle (something reasonable within 0-15 degrees)
+    public static final double kSimpleBalanceClimbThreshold = 9.0;
+    // For this number of cycles (maybe a second or two)
+    public static final double kSimpleBalanceClimbingCount = 1.5*50.0;
+    // Then we switch to CREEPING at this drive motor power (adjust)
+    public static final double kSimpleBalanceCreepingPower = 0.3;
+    // Counting the number of times we exceed this rotation rate (degrees/second)
+    public static final double kSimpleBalanceTippingRateThreshold = 10;
+    // When we reach this number, maybe for 100ms (5 cycles)
+    public static final double kSimpleBalanceTipppingCount = 5.;
+    // Then we can stop
+
 }
