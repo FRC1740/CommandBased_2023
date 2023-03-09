@@ -15,6 +15,7 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GroundIntakeSubsystem;
 import frc.robot.subsystems.LimeLightSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.SignalLEDSubsystem;
 import frc.robot.subsystems.SignalLEDSubsystem.LedMode;
 import frc.robot.subsystems.SignalLEDSubsystem.LedPreference;
@@ -28,7 +29,7 @@ public class RobotShared {
     // The robot's subsystems and commands are defined here...
     protected final DriveSubsystem m_robotDrive = new DriveSubsystem();
     protected final LimeLightSubsystem m_limelight = new LimeLightSubsystem();
-    //protected final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
+    protected final PhotonVisionSubsystem m_photonVision = new PhotonVisionSubsystem();
     protected final ClawSubsystem m_claw = new ClawSubsystem();
     // protected final ArmPIDSubsystem m_arm = new ArmPIDSubsystem();
     protected final ArmProfiledPIDSubsystem m_armProfiled = new ArmProfiledPIDSubsystem();
@@ -60,6 +61,10 @@ public class RobotShared {
 
     public LimeLightSubsystem getLimeLightSubsystem() {
         return m_limelight;
+    }
+
+    public PhotonVisionSubsystem getPhotonVisionSubsystem() {
+        return m_photonVision;
     }
 
     public ClawSubsystem getClawSubsystem() {

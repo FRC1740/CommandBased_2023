@@ -31,7 +31,7 @@ import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.TurnToAngleProfiled;
 
 import frc.robot.subsystems.LimeLightSubsystem;
-//import frc.robot.subsystems.PhotonVisionSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 // import frc.robot.subsystems.ArmPIDSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -66,7 +66,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private DriveSubsystem m_robotDrive;
   private LimeLightSubsystem m_limelight;
-  //private PhotonVisionSubsystem m_photonVision;
+  private PhotonVisionSubsystem m_photonVision;
   protected ClawSubsystem m_claw;
   // protected final ArmPIDSubsystem m_arm;
   protected ArmProfiledPIDSubsystem m_armProfiled;
@@ -151,6 +151,7 @@ public class RobotContainer {
 
     m_robotDrive = m_robotShared.getDriveSubsystem();
     m_limelight = m_robotShared.getLimeLightSubsystem();
+    m_photonVision = m_robotShared.getPhotonVisionSubsystem();
     m_claw = m_robotShared.getClawSubsystem();
     m_armProfiled = m_robotShared.getArmProfiledPIDSubsystem();
     m_telescope = m_robotShared.getTelescopePIDSubsystem();

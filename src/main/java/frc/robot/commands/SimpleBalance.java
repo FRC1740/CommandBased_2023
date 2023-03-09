@@ -79,6 +79,6 @@ public class SimpleBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((m_state == State.CLIMBING) && (m_count > AutoConstants.kSimpleBalanceTipppingCount));
+    return ((m_state == State.CREEPING) && (m_count > AutoConstants.kSimpleBalanceTipppingCount));
   }    
 }
