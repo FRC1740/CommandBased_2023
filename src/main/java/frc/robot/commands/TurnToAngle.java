@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj2.command.PIDCommand;
 
 /** A command that will turn the robot to the specified angle. */
 public class TurnToAngle extends PIDCommand {
+  DriveSubsystem m_drive;
+  double targetAngle;
+  double m_initialHeading;
   /**
    * Turns to robot to the specified angle.
    *
@@ -23,27 +26,26 @@ public class TurnToAngle extends PIDCommand {
     super(
         new PIDController(AutoConstants.kTurnP, AutoConstants.kTurnI, AutoConstants.kTurnD),
         // Close loop on heading
-        drive::getHeading,
+        drive::getAngle,
         // Set reference to target
-        targetAngleDegrees,
+        drive.getAngle() + targetAngleDegrees,
         // Pipe output to turn robot
-        output -> drive.arcadeDrive(0, output, false),
+        output -> drive.simpleArcadeDrive(0, output, false),
         // Require the drive
         drive);
 
     // Set the controller to be continuous (because it is an angle controller)
-    getController().enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(AutoConstants.kTurnToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
+      System.out.println("turn to anfle runniomng");
+
   }
 
   @Override
   public boolean isFinished() {
-    // End when the controller is at the reference.
-    // return getController().atSetpoint();
-    System.out.println("TurnToAngle is deprecated. Use TurnToAngleProfiled!");
-    return true;
+
+    return getController().atSetpoint();
   }
 }
