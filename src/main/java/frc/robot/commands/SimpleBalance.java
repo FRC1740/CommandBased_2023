@@ -25,7 +25,7 @@ public class SimpleBalance extends CommandBase {
 
   private enum State {
     CLIMBING,
-    CREEPING
+    TIPPING
   }
   private State m_state;
 
@@ -56,13 +56,13 @@ public class SimpleBalance extends CommandBase {
         m_count++;
         if (m_count > AutoConstants.kSimpleBalanceClimbingCount) {
           m_count = 0;
-          m_state = State.CREEPING;
+          m_state = State.TIPPING;
         }
       }
     }
-    else { // CREEPING
+    else { // TIPPING
       double pitchRate = m_drive.getRawGyroX(); // degrees/sec
-      m_drive.simpleArcadeDrive(m_direction * AutoConstants.kSimpleBalanceCreepingPower,
+      m_drive.simpleArcadeDrive(m_direction * AutoConstants.kSimpleBalanceTippingPower,
         AutoConstants.kAngleCorrectionP * angleDelta, false);
       if (Math.abs(pitchRate) > AutoConstants.kSimpleBalanceTippingRateThreshold) {
         m_count++;
@@ -79,6 +79,6 @@ public class SimpleBalance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((m_state == State.CREEPING) && (m_count > AutoConstants.kSimpleBalanceTipppingCount));
+    return ((m_state == State.TIPPING) && (m_count > AutoConstants.kSimpleBalanceTipppingCount));
   }    
 }
