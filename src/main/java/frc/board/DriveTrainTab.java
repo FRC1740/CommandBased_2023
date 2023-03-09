@@ -4,12 +4,17 @@
 
 package frc.board;
 
+import java.util.Map;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.constants.AutoConstants;
 import frc.constants.ShuffleboardConstants;
 
 /** Add your docs here. */
@@ -40,6 +45,14 @@ public class DriveTrainTab {
     GenericEntry m_nte_DriveSpeedFilter;
     GenericEntry m_nte_DriveRotationFilter;
 
+    GenericEntry m_nte_kPAutoBalance;
+    GenericEntry m_nte_kIAutoBalance;
+    GenericEntry m_nte_kDAutoBalance;
+
+    GenericEntry m_nte_kPTurnProfiled;
+    GenericEntry m_nte_kITurnProfiled;
+    GenericEntry m_nte_kDTurnProfiled;
+
     // Create widget for non-linear input
     GenericEntry m_nte_InputExponent;
 
@@ -47,6 +60,9 @@ public class DriveTrainTab {
 
     private DriveTrainTab() {
         initShuffleboardTab();
+        
+        // Comment the next line to persist the values on the robot across deploys and restarts
+        resetToDefault();
     }
 
     public static DriveTrainTab getInstance() {
@@ -54,6 +70,19 @@ public class DriveTrainTab {
             instance = new DriveTrainTab();
         }
         return instance;
+    }
+
+    private void resetToDefault() {
+        // Auto Balance PID
+        m_nte_kPAutoBalance.setDouble(AutoConstants.kBalanceP);
+        m_nte_kIAutoBalance.setDouble(AutoConstants.kBalanceI);
+        m_nte_kDAutoBalance.setDouble(AutoConstants.kBalanceD);
+    
+        // Turn Profiled PID
+        m_nte_kPTurnProfiled.setDouble(AutoConstants.kTurnP);
+        m_nte_kITurnProfiled.setDouble(AutoConstants.kTurnI);
+        m_nte_kDTurnProfiled.setDouble(AutoConstants.kTurnD);
+    
     }
 
     private void initShuffleboardTab() {
@@ -97,6 +126,65 @@ public class DriveTrainTab {
 
         m_sbt_DriveTrain.add(m_Field);
 
+        // Create widgets for PID Controllers
+        // Auto Balance
+        ShuffleboardLayout autoBalancePIDLayout = m_sbt_DriveTrain
+            .getLayout("Auto Balance PID", BuiltInLayouts.kList)
+            .withSize(2, 2)
+            .withPosition(8, 0)
+            .withProperties(Map.of("Number of columns", "2", "Label position", "LEFT"));
+            
+        m_nte_kPAutoBalance = autoBalancePIDLayout
+            .add("AutoBalance kP", AutoConstants.kBalanceP)
+            .getEntry();
+        m_nte_kIAutoBalance = autoBalancePIDLayout
+            .add("AutoBalance kI", AutoConstants.kBalanceI)
+            .getEntry();
+        m_nte_kDAutoBalance = autoBalancePIDLayout
+            .add("AutoBalance kD", AutoConstants.kBalanceD)
+            .getEntry();
+
+        // Turn Profiled
+        ShuffleboardLayout turnProfiledPIDLayout = m_sbt_DriveTrain
+            .getLayout("Turn Profiled PID", BuiltInLayouts.kList)
+            .withSize(2, 2)
+            .withPosition(8, 2)
+            .withProperties(Map.of("Number of columns", "2", "Label position", "LEFT"));
+ 
+        m_nte_kPTurnProfiled = turnProfiledPIDLayout
+            .add("TurnProfiled kP", AutoConstants.kTurnP)
+            .getEntry();
+        m_nte_kITurnProfiled = turnProfiledPIDLayout
+            .add("TurnProfiled kI", AutoConstants.kTurnI)
+            .getEntry();
+        m_nte_kDTurnProfiled = turnProfiledPIDLayout
+            .add("TurnProfiled kD", AutoConstants.kTurnD)
+            .getEntry();
+
+    }
+
+    public Double getAutoBalancekP() {
+        return m_nte_kPAutoBalance.getDouble(AutoConstants.kBalanceP);
+    }
+
+    public Double getAutoBalancekI() {
+        return m_nte_kIAutoBalance.getDouble(AutoConstants.kBalanceI);
+    }
+
+    public Double getAutoBalancekD() {
+        return m_nte_kDAutoBalance.getDouble(AutoConstants.kBalanceD);
+    }
+
+    public Double getTurnProfiledkP() {
+        return m_nte_kPTurnProfiled.getDouble(AutoConstants.kTurnP);
+    }
+
+    public Double getTurnProfiledkI() {
+        return m_nte_kITurnProfiled.getDouble(AutoConstants.kTurnI);
+    }
+
+    public Double getTurnProfiledkD() {
+        return m_nte_kDTurnProfiled.getDouble(AutoConstants.kTurnD);
     }
 
     public Double getDriveSpeedFilter() {

@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.board.DriveTrainTab;
 import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
@@ -13,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 /** A command that will turn the robot to the specified angle using a motion profile. */
 public class TurnToAngleProfiled extends ProfiledPIDCommand {
   private DriveSubsystem m_drive;
+  private DriveTrainTab m_driveTab;
 
   /**
    * Turns to robot to the specified angle using a motion profile.
@@ -46,12 +48,18 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
     getController()
         .setTolerance(AutoConstants.kTurnToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
         m_drive = drive;
+
+      m_driveTab = DriveTrainTab.getInstance();
   }
 
   @Override
   public void initialize() {
     super.initialize();
     m_drive.resetGyro();
+    getController().setPID(
+      m_driveTab.getTurnProfiledkP(),
+      m_driveTab.getTurnProfiledkI(),
+      m_driveTab.getTurnProfiledkD());
   }
 
   @Override

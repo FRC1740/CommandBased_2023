@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.board.DriveTrainTab;
 import frc.constants.AutoConstants;
 
 public class AutoBalancePID extends ProfiledPIDCommand {
@@ -17,6 +18,7 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   private DriveSubsystem m_drive;
   private double m_initialHeading;
   private static double m_headingDelta;
+  private DriveTrainTab m_driveTab;
 
   public AutoBalancePID(DriveSubsystem drive) {
     super(
@@ -45,6 +47,8 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     // Configure additional PID options by calling `getController` here.
     getController()
       .setTolerance(AutoConstants.kBalanceToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
+    
+    m_driveTab = DriveTrainTab.getInstance();
   }
 
   @Override
@@ -62,7 +66,11 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     }
   }
 
-  public void execute(){
+  public void execute() {
+    getController().setPID(
+      m_driveTab.getAutoBalancekP(),
+      m_driveTab.getAutoBalancekI(),
+      m_driveTab.getAutoBalancekD());
     super.execute();
     m_headingDelta = m_initialHeading - m_drive.getAngle();
   }
