@@ -47,13 +47,13 @@ public class AutoConstants {
     // We exceed this angle (something reasonable within 0-15 degrees)
     public static final double kSimpleBalanceClimbThreshold = 9.0;
     // For this number of cycles (maybe a second or two)
-    public static final double kSimpleBalanceClimbingCount = 1.5*50.0;
+    public static final int kSimpleBalanceClimbingCount = (int) (1.5 * 50.0);
     // Then we switch to CREEPING at this drive motor power (adjust)
-    public static final double kSimpleBalanceCreepingPower = 0.3;
+    public static final double kSimpleBalanceCreepingPower = 0.2;
     // Counting the number of times we exceed this rotation rate (degrees/second)
-    public static final double kSimpleBalanceTippingRateThreshold = 10;
+    public static final double kSimpleBalanceTippingRateThreshold = 10.0;
     // When we reach this number, maybe for 100ms (5 cycles)
-    public static final double kSimpleBalanceTipppingCount = 5.;
+    public static final int kSimpleBalanceTipppingCount = 5;
     // Then we can stop
 
 }
