@@ -8,6 +8,7 @@ import frc.robot.RobotShared;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.DriveOnAndBalanceChargeStation;
 import frc.robot.commands.basic.ClawScore;
+import frc.robot.commands.AutoBalancePID;
 import frc.robot.subsystems.DriveSubsystem;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -25,9 +26,10 @@ public class RB_2 extends SequentialCommandGroup {
     m_drive = m_robotShared.getDriveSubsystem();
 
     addCommands (
-      new ClawScore(),
-      new DriveToDistance(Units.inchesToMeters(-32.0), m_drive),
-      new DriveOnAndBalanceChargeStation(false, m_drive)
+      // new ClawScore(),
+      // new DriveToDistance(Units.inchesToMeters(-32.0), m_drive),
+      // new DriveOnAndBalanceChargeStation(false, m_drive)
+      new AutoBalancePID(m_drive)
     );
 
   }

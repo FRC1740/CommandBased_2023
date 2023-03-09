@@ -183,7 +183,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_DriveTrainTab.setLeftEncoder(getAverageLeftEncoders());
     m_DriveTrainTab.setRightEncoder(getAverageRightEncoders());
     m_DriveTrainTab.setIMU_ZAngle(getAngle());
-    m_DriveTrainTab.setIMU_PitchAngle(getRoll());
+    m_DriveTrainTab.setIMU_PitchAngle(getPitch());
   }
 
   public Pose2d getPose(){
@@ -233,6 +233,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void resetGyro() {
     m_gyro.reset();
+  }
+
+  public double getPitch(){
+    return m_gyro.getPitch();
   }
 
   public double getRoll(){

@@ -24,7 +24,7 @@ import frc.robot.commands.auto.*;
 import frc.robot.commands.driver.ManualArmCombined;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SequentialVisionAlign;
-import frc.robot.commands.SubStationSideAuto;
+// import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
 //import frc.robot.commands.RotateArmToAngle;

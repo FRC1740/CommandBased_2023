@@ -14,7 +14,6 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   /** Creates a new AutoBalancePID.
    * Assumes starting Roll is greater than the tolerance for atGoal()
    */
-  
   private DriveSubsystem m_drive;
   private double m_initialHeading;
   private static double m_headingDelta;
@@ -28,13 +27,13 @@ public class AutoBalancePID extends ProfiledPIDCommand {
             AutoConstants.kBalanceI,
             AutoConstants.kBalanceD,
             // The motion profile constraints
-            new TrapezoidProfile.Constraints(0, 0)),
+            new TrapezoidProfile.Constraints(999, 999)),
         // This should return the measurement
-        drive::getRoll,
+        drive::getPitch,
         // This should return the goal (can also be a constant)
         AutoConstants.kLevel,
         // This uses the output
-        (output, setpoint) -> drive.simpleArcadeDrive(-output, AutoConstants.kAngleCorrectionP * m_headingDelta, false),
+        (output, setpoint) -> drive.simpleArcadeDrive(output, AutoConstants.kAngleCorrectionP * m_headingDelta, false),
         drive
         );
 
@@ -57,8 +56,8 @@ public class AutoBalancePID extends ProfiledPIDCommand {
     super.initialize();
     m_headingDelta = 0;
     m_initialHeading = m_drive.getAngle();
-    if (m_drive.getRoll() < AutoConstants.kBalanceToleranceDeg) {
-      System.out.print("Starting assumption not met: Roll is " + m_drive.getRoll() +
+    if (m_drive.getPitch() < AutoConstants.kBalanceToleranceDeg) {
+      System.out.print("Starting assumption not met: Roll is " + m_drive.getPitch() +
         " Tolerance is " + AutoConstants.kBalanceToleranceDeg);
     }
   }
