@@ -60,9 +60,9 @@ public class SimpleBalance extends CommandBase {
         }
       }
     }
-    else { // TIPPING
+    else { // CREEPING
       double pitchRate = m_drive.getRawGyroX(); // degrees/sec
-      m_drive.simpleArcadeDrive(m_direction * AutoConstants.kSimpleBalanceTippingPower,
+      m_drive.simpleArcadeDrive(m_direction * AutoConstants.kSimpleBalanceCreepingPower,
         AutoConstants.kAngleCorrectionP * angleDelta, false);
       if (Math.abs(pitchRate) > AutoConstants.kSimpleBalanceTippingRateThreshold) {
         m_count++;
