@@ -6,13 +6,14 @@ package frc.board;
 
 import java.util.Map;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.RobotShared;
-import frc.robot.commands.AutoBalancePID;
-import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.commands.*;
+import frc.robot.commands.auto.*;
 
 /** Add your docs here. */
 public class CommandTab {
@@ -40,17 +41,41 @@ public class CommandTab {
         // Create and get reference to SB tab
         m_sbt_Command = Shuffleboard.getTab("Commands");
 
-        ShuffleboardLayout commandLayout = m_sbt_Command
-            .getLayout("Testable Commands", BuiltInLayouts.kList)
-            .withSize(2, 2)
-            .withPosition(1, 1)
+        initDriveLayout();
+        initAutoLayout();
+    }
+
+    private void initDriveLayout() {
+        ShuffleboardLayout driveCommandLayout = m_sbt_Command
+            .getLayout("Drive Commands", BuiltInLayouts.kList)
+            .withSize(3, 3)
+            .withPosition(0, 0)
             .withProperties(Map.of("Number of columns", "2", "Label position", "LEFT"));
             
-        commandLayout.add("Auto Balance", 
+        driveCommandLayout.add("Auto Balance", 
             new AutoBalancePID(m_robotShared.getDriveSubsystem()));
 
-        commandLayout.add("Turn 90 degrees", 
+        driveCommandLayout.add("Turn 90 degrees", 
             new TurnToAngleProfiled(90, m_robotShared.getDriveSubsystem()));
+
+        driveCommandLayout.add("Drive -30", 
+            new DriveToDistance(Units.inchesToMeters(-30), m_robotShared.getDriveSubsystem()));
+    }
+
+    private void initAutoLayout() {
+        ShuffleboardLayout autoCommandLayout = m_sbt_Command
+            .getLayout("Auto Commands", BuiltInLayouts.kList)
+            .withSize(3, 3)
+            .withPosition(3, 0)
+            .withProperties(Map.of("Number of columns", "2", "Label position", "LEFT"));
+        
+        autoCommandLayout.add("Station 1", new RB_1());
+        autoCommandLayout.add("Station 1 - Claw Ready", new RB_1_Claw_Ready());
+        autoCommandLayout.add("Station 2", new RB_2());
+        autoCommandLayout.add("Station 2 - Exit Balance", new RB_2_Exit_Balance());
+        autoCommandLayout.add("Station 2 - Pickup", new RB_2_Pickup());
+        autoCommandLayout.add("Station 3", new RB_3());
+        autoCommandLayout.add("Station 3 - Claw Ready", new RB_3_Claw_Ready());
     }
 
 }
