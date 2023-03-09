@@ -41,7 +41,6 @@ public class SimpleBalance extends CommandBase {
   @Override
   public void initialize() {
     m_state = State.CLIMBING;
-    m_direction = 0;
     m_initialHeading = m_drive.getAngle();
     m_count = 0;
   }
@@ -49,7 +48,6 @@ public class SimpleBalance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double rate = 0;
     double angleDelta = m_initialHeading - m_drive.getAngle();
     if (m_state == State.CLIMBING) {
       m_drive.simpleArcadeDrive(m_direction * AutoConstants.kSimpleBalanceClimbingPower,
@@ -63,10 +61,10 @@ public class SimpleBalance extends CommandBase {
       }
     }
     else { // CREEPING
-      double pitchRate = m_drive.getRawGyroX();
+      double pitchRate = m_drive.getRawGyroX(); // degrees/sec
       m_drive.simpleArcadeDrive(m_direction * AutoConstants.kSimpleBalanceCreepingPower,
         AutoConstants.kAngleCorrectionP * angleDelta, false);
-      if (pitchRate > AutoConstants.kSimpleBalanceTippingRateThreshold) {
+      if (Math.abs(pitchRate) > AutoConstants.kSimpleBalanceTippingRateThreshold) {
         m_count++;
       }
     }
