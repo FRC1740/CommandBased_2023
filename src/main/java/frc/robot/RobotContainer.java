@@ -95,21 +95,16 @@ public class RobotContainer {
   // private final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
   // ----------------------------------------------------------------------------------------------
   
-  SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
-
-  // auto command
-  // Note: The autocommand is dynamically retrieved in getAutonomousCommand.
-  // This member variable is currently unused
-  // private Command m_autoCommand = m_AutoChooser.getSelected();
-
   private OIConstants.GamePiece m_gamePiece = OIConstants.kDefaultGamePiece;
   private RobotTab m_RobotTab;
+  private AutonomousTab m_AutonomousTab;
 
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     initSubsystems();
     initShuffleboard();
+
     configureButtonBindings();
 
     // Configure default commands
@@ -122,28 +117,8 @@ public class RobotContainer {
         m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
         m_driverController.getLeftX(), false), m_robotDrive));
     
-    m_AutoChooser.addOption("curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("Curvy Path",
-        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
-          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
-          true));
-
-    m_AutoChooser.addOption("straight", m_robotDrive.FollowPath(PathPlanner.loadPath("Straight path",
-        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
-          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
-          true));
-
-    m_AutoChooser.addOption("Short Straight path", m_robotDrive.FollowPath(PathPlanner.loadPath("Short_Straight_Path",
-        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
-          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
-          true));
-
-    m_AutoChooser.addOption("more curvy path", m_robotDrive.FollowPath(PathPlanner.loadPath("more curvy path",
-        new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond,
-          DriveConstants.kMaxAccelerationMetersPerSecondSquared)),
-          true));
-
-    Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
-
+    // Set the starting game piece
+    m_AutonomousTab.setGamePiece(m_RobotTab.getGamePiece());
   }
 
   private void initSubsystems() {
@@ -166,7 +141,7 @@ public class RobotContainer {
   private void initShuffleboard() {
     m_RobotTab = RobotTab.getInstance();
     ArmTab.getInstance();
-    // AutonomousTab.getInstance();
+    m_AutonomousTab = AutonomousTab.getInstance();
     ClawTab.getInstance();
     DriveTrainTab.getInstance();
     GroundIntakeTab.getInstance();
@@ -585,7 +560,7 @@ public class RobotContainer {
 
   // Return the command to run in autonomous
   public Command getAutonomousCommand() {
-      return m_AutoChooser.getSelected();
+      return m_AutonomousTab.getAutonomousCommand();
   }
 
   public void disabledInit() {

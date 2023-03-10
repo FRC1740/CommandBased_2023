@@ -56,10 +56,6 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
   public void initialize() {
     super.initialize();
     m_drive.resetGyro();
-    getController().setPID(
-      m_driveTab.getTurnProfiledkP(),
-      m_driveTab.getTurnProfiledkI(),
-      m_driveTab.getTurnProfiledkD());
   }
 
   @Override

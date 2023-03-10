@@ -56,7 +56,7 @@ public class CommandTab {
             new AutoBalancePID(m_robotShared.getDriveSubsystem()));
 
         driveCommandLayout.add("Turn 90 degrees", 
-            new TurnToAngleProfiled(90, m_robotShared.getDriveSubsystem()));
+            new TurnToAngle(90, m_robotShared.getDriveSubsystem()));
 
         driveCommandLayout.add("Drive -30", 
             new DriveToDistance(Units.inchesToMeters(-30), m_robotShared.getDriveSubsystem()));
