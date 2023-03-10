@@ -5,14 +5,14 @@
 package frc.robot.commands.auto;
 
 import frc.robot.RobotShared;
-import frc.robot.commands.DriveToDistance;
-import frc.robot.commands.TurnToAngleProfiled;
+import frc.robot.commands.*;
 import frc.robot.commands.basic.*;
 import frc.robot.commands.driver.*;
 import frc.robot.subsystems.DriveSubsystem;
-
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.util.Units;
 
 
@@ -26,13 +26,29 @@ public class RB_1 extends SequentialCommandGroup {
     m_drive = m_robotShared.getDriveSubsystem();
 
     addCommands (
-      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new ClawScore(),
-      new ArmStow(),
-      new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
-      new TurnToAngleProfiled(13.217, m_drive),
-      new DriveToDistance(Units.inchesToMeters(-57.35), m_drive)
-    );
+      new PrintCommand(getName() + " Started"),
 
+      // Score the piece in the high position (Cube or Cone)
+      // and stow the arm
+      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
+      new WaitCommand(1),
+      new ParallelDeadlineGroup (
+        new WaitCommand(0.5),
+        new ClawScore()
+        // Automatically calls scoreDone at end
+      ),
+      new ParallelDeadlineGroup (
+        new WaitCommand(0.5),
+        new ArmStow()
+      ),
+
+      // Drive out of the community and park in front of piece
+      new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
+      new TurnToAngle(13.217, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-57.35), m_drive),
+
+      new PrintCommand(getName() + " Finished")
+    );
+      
   }
 }

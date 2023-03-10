@@ -107,7 +107,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   private void setMode(ClawMode newMode) {
     m_clawMode = newMode;
-    System.out.println(m_clawMode);
+    // System.out.println(m_clawMode);
     m_ClawTab.setClawMode(getModeString());
   }
 
