@@ -213,4 +213,7 @@ public class RobotShared {
         AutonomousTab.getInstance().setGamePiece(piece);
     }
     
+    public GamePiece getGamePiece() {
+        return m_robotTab.getGamePiece();
+    }
 }
