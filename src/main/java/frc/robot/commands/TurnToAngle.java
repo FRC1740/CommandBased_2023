@@ -30,7 +30,7 @@ public class TurnToAngle extends PIDCommand {
         // Close loop on heading
         drive::getAngle,
         // Set reference to target
-        drive.getAngle() + targetAngleDegrees,
+        targetAngleDegrees,
         // Pipe output to turn robot
         output -> drive.simpleArcadeDrive(0, output, false),
         // Require the drive
@@ -48,16 +48,15 @@ public class TurnToAngle extends PIDCommand {
   @Override
   public void initialize() {
     super.initialize();
+    m_drive.resetGyro();
     getController().setPID(
       m_driveTab.getTurnkP(),
       m_driveTab.getTurnkI(),
       m_driveTab.getTurnkD());
   }
 
-
   @Override
   public boolean isFinished() {
-
     return getController().atSetpoint();
   }
 }
