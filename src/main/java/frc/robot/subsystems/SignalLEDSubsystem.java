@@ -126,12 +126,12 @@ public class SignalLEDSubsystem extends SubsystemBase {
     // Create the strings, based on hardware
     if (m_hwConfig == LedHwConfig.OFF) return;
     if (m_hwConfig == LedHwConfig.SINGLE) {
-      System.out.println("Configure one string");
+      // System.out.println("Configure one string");
       m_hwStrings = new LedHwString[1];
       m_hwStrings[0] = new LedHwString(kLedPwmPortA, kLedLengthA);
     }
     else {
-      System.out.println("Configure two strings");
+      // System.out.println("Configure two strings");
       m_hwStrings = new LedHwString[2];
       m_hwStrings[0] = new LedHwString(kLedPwmPortA, kLedLengthA);
       m_hwStrings[1] = new LedHwString(kLedPwmPortB, kLedLengthB);
@@ -266,7 +266,7 @@ public void Countdown(LedHwString hwString) {
   }
 
   public void setMode(LedMode newMode, LedPreference preference, boolean background) {
-    System.out.println("Change LED mode to " + newMode);
+    // System.out.println("Change LED mode to " + newMode);
     LedHwString hwString;
   
     switch (m_hwConfig) {

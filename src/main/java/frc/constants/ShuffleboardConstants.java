@@ -7,9 +7,11 @@ package frc.constants;
 /** Add your docs here. */
 public class ShuffleboardConstants {
     public static final String RobotTab = "Robot";
+    public static final String AutonomousTabTab = "Autonomous";
     public static final String DriveTrainTab = "DriveTrain";
     public static final String ArmTab = "Arm";
     public static final String ClawTab = "Claw";
     public static final String GroundIntakeTab = "GroundIntake";
     public static final String VisionTab = "Vision";
+    public static final String CommandTab = "Command";
 }

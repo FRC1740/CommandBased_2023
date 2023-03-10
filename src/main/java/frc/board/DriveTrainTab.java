@@ -49,9 +49,9 @@ public class DriveTrainTab {
     GenericEntry m_nte_kIAutoBalance;
     GenericEntry m_nte_kDAutoBalance;
 
-    GenericEntry m_nte_kPTurnProfiled;
-    GenericEntry m_nte_kITurnProfiled;
-    GenericEntry m_nte_kDTurnProfiled;
+    GenericEntry m_nte_kPTurn;
+    GenericEntry m_nte_kITurn;
+    GenericEntry m_nte_kDTurn;
 
     // Create widget for non-linear input
     GenericEntry m_nte_InputExponent;
@@ -78,10 +78,10 @@ public class DriveTrainTab {
         m_nte_kIAutoBalance.setDouble(AutoConstants.kBalanceI);
         m_nte_kDAutoBalance.setDouble(AutoConstants.kBalanceD);
     
-        // Turn Profiled PID
-        m_nte_kPTurnProfiled.setDouble(AutoConstants.kTurnP);
-        m_nte_kITurnProfiled.setDouble(AutoConstants.kTurnI);
-        m_nte_kDTurnProfiled.setDouble(AutoConstants.kTurnD);
+        // Turn PID
+        m_nte_kPTurn.setDouble(AutoConstants.kTurnP);
+        m_nte_kITurn.setDouble(AutoConstants.kTurnI);
+        m_nte_kDTurn.setDouble(AutoConstants.kTurnD);
     
     }
 
@@ -145,20 +145,20 @@ public class DriveTrainTab {
             .getEntry();
 
         // Turn Profiled
-        ShuffleboardLayout turnProfiledPIDLayout = m_sbt_DriveTrain
-            .getLayout("Turn Profiled PID", BuiltInLayouts.kList)
+        ShuffleboardLayout turnPIDLayout = m_sbt_DriveTrain
+            .getLayout("Turn PID", BuiltInLayouts.kList)
             .withSize(2, 2)
             .withPosition(8, 2)
             .withProperties(Map.of("Number of columns", "2", "Label position", "LEFT"));
  
-        m_nte_kPTurnProfiled = turnProfiledPIDLayout
-            .add("TurnProfiled kP", AutoConstants.kTurnP)
+        m_nte_kPTurn = turnPIDLayout
+            .add("Turn kP", AutoConstants.kTurnP)
             .getEntry();
-        m_nte_kITurnProfiled = turnProfiledPIDLayout
-            .add("TurnProfiled kI", AutoConstants.kTurnI)
+        m_nte_kITurn = turnPIDLayout
+            .add("Turn kI", AutoConstants.kTurnI)
             .getEntry();
-        m_nte_kDTurnProfiled = turnProfiledPIDLayout
-            .add("TurnProfiled kD", AutoConstants.kTurnD)
+        m_nte_kDTurn = turnPIDLayout
+            .add("Turn kD", AutoConstants.kTurnD)
             .getEntry();
 
     }
@@ -175,16 +175,16 @@ public class DriveTrainTab {
         return m_nte_kDAutoBalance.getDouble(AutoConstants.kBalanceD);
     }
 
-    public Double getTurnProfiledkP() {
-        return m_nte_kPTurnProfiled.getDouble(AutoConstants.kTurnP);
+    public Double getTurnkP() {
+        return m_nte_kPTurn.getDouble(AutoConstants.kTurnP);
     }
 
-    public Double getTurnProfiledkI() {
-        return m_nte_kITurnProfiled.getDouble(AutoConstants.kTurnI);
+    public Double getTurnkI() {
+        return m_nte_kITurn.getDouble(AutoConstants.kTurnI);
     }
 
-    public Double getTurnProfiledkD() {
-        return m_nte_kDTurnProfiled.getDouble(AutoConstants.kTurnD);
+    public Double getTurnkD() {
+        return m_nte_kDTurn.getDouble(AutoConstants.kTurnD);
     }
 
     public Double getDriveSpeedFilter() {
