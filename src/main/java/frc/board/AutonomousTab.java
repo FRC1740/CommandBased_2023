@@ -4,25 +4,27 @@
 
 package frc.board;
 
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.auto.CurvyPath;
-import frc.robot.commands.auto.MoreCurvyPath;
-import frc.robot.commands.auto.ShortStraightPath;
-import frc.robot.commands.auto.StraightPath;
+import frc.constants.ShuffleboardConstants;
+import frc.constants.OIConstants.GamePiece;
+import frc.robot.commands.auto.*;
+import frc.robot.commands.driver.ToggleGamePiece;
 
 /** Add your docs here. */
 public class AutonomousTab {
 
-    SendableChooser<Command> m_AutoChooser = new SendableChooser<>();
+    private ShuffleboardTab m_sbt_Autonomous;
     
-    private static AutonomousTab instance;
+    private SendableChooser<Command> m_AutoChooser;
+    
+    private GenericEntry m_nte_GamePieceName;
 
-    // auto command
-    // Note: The autocommand is dynamically retrieved in getAutonomousCommand.
-    // This member variable is currently unused
-    // private Command m_autoCommand = m_AutoChooser.getSelected();
+    private static AutonomousTab instance;
 
     private AutonomousTab() {
         initShuffleboardTab();
@@ -36,16 +38,38 @@ public class AutonomousTab {
     }
 
     private void initShuffleboardTab() {
-        m_AutoChooser.addOption("curvy path", new CurvyPath());
-        m_AutoChooser.addOption("straight", new StraightPath());
-        m_AutoChooser.addOption("Short Straight path", new ShortStraightPath());
-        m_AutoChooser.addOption("more curvy path", new MoreCurvyPath());
+        m_sbt_Autonomous = Shuffleboard.getTab(ShuffleboardConstants.AutonomousTabTab);
+
+        m_AutoChooser = new SendableChooser<Command>();
+        m_AutoChooser.addOption("RB_1", new RB_1());
+        m_AutoChooser.addOption("RB_1_Claw_Ready", new RB_1_Claw_Ready());
+        m_AutoChooser.addOption("RB_2", new RB_2());
+        m_AutoChooser.addOption("RB_2_Exit_Balance", new RB_2_Exit_Balance());
+        m_AutoChooser.addOption("RB_2_Pickup", new RB_2_Pickup());
+        m_AutoChooser.addOption("RB_3", new RB_3());
+        m_AutoChooser.addOption("RB_3_Claw_Ready", new RB_3_Claw_Ready());
     
-        Shuffleboard.getTab("Autonomous").add(m_AutoChooser);
+        m_sbt_Autonomous.add("Autonomous Command", m_AutoChooser)
+            .withSize(2, 1)
+            .withPosition(0, 0);
+
+        m_nte_GamePieceName = m_sbt_Autonomous
+            .add("Current Game Piece", "")
+            .withSize(2, 1)
+            .withPosition(3, 0)
+            .getEntry();
+
+        m_sbt_Autonomous.add("Toggle Game Piece", new ToggleGamePiece())
+            .withSize(2, 1)
+            .withPosition(3, 1);
+        
     }
 
     public Command getAutonomousCommand() {
         return m_AutoChooser.getSelected();
     }
 
+    public void setGamePiece(GamePiece gamePiece) {
+        m_nte_GamePieceName.setString(gamePiece.name());
+    }
 }

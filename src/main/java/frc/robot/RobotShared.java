@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.board.ArmTab;
+import frc.board.AutonomousTab;
 import frc.board.RobotTab;
 import frc.constants.ArmConstants;
 import frc.constants.OIConstants;
@@ -42,7 +43,7 @@ public class RobotShared {
 
     private RobotTab m_robotTab;
     private ArmTab m_armTab;
-    
+
     private RobotShared() {
         m_robotTab = RobotTab.getInstance();
         m_armTab = ArmTab.getInstance();
@@ -198,16 +199,18 @@ public class RobotShared {
       }
     
     public void setGamePiece(OIConstants.GamePiece piece) {
-        getSignalLEDSubsystem();
-        getGroundIntakeSubsystem();
-        getClawSubsystem();
+        SignalLEDSubsystem signalLEDs = getSignalLEDSubsystem();
+        GroundIntakeSubsystem groundIntake = getGroundIntakeSubsystem();
+        ClawSubsystem claw = getClawSubsystem();
+
         if (piece == OIConstants.GamePiece.CUBE) {
-            m_signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false);
+            signalLEDs.setMode(LedMode.CUBE, LedPreference.MAIN, false);
         } else if (piece == OIConstants.GamePiece.CONE) {
-            m_signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false);
+            signalLEDs.setMode(LedMode.CONE, LedPreference.MAIN, false);
         }
-        m_groundIntake.setGamePiece(piece);
-        m_claw.setGamePiece(piece);
+        groundIntake.setGamePiece(piece);
+        claw.setGamePiece(piece);
+        AutonomousTab.getInstance().setGamePiece(piece);
     }
     
 }

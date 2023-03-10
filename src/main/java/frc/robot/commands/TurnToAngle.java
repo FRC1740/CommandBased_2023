@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import frc.board.DriveTrainTab;
 import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.PIDCommand;
@@ -16,6 +17,7 @@ public class TurnToAngle extends PIDCommand {
   DriveSubsystem m_drive;
   double targetAngle;
   double m_initialHeading;
+  private DriveTrainTab m_driveTab;
   /**
    * Turns to robot to the specified angle.
    *
@@ -39,9 +41,19 @@ public class TurnToAngle extends PIDCommand {
     // setpoint before it is considered as having reached the reference
     getController()
         .setTolerance(AutoConstants.kTurnToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
-      System.out.println("turn to anfle runniomng");
-
+    // System.out.println("turn to anfle runniomng");
+    m_driveTab = DriveTrainTab.getInstance();
   }
+
+  @Override
+  public void initialize() {
+    super.initialize();
+    getController().setPID(
+      m_driveTab.getTurnkP(),
+      m_driveTab.getTurnkI(),
+      m_driveTab.getTurnkD());
+  }
+
 
   @Override
   public boolean isFinished() {
