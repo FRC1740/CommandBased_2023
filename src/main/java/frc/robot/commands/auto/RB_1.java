@@ -44,8 +44,8 @@ public class RB_1 extends SequentialCommandGroup {
 
       // Drive out of the community and park in front of piece
       new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
-      new TurnToAngle(13.217, m_drive),
-      new DriveToDistance(Units.inchesToMeters(-57.35), m_drive),
+      new TurnToAngle(-166.783, m_drive), // 180 - 13.217 (We want the claw ready)
+      new DriveToDistance(Units.inchesToMeters(20), m_drive), // Was -57.35
 
       new PrintCommand(getName() + " Finished")
     );
