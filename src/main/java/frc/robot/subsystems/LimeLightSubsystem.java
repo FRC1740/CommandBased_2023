@@ -31,6 +31,7 @@ public class LimeLightSubsystem extends SubsystemBase {
   }
   public void enableDriverCamera(){
     m_LimeLightTable.setCamMode(1);
+    m_LimeLightTable.setLedMode(1);
   }
 
   public double getCamMode(){
@@ -47,8 +48,8 @@ public class LimeLightSubsystem extends SubsystemBase {
 
   //Returns true if Limelight is in vision processing mode
   public Boolean isVisionProcessing(){
-    Boolean camMode = m_LimeLightTable.getCamMode() == 0;
-    return camMode;
+    return m_LimeLightTable.getCamMode() == 0 && m_LimeLightTable.getLedMode() == 3;
+    
     
   }
   public void targetMidNode(){
