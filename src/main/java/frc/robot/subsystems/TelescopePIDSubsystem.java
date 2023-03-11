@@ -29,7 +29,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
           ArmConstants.extendDDefault));
 
     m_extensionEncoder = m_extensionMotor.getEncoder();
-    m_extensionEncoder.setPosition(ArmConstants.kStowedPosition);
+    m_extensionEncoder.setPosition(ArmConstants.kStartingPosition);
     m_extensionEncoder.setPositionConversionFactor(ArmConstants.ARM_EXTENSION_POSITION_CONVERSION_FACTOR);
     
     m_extensionMotor.setSoftLimit(SoftLimitDirection.kForward, ArmConstants.kMaxSoftLimitPosition);
