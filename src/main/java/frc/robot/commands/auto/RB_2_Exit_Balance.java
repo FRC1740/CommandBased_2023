@@ -33,7 +33,7 @@ public class RB_2_Exit_Balance extends SequentialCommandGroup {
       // Score the piece in the high position (Cube or Cone)
       // and stow the arm
       new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitCommand(1),
+      new WaitCommand(1.5),
       new ParallelDeadlineGroup (
         new WaitCommand(0.5),
         new ClawScore()
