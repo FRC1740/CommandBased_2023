@@ -55,6 +55,10 @@ public class ArmPIDSubsystem extends PIDSubsystem {
   public void periodic() {
     // WPILib Docs say to call the parent periodic method or PID will not work
     super.periodic();
+    getController().setPID(
+      m_ArmTab.getRotkP(), 
+      m_ArmTab.getRotkI(),
+      m_ArmTab.getRotkD());
     m_ArmTab.setArmAngle(getArmRotationDegrees());
   }
   @Override

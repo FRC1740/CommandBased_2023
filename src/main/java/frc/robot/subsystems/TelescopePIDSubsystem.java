@@ -46,6 +46,11 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   @Override
   public void periodic() {
     super.periodic();
+    getController().setPID(
+      m_ArmTab.getExtkP(), 
+      m_ArmTab.getExtkI(),
+      m_ArmTab.getExtkD());
+
     m_ArmTab.setArmExtension(getMeasurement());
   }
 
