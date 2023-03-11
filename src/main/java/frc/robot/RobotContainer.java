@@ -427,7 +427,7 @@ public class RobotContainer {
   }
 
   private void bind_Limelight() {
-    m_codriverController.leftBumper()
+    m_driverController.leftBumper()
       .onTrue(new SequentialVisionAlign(m_robotDrive, m_limelight));
   }
 
