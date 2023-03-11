@@ -43,6 +43,7 @@ public class TurnToAngle extends PIDCommand {
         .setTolerance(AutoConstants.kTurnToleranceDeg, AutoConstants.kTurnRateToleranceDegPerS);
     // System.out.println("turn to anfle runniomng");
     m_driveTab = DriveTrainTab.getInstance();
+    m_drive = drive;
   }
 
   @Override
