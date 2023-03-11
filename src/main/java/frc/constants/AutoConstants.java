@@ -32,7 +32,7 @@ public class AutoConstants {
     public static final double kAngleCorrectionP = .01; //coefficient for course correction in autoDrive commands
 
     public static final double kDriveToChargeStationPower  = 0.4; //power for drive to charge station command
-    public static final double kDriveToDistancePower       = 0.3; //power for drive to distance command
+    public static final double kDriveToDistancePower       = 0.5; //power for drive to distance command
     public static final double kDriveToAprilTagPower       = 0.3; //power for drive to April tag command
 
     // public static final double kSubStationSideDriveDistance = -4.29; // FIXME: Units? (Only Used by deprecated command)
