@@ -10,11 +10,11 @@ import frc.robot.subsystems.DriveSubsystem;
 
 public class DriveToChargeStation extends CommandBase {
   /** Creates a new DriveToChargeStation.
-   * Drives until Roll exceeds the Threshold (we are tilted)
+   * Drives until Pitch exceeds the Threshold (we are tilted)
   */
   
   private final DriveSubsystem m_drive;
-  private double m_initialRoll;
+  private double m_initialPitch;
   private double m_initialHeading;
   private double m_direction;
 
@@ -32,12 +32,13 @@ public class DriveToChargeStation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //  Consider setting m_initialRoll to 0 in case the command is started when already tilted
-    m_initialRoll = m_drive.getRoll();
+    //  Consider setting m_initialPitch to 0 in case the command is started when already tilted
+    // m_initialPitch = m_drive.getPitch();
+    m_initialPitch = 0;
     m_initialHeading = m_drive.getAngle();
-    if (Math.abs(m_initialRoll) > AutoConstants.kRollThresholdDegrees) {
-      System.out.print("Starting assumption not met: Roll is " + m_initialRoll +
-        " Threshold is " + AutoConstants.kRollThresholdDegrees);
+    if (Math.abs(m_initialPitch) > AutoConstants.kPitchThresholdDegrees) {
+      System.out.print("Starting assumption not met: Pitch is " + m_initialPitch +
+        " Threshold is " + AutoConstants.kPitchThresholdDegrees);
     }
   }
 
@@ -45,8 +46,8 @@ public class DriveToChargeStation extends CommandBase {
   @Override
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getAngle();
-    double rollDelta = m_drive.getRoll() - m_initialRoll;
-    m_drive.arcadeDrive(Math.signum(rollDelta) * AutoConstants.kDriveToChargeStationPower * m_direction,
+    double pitchDelta = m_drive.getPitch() - m_initialPitch;
+    m_drive.arcadeDrive(Math.signum(pitchDelta) * AutoConstants.kDriveToChargeStationPower * m_direction,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
@@ -59,7 +60,7 @@ public class DriveToChargeStation extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      double rollDelta = m_drive.getRoll() - m_initialRoll;
-      return (Math.abs(rollDelta) > AutoConstants.kRollThresholdDegrees);
+      double pitchDelta = m_drive.getPitch() - m_initialPitch;
+      return (Math.abs(pitchDelta) > AutoConstants.kPitchThresholdDegrees);
     }    
 }
