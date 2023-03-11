@@ -57,7 +57,7 @@ public class RB_3_Claw_Ready extends SequentialCommandGroup {
       // Drive out of the community and park in front of piece
       new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
       new TurnToAngle(166.883, m_drive),
-      new DriveToDistance(Units.inchesToMeters(20.0), m_drive),
+      // new DriveToDistance(Units.inchesToMeters(20.0), m_drive),
       
       // Position arm
       new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(AutoMode.FLOOR))),

@@ -46,6 +46,7 @@ public class RB_2 extends SequentialCommandGroup {
       new DriveToDistance(Units.inchesToMeters(-42.0), m_drive),
       // new DriveOnAndBalanceChargeStation(false, m_drive)
       new AutoBalancePID(m_drive),
+      // new SimpleBalance(false, m_drive),
 
       new PrintCommand(getName() + " Finished")
     );
