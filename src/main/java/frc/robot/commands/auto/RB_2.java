@@ -31,7 +31,7 @@ public class RB_2 extends SequentialCommandGroup {
       // Score the piece in the high position (Cube or Cone)
       // and stow the arm
       new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitCommand(1),
+      new WaitCommand(1.5),
       new ParallelDeadlineGroup (
         new WaitCommand(0.5),
         new ClawScore()
@@ -43,7 +43,7 @@ public class RB_2 extends SequentialCommandGroup {
       ),
 
       // Drive to the charge station and balance
-      new DriveToDistance(Units.inchesToMeters(-30.0), m_drive),
+      new DriveToDistance(Units.inchesToMeters(-42.0), m_drive),
       // new DriveOnAndBalanceChargeStation(false, m_drive)
       new AutoBalancePID(m_drive),
 
