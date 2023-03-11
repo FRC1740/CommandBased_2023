@@ -15,6 +15,7 @@ public class LimeLightSubsystem extends SubsystemBase {
 
   public LimeLightSubsystem() {
     m_LimeLightTable = LimeLightTable.getInstance();
+    enableDriverCamera();
   }
 
   public double getXdeviation(){
