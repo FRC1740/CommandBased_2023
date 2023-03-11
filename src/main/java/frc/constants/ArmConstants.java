@@ -38,10 +38,11 @@ public class ArmConstants {
     public static final double kArmRotateInputMultiplier = 0.2; //used to dampen joystick input
 
     // Auto limits and speeds
+    public static final double kStartingPosition      = 0.0f;
     public static final double kStowedAngle           = 5.0;
     public static final float kMinSoftLimitAngle      = 0;
     public static final float kMaxSoftLimitAngle      = 173;
-    public static final double kStowedPosition        = 0.0;
+    public static final double kStowedPosition        = 1.0;
     public static final float kMinSoftLimitPosition   = 0;
     public static final float kMaxSoftLimitPosition   = 30;
 
@@ -85,7 +86,7 @@ public class ArmConstants {
     public static final double rotateIDefault = 0.0;
     public static final double rotateDDefault = 0.039139*2*0;
 
-    public static final double extendPDefault = 0.08;
+    public static final double extendPDefault = 0.16; // Was .08. Tweaked for more speed
     public static final double extendIDefault = 0.002;//0.005
     public static final double extendDDefault = 0.0;
 
