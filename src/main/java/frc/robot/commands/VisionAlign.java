@@ -31,7 +31,7 @@ public class VisionAlign extends ProfiledPIDCommand {
         // This should return the goal (can also be a constant)
         0,
         // This uses the output
-        (output, setpoint) -> {drive.arcadeDrive(0, -output, false);
+        (output, setpoint) -> {drive.simpleArcadeDrive(0, -output, false);
           // Use the output (and setpoint, if desired) here
         });
     // Use addRequirements() here to declare subsystem dependencies.
@@ -44,7 +44,7 @@ public class VisionAlign extends ProfiledPIDCommand {
   @Override
   public void end(boolean interrupted) {
     super.end(interrupted);
-    m_LimeLight.enableDriverCamera();
+   
   }
 
   // Returns true when the command should end.
