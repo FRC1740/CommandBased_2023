@@ -13,29 +13,20 @@ public class ArmToSetpoint extends CommandBase {
 
   private ArmProfiledPIDSubsystem m_armProfiled;
   private RobotShared m_robotShared;
-  private Double m_setpoint;
+  private AutoMode m_mode;
 
   /** Creates a new ArmToSetpoint. */
   public ArmToSetpoint(AutoMode mode) {
+    m_mode = mode;
     m_robotShared = RobotShared.getInstance();
-    m_setpoint = m_robotShared.calculateArmSetpoint(mode);
     m_armProfiled = m_robotShared.getArmProfiledPIDSubsystem();
     addRequirements(m_armProfiled);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_armProfiled.setGoal(m_setpoint);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
+  public void initialize() {
+    m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(m_mode));
   }
 
   // Returns true when the command should end.
