@@ -31,7 +31,7 @@ public class RB_1 extends SequentialCommandGroup {
       // Score the piece in the high position (Cube or Cone)
       // and stow the arm
       new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitCommand(1.5),
+      new WaitCommand(2.5),
       new ParallelDeadlineGroup (
         new WaitCommand(0.5),
         new ClawScore()
@@ -43,9 +43,9 @@ public class RB_1 extends SequentialCommandGroup {
       ),
 
       // Drive out of the community and park in front of piece
-      new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
+      new DriveToDistance(Units.inchesToMeters(-155.875 * 8.45/10.71), m_drive), // FIXME: Change the gear ratio constant to 8.45
       new TurnToAngle(-166.783, m_drive), // 180 - 13.217 (We want the claw ready)
-      // new DriveToDistance(Units.inchesToMeters(20), m_drive), // Was -57.35
+      // new DriveToDistance(Units.inchesToMeters(20 * 8.45/10.71), m_drive), // FIXME: Change gear ratio 8.45
 
       new PrintCommand(getName() + " Finished")
     );
