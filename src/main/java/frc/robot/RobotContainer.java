@@ -175,6 +175,7 @@ public class RobotContainer {
     // bind_ArmAndTelescope();
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
+    bind_autoBalance();
 
     bind_RC_ManualArm();
     bind_RC_AutoArm();
@@ -301,8 +302,8 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()),
-        new WaitCommand(0.3),
         new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
+        new WaitCommand(0.3),
         new InstantCommand(() -> m_claw.setClawSpeed(0)),
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED)))
         
@@ -317,10 +318,10 @@ public class RobotContainer {
         ))
       .onFalse(new SequentialCommandGroup(
         new InstantCommand(() -> m_claw.hold()), 
+        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED))),
         new WaitCommand(0.3),
         new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_claw.setClawSpeed(0)),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
+        new InstantCommand(() -> m_claw.setClawSpeed(0))
         ));
   }
 
@@ -357,6 +358,11 @@ public class RobotContainer {
     m_driverController.b()
       .whileTrue(new RunCommand(() -> m_groundIntake.eject()))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
+  }
+
+  private void bind_autoBalance(){
+    m_driverController.rightBumper()
+      .whileTrue(new AutoBalancePID(m_robotDrive));
   }
 
   private void bind_POVTest() {

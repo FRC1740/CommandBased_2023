@@ -56,11 +56,11 @@ public class ArmConstants {
     }    
 
     // Cone
-    public static final double kConeHighAngle         = 82; // Was 77: Too high in practice match
-    public static final double kConeMidAngle          = 75;
+    public static final double kConeHighAngle         = 85; // Was 77: Too high in practice match
+    public static final double kConeMidAngle          = 78;
     public static final double kConeLowAngle          = 140;
     public static final double kConeShelfAngle        = 87;
-    public static final double kConeFloorAngle        = 173;
+    public static final double kConeFloorAngle        = 175;
 
     public static final double kConeHighPosition      = 28.5;
     public static final double kConeMidPosition       = 8.5;
