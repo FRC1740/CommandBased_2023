@@ -13,12 +13,12 @@ public class TelescopeToSetpoint extends CommandBase {
 
   private TelescopePIDSubsystem m_telescope;
   private RobotShared m_robotShared;
-  private Double m_setpoint;
+  private AutoMode m_mode;
 
   /** Creates a new TelescopeToSetpoint. */
   public TelescopeToSetpoint(AutoMode mode) {
+    m_mode = mode;
     m_robotShared = RobotShared.getInstance();
-    m_setpoint = m_robotShared.calculateTeleSetpoint(mode);
     m_telescope = m_robotShared.getTelescopePIDSubsystem();
 
     addRequirements(m_telescope);
@@ -26,17 +26,8 @@ public class TelescopeToSetpoint extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    m_telescope.setSetpoint(m_setpoint);
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
+  public void initialize() {
+    m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(m_mode));
   }
 
   // Returns true when the command should end.
