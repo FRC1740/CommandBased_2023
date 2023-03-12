@@ -43,7 +43,7 @@ public class RB_1 extends SequentialCommandGroup {
       ),
 
       // Drive out of the community and park in front of piece
-      new DriveToDistance(Units.inchesToMeters(-155.875 * 8.45/10.71), m_drive), // FIXME: Change the gear ratio constant to 8.45
+      new DriveToDistance(Units.inchesToMeters(-149.875 * 8.45/10.71), m_drive), // FIXME: Change the gear ratio constant to 8.45
       new TurnToAngle(-166.783, m_drive), // 180 - 13.217 (We want the claw ready)
       // new DriveToDistance(Units.inchesToMeters(20 * 8.45/10.71), m_drive), // FIXME: Change gear ratio 8.45
 
