@@ -4,7 +4,7 @@ import edu.wpi.first.math.util.Units; // Only needed for ConSparkMaX
 
 public class DriveConstants {
 
-    public static final double GEAR_RATIO = 10.71; // Neo rotates 10.71 times for one rotation of the output
+    public static final double GEAR_RATIO = 8.45; // Neo rotates 8.45 times for one rotation of the output
     public static final double WHEEL_DIAMETER_INCHES = 6.0; // Inches
     public static final double WHEEL_CIRCUMFERENCE_INCHES = WHEEL_DIAMETER_INCHES * Math.PI; // Abt 18.85 in.
     public static final double DRIVE_POSITION_CONVERSION_FACTOR = Units.inchesToMeters(WHEEL_CIRCUMFERENCE_INCHES)/GEAR_RATIO; //Encoder output in meters the robot travels
