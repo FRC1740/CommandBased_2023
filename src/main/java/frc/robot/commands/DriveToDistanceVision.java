@@ -21,9 +21,9 @@ public class DriveToDistanceVision extends CommandBase {
   private double m_direction;
   private double m_power;
 
-  public DriveToDistanceVision(double meters, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
+  public DriveToDistanceVision(double meters, Boolean driveForward, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
     m_meters = meters;
-    m_direction = Math.signum(meters);
+    m_direction = (driveForward) ? 1 : -1;
     m_power = power;
     m_drive = drive;
     m_vision = vision;
@@ -45,6 +45,7 @@ public class DriveToDistanceVision extends CommandBase {
   @Override
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getEstimatedVisionPose().getRotation().getDegrees();
+    //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
     m_drive.simpleArcadeDrive(m_direction * m_power,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
