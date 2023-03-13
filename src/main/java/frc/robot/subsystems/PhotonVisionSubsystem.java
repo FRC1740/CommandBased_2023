@@ -34,7 +34,7 @@ public class PhotonVisionSubsystem extends SubsystemBase {
   Transform3d robotToRearCam = new Transform3d(
     new Translation3d(Units.inchesToMeters(16), 0, 0), 
     new Rotation3d(0,0,0));
-  Transform3d robotToFrontCam = new Transform3d(new Translation3d(Units.inchesToMeters(14), 4, 10), new Rotation3d()); //Guess values for now
+  Transform3d robotToFrontCam = new Transform3d(new Translation3d(Units.inchesToMeters(14), Units.inchesToMeters(4), Units.inchesToMeters(10)), new Rotation3d()); //Guess values for now
 
   AprilTagFieldLayout m_aprilTagFieldLayout;
   PhotonPoseEstimator m_photonPoseEstimator;

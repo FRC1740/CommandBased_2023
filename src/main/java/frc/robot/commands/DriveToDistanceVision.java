@@ -19,10 +19,12 @@ public class DriveToDistanceVision extends CommandBase {
   private double m_initialHeading;
   private Pose2d m_initialPose;
   private double m_direction;
+  private double m_power;
 
-  public DriveToDistanceVision(double meters, Boolean driveForward, DriveSubsystem drive, PhotonVisionSubsystem vision) {
+  public DriveToDistanceVision(double meters, Boolean driveForward, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
     m_meters = meters;
     m_direction = (driveForward) ? 1 : -1;
+    m_power = power;
     m_drive = drive;
     m_vision = vision;
 
@@ -35,6 +37,7 @@ public class DriveToDistanceVision extends CommandBase {
   @Override
   public void initialize() {
     m_initialHeading = m_drive.getEstimatedVisionPose().getRotation().getDegrees();
+    m_initialPose = m_drive.getEstimatedVisionPose();
     // Goal = distance to travel + current position
     
   }
@@ -44,7 +47,7 @@ public class DriveToDistanceVision extends CommandBase {
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getEstimatedVisionPose().getRotation().getDegrees();
     //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
-    m_drive.simpleArcadeDrive(m_direction * AutoConstants.kDriveToDistancePower,
+    m_drive.simpleArcadeDrive(m_direction * m_power,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
