@@ -16,7 +16,7 @@ public class ArmConstants {
     public static final double ArmRotationKg = 0.23146;
     public static final double ArmRotationAngleOffset = 102.24;
     // Arm Extension Constants
-    public static final double kArmExtensionGearRatio = 12; //Gear box is 5x3, Sprockets 1/1 //Changing to 12:1 3/13/23
+    public static final double kArmExtensionGearRatio = 9; //Gear box is 5x3, Sprockets 1/1 //Changing to 12:1 3/13/23
     // One rotation of the output = 5 inches of extension
     public static final double kArmExtensionOutputToInches = Math.PI * 1.5;
     // Encoder output to inches of extension
