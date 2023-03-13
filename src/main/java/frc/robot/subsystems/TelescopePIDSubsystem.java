@@ -36,6 +36,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     m_extensionMotor.setSoftLimit(SoftLimitDirection.kReverse, ArmConstants.kMinSoftLimitPosition);
     m_extensionMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
     m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+
     // Initial setpoint for starting configuration (stowed, 0.0)
     setSetpoint(ArmConstants.kStowedPosition);
     
@@ -58,7 +59,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   public void useOutput(double output, double setpoint) {
     // Use the output here
     // setpoint may be useful for a feedforward adjustment
-    m_extensionMotor.set(output);
+    m_extensionMotor.set(output * 0.7);
   }
 
   @Override

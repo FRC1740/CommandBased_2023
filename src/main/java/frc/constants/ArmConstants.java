@@ -46,6 +46,8 @@ public class ArmConstants {
     public static final float kMinSoftLimitPosition   = 0;
     public static final float kMaxSoftLimitPosition   = 30;
 
+    public static final double kExtensionPowerScalar = 0.7;
+
     public enum AutoMode {
         HIGH,
         MID,
