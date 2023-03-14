@@ -16,14 +16,15 @@ public class DriveTowardsPose extends CommandBase {
   private final DriveSubsystem m_drive;
   private final PhotonVisionSubsystem m_vision;
   private double m_meters;
-  private double m_initialHeading;
   private Pose2d m_initialPose;
   private double m_direction;
   private Pose2d m_targetPose;
+  private double m_power;
 
-  public DriveTowardsPose(double meters, Boolean driveForward, Pose2d pose, DriveSubsystem drive, PhotonVisionSubsystem vision) {
+  public DriveTowardsPose(double meters, Boolean driveForward, double power, Pose2d pose, DriveSubsystem drive, PhotonVisionSubsystem vision) {
     m_meters = meters;
     m_direction = (driveForward) ? 1 : -1;
+    m_power = power;
     m_targetPose = pose;
     m_drive = drive;
     m_vision = vision;
@@ -37,7 +38,7 @@ public class DriveTowardsPose extends CommandBase {
   @Override
   public void initialize() {
     m_initialPose = m_drive.getEstimatedVisionPose();
-    m_initialHeading = m_initialPose.getRotation().getDegrees();
+    // m_initialHeading = m_initialPose.getRotation().getDegrees();
     // Goal = distance to travel + current position
     
   }
@@ -47,7 +48,7 @@ public class DriveTowardsPose extends CommandBase {
   public void execute() {
     double angleDelta = m_drive.getEstimatedVisionPose().getRotation().getDegrees() - m_initialPose.getRotation().plus(m_vision.getYawToPose(m_targetPose)).getDegrees();
     //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
-    m_drive.simpleArcadeDrive(m_direction * AutoConstants.kDriveToDistancePower,
+    m_drive.simpleArcadeDrive(m_direction * m_power,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
