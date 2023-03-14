@@ -34,7 +34,7 @@ public class RB_3 extends SequentialCommandGroup {
       new WaitCommand(2.5),
       new ParallelDeadlineGroup (
         new WaitCommand(0.5),
-        new ClawScore()
+        new DunkScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (

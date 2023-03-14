@@ -6,35 +6,31 @@ package frc.robot.commands.basic;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotShared;
-import frc.robot.subsystems.ClawSubsystem;
+import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 
-public class ClawScore extends CommandBase {
+public class ArmRotateRelative extends CommandBase {
 
-  private ClawSubsystem m_claw;
+  private ArmProfiledPIDSubsystem m_armProfiled;
   private RobotShared m_robotShared;
+  private double m_relativeDegrees;
 
-  /** Creates a new ClawScore. */
-  public ClawScore() {
+  /** Creates a new ArmRotateRelative. */
+  public ArmRotateRelative(double relativeDegrees) {
     m_robotShared = RobotShared.getInstance();
-    m_claw = m_robotShared.getClawSubsystem();
-    addRequirements(m_claw);
+    m_armProfiled = m_robotShared.getArmProfiledPIDSubsystem();
+    m_relativeDegrees = relativeDegrees;
+    addRequirements(m_armProfiled);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_claw.score();
-  }
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    m_claw.scoreDone();
+    m_armProfiled.setGoal(m_armProfiled.getArmRotationDegrees() + m_relativeDegrees);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

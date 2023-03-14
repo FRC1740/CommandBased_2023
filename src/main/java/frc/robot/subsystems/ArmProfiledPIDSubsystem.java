@@ -72,7 +72,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
                           m_ArmTab.getRotkD());
    }
   
-  private double getArmRotationDegrees() {  
+  public double getArmRotationDegrees() {  
     return getMeasurement();
   }
 

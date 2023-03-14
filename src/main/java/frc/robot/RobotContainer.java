@@ -22,6 +22,11 @@ import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.auto.*;
+import frc.robot.commands.driver.ArmStow;
+import frc.robot.commands.driver.AutoArmScoreHigh;
+import frc.robot.commands.driver.AutoArmScoreLow;
+import frc.robot.commands.driver.AutoArmScoreMedium;
+import frc.robot.commands.driver.DunkScore;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.SequentialVisionAlign;
 // import frc.robot.commands.SubStationSideAuto;
@@ -252,46 +257,60 @@ public class RobotContainer {
 
     // ArmScore 
     m_codriverController.leftTrigger()
-      .whileTrue(new RunCommand(() -> m_claw.score()))
+      .whileTrue(
+        // new RunCommand(() -> m_claw.score())
+        new DunkScore())
       .onFalse(new InstantCommand(() -> m_claw.scoreDone()));
   }
 
   private void bind_RC_AutoArm() {
     // AutoArmScoreHigh
     m_codriverController.x()
-      .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.HIGH))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.HIGH))),
-        new InstantCommand(() -> m_claw.hold())
-        ))
-      .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
-        ));
+      .onTrue(new AutoArmScoreHigh()
+        // new SequentialCommandGroup(
+        // new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.HIGH))),
+        // new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.HIGH))),
+        // new InstantCommand(() -> m_claw.hold())
+        // )
+        )
+      .onFalse(new ArmStow()
+        //  new SequentialCommandGroup(
+        //   new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        //   new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
+        // )
+        );
   
     // AutoArmScoreMedium
     m_codriverController.y()
-      .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.MID))),
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.MID))),
-        new InstantCommand(() -> m_claw.hold())
-        ))
-      .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
-        ));
+      .onTrue(new AutoArmScoreMedium()
+        // new SequentialCommandGroup(
+        // new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.MID))),
+        // new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.MID))),
+        // new InstantCommand(() -> m_claw.hold())
+        // )
+        )
+      .onFalse(new ArmStow()
+        // new SequentialCommandGroup(
+        // new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        // new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
+        // )
+        );
 
     // AutoArmScoreLow
     m_codriverController.b()
-      .onTrue(new SequentialCommandGroup(
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.LOW))),
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.LOW))),
-        new InstantCommand(() -> m_claw.hold())
-        ))
-      .onFalse(new SequentialCommandGroup(
-        new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
-        new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
-        ));
+      .onTrue(new AutoArmScoreLow()
+        // new SequentialCommandGroup(
+        // new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.LOW))),
+        // new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.LOW))),
+        // new InstantCommand(() -> m_claw.hold())
+        // )
+        )
+      .onFalse(new ArmStow()
+        // new SequentialCommandGroup(
+        // new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(ArmConstants.AutoMode.STOWED))),
+        // new InstantCommand(() -> m_armProfiled.setGoal(m_robotShared.calculateArmSetpoint(ArmConstants.AutoMode.STOWED)))
+        // )
+        );
 
     // AutoArmRetrieveMedium
     m_codriverController.rightBumper()

@@ -31,6 +31,7 @@ public class ArmTab {
     GenericEntry m_nte_ConeLowAngle;
     GenericEntry m_nte_ConeShelfAngle;
     GenericEntry m_nte_ConeFloorAngle;
+    GenericEntry m_nte_ConeDunkAngle;
 
     GenericEntry m_nte_ConeHighPosition;
     GenericEntry m_nte_ConeMidPosition;
@@ -44,6 +45,7 @@ public class ArmTab {
     GenericEntry m_nte_CubeLowAngle;
     GenericEntry m_nte_CubeShelfAngle;
     GenericEntry m_nte_CubeFloorAngle;
+    GenericEntry m_nte_CubeDunkAngle;
 
     GenericEntry m_nte_CubeHighPosition;
     GenericEntry m_nte_CubeMidPosition;
@@ -82,6 +84,7 @@ public class ArmTab {
         m_nte_ConeLowAngle.setDouble(ArmConstants.kConeLowAngle);
         m_nte_ConeShelfAngle.setDouble(ArmConstants.kConeShelfAngle);
         m_nte_ConeFloorAngle.setDouble(ArmConstants.kConeFloorAngle);
+        m_nte_ConeDunkAngle.setDouble(ArmConstants.kConeDunkAngle);
 
         // Cube Angles
         m_nte_CubeHighAngle.setDouble(ArmConstants.kCubeHighAngle);
@@ -89,6 +92,7 @@ public class ArmTab {
         m_nte_CubeLowAngle.setDouble(ArmConstants.kCubeLowAngle);
         m_nte_CubeShelfAngle.setDouble(ArmConstants.kCubeShelfAngle);
         m_nte_CubeFloorAngle.setDouble(ArmConstants.kCubeFloorAngle);
+        m_nte_CubeDunkAngle.setDouble(ArmConstants.kCubeDunkAngle);
 
         // Cone Extension
         m_nte_ConeHighPosition.setDouble(ArmConstants.kConeHighPosition);
@@ -150,6 +154,9 @@ public class ArmTab {
         m_nte_ConeFloorAngle = armAngleConeLayout
             .addPersistent("Cone Floor Angle", ArmConstants.kConeFloorAngle)
             .getEntry();
+        m_nte_ConeDunkAngle = armAngleConeLayout
+            .addPersistent("Cone Dunk Angle", ArmConstants.kConeDunkAngle)
+            .getEntry();
 
         // Cube
         ShuffleboardLayout armAngleCubeLayout = m_sbt_Arm
@@ -172,6 +179,9 @@ public class ArmTab {
             .getEntry();
         m_nte_CubeFloorAngle = armAngleCubeLayout
             .addPersistent("Cube Floor Angle", ArmConstants.kCubeFloorAngle)
+            .getEntry();
+        m_nte_CubeDunkAngle = armAngleCubeLayout
+            .addPersistent("Cube Dunk Angle", ArmConstants.kCubeDunkAngle)
             .getEntry();
  
         // Graph of Arm Extension
@@ -330,6 +340,10 @@ public class ArmTab {
         return m_nte_ConeFloorAngle.getDouble(ArmConstants.kConeFloorAngle);
     }
     
+    public Double getConeDunkAngle() {
+        return m_nte_ConeDunkAngle.getDouble(ArmConstants.kConeDunkAngle);
+    }
+    
     // Cube
     public Double getCubeHighAngle() {
         return m_nte_CubeHighAngle.getDouble(ArmConstants.kCubeHighAngle);
@@ -349,6 +363,10 @@ public class ArmTab {
 
     public Double getCubeFloorAngle() {
         return m_nte_CubeFloorAngle.getDouble(ArmConstants.kCubeFloorAngle);
+    }
+
+    public Double getCubeDunkAngle() {
+        return m_nte_CubeDunkAngle.getDouble(ArmConstants.kCubeDunkAngle);
     }
 
     // Getters for Arm position setpoints

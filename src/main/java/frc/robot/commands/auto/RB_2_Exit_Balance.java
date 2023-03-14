@@ -36,7 +36,7 @@ public class RB_2_Exit_Balance extends SequentialCommandGroup {
       new WaitCommand(1.5),
       new ParallelDeadlineGroup (
         new WaitCommand(0.5),
-        new ClawScore()
+        new DunkScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (
