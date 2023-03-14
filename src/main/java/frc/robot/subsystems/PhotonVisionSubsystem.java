@@ -74,6 +74,9 @@ public class PhotonVisionSubsystem extends SubsystemBase {
     return PhotonUtils.getYawToPose(getEstimatedVisionPose().get().estimatedPose.toPose2d(), pose);
   }
 
+  public double getYawToPoseDegrees(Pose2d pose){
+    return getYawToPose(pose).getDegrees();
+  }
   // public double getYawSpecificAprilTag(int ID){
   //   double IDs[] = new double[0];
   //   List<PhotonTrackedTarget> tags = m_camera.getLatestResult().getTargets();
