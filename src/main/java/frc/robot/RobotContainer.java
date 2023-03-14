@@ -23,6 +23,7 @@ import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.DriveToDistance;
+import frc.robot.commands.DriveToDistanceVision;
 import frc.robot.commands.SequentialVisionAlign;
 // import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
@@ -176,6 +177,7 @@ public class RobotContainer {
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
     bind_autoBalance();
+    bind_DriveToDistanceVision();
 
     bind_RC_ManualArm();
     bind_RC_AutoArm();
@@ -363,6 +365,11 @@ public class RobotContainer {
   private void bind_autoBalance(){
     m_driverController.rightBumper()
       .whileTrue(new AutoBalancePID(m_robotDrive));
+  }
+
+  private void bind_DriveToDistanceVision(){
+    m_driverController.rightStick()
+    .whileTrue(new DriveToDistanceVision(0.5, false, 0.2 ,m_robotDrive, m_photonVision));
   }
 
   private void bind_POVTest() {

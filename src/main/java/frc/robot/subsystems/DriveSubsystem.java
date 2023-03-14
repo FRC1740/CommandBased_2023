@@ -228,6 +228,10 @@ public class DriveSubsystem extends SubsystemBase {
     //System.out.println("gyro angle" + m_gyro.getAngle());
     return m_gyro.getAngle();
   }
+
+  public double getVisionAngle(){
+    return getEstimatedVisionPose().getRotation().getDegrees();
+  }
   
   public Rotation2d getRotation2d(){
     return Rotation2d.fromDegrees(getHeading());

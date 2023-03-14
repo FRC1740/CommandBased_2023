@@ -20,9 +20,7 @@ public class AutoArmRetrieveLow extends SequentialCommandGroup {
     addCommands(
       new ArmToSetpoint(ArmConstants.AutoMode.FLOOR),
       new TelescopeToSetpoint(ArmConstants.AutoMode.FLOOR),
-      new ClawRetrieve(),
-      new ClawWaitOnPiece(),
-      new ClawHold());
+      new ClawRetrieve());
   }
 
 }
