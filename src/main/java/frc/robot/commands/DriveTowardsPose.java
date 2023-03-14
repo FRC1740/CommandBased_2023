@@ -11,7 +11,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 
 public class DriveTowardsPose extends CommandBase {
-  /** Creates a new DriveToDistance. */
+  /** Creates a new DriveTowardsPose. */
   
   private final DriveSubsystem m_drive;
   private final PhotonVisionSubsystem m_vision;
@@ -21,16 +21,15 @@ public class DriveTowardsPose extends CommandBase {
   private double m_direction;
   private Pose2d m_targetPose;
 
-  public DriveTowardsPose(double meters, Boolean driveForward, double power, Pose2d targetPose, DriveSubsystem drive, PhotonVisionSubsystem vision) {
+  public DriveTowardsPose(double meters, double power, Pose2d targetPose, DriveSubsystem drive, PhotonVisionSubsystem vision) {
     m_meters = meters;
-    m_direction = (driveForward) ? 1 : -1;
+    m_direction = Math.signum(meters);
     m_targetPose = targetPose;
     m_drive = drive;
     m_vision = vision;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive, m_vision);
-
   }
 
   // Called when the command is initially scheduled.
@@ -38,14 +37,13 @@ public class DriveTowardsPose extends CommandBase {
   public void initialize() {
     m_initialPose = m_drive.getEstimatedVisionPose();
     // Goal = distance to travel + current position
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angleDelta = m_vision.getYawToPose(m_targetPose).getDegrees(); //m_drive.getEstimatedVisionPose().getRotation().getDegrees() - m_initialPose.getRotation().plus(m_vision.getYawToPose(m_targetPose)).getDegrees();
-    //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
+    double angleDelta = m_vision.getYawToPose(m_targetPose).getDegrees();
+    //m_drive.getEstimatedVisionPose().getRotation().getDegrees() - m_initialPose.getRotation().plus(m_vision.getYawToPose(m_targetPose)).getDegrees();
     m_drive.simpleArcadeDrive(m_direction * m_power,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }

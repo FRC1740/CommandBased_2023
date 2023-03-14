@@ -57,6 +57,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.DriverStation;
 
+import edu.wpi.first.math.util.Units;
+
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -369,7 +372,7 @@ public class RobotContainer {
 
   private void bind_DriveToDistanceVision(){
     m_driverController.rightStick()
-    .whileTrue(new DriveToDistanceVision(0.5, false, 0.2 ,m_robotDrive, m_photonVision));
+    .whileTrue(new DriveToDistanceVision(Units.inchesToMeters(-20.0), 0.2, m_robotDrive, m_photonVision));
   }
 
   private void bind_POVTest() {
