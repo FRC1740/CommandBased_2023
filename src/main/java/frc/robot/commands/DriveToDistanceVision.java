@@ -49,7 +49,7 @@ public class DriveToDistanceVision extends CommandBase {
     double angleDelta = m_initialHeading - m_drive.getEstimatedVisionPose().getRotation().getDegrees();
     //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
     m_drive.simpleArcadeDrive(m_direction * m_power,
-      AutoConstants.kAngleCorrectionP * angleDelta, false);
+      AutoConstants.kAngleCorrectionP * -angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
