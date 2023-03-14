@@ -193,6 +193,14 @@ public class RobotShared {
         }
     }
 
+    public double calculateRelativeArmSetpoint() {
+        GamePiece piece = m_robotTab.getGamePiece();
+        if (piece == OIConstants.GamePiece.CONE)
+            return m_armTab.getConeDunkAngle();
+        else
+            return m_armTab.getCubeDunkAngle();
+    }
+
     public void toggleGamePiece() {
         GamePiece newGamePiece = m_robotTab.toggleGamePiece();
         setGamePiece(newGamePiece);
