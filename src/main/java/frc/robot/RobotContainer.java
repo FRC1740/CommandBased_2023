@@ -391,7 +391,7 @@ public class RobotContainer {
 
   private void bind_DriveToDistanceVision(){
     m_driverController.rightStick()
-    .whileTrue(new DriveToDistanceVision(0.5, false, 0.2 ,m_robotDrive, m_photonVision));
+    .whileTrue(new RB_2_Exit_Balance_Vision());//(new DriveToDistanceVision(3.94, false, 0.2 ,m_robotDrive, m_photonVision));
   }
 
   private void bind_POVTest() {

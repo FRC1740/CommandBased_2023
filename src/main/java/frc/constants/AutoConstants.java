@@ -40,6 +40,9 @@ public class AutoConstants {
     // Tolerances for Autonomous driving
     public static final double kAutoDriveToleranceMeters = 0.05; // About 2 inches
     public static final double kPitchThresholdDegrees = 9.0;
+
+    //Field Width
+    public static final double kFieldWidthMeters = 8.02;
     
     // Simple Balance strategy - stop immediately when seeing a high rate of rotation
     // While we are CLIMBING at ths drive motor power (adjust)

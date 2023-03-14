@@ -11,6 +11,7 @@ import frc.robot.commands.driver.*;
 import frc.robot.commands.basic.*;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -32,8 +33,8 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
     m_drive = m_robotShared.getDriveSubsystem();
     m_photonVision = m_robotShared.getPhotonVisionSubsystem();
 
-    Pose2d gamePiecePose = new Pose2d(7.07, 2.13, new Rotation2d()); // for blue side
-    Pose2d returnBalancePose = new Pose2d(5.4, 2.13, new Rotation2d());
+    Pose2d gamePiecePose = new Pose2d(7.07, m_drive.getAdjustedYComponentOfPose(2.13), new Rotation2d()); // for blue side, rotation is zero because it shouldnt matter
+    Pose2d returnBalancePose = new Pose2d(5.4, m_drive.getAdjustedYComponentOfPose(2.13), new Rotation2d());
 
     addCommands (
       new PrintCommand(getName() + " Started"),
@@ -57,6 +58,7 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
 
       new TurnTowardsPose(gamePiecePose, m_drive, m_photonVision),
       // Prepare the arm to pickup a piece and drive to the piece
+      new InstantCommand(() -> m_robotShared.setGamePiece(piece)),
       new AutoArmRetrieveLow(),
       new DriveTowardsPose(Units.inchesToMeters(69.0), 0.3, gamePiecePose, m_drive, m_photonVision),
 

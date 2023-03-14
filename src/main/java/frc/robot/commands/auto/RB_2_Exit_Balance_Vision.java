@@ -34,21 +34,22 @@ public class RB_2_Exit_Balance_Vision extends SequentialCommandGroup {
 
       // Score the piece in the high position (Cube or Cone)
       // and stow the arm
-      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitCommand(1.5),
-      new ParallelDeadlineGroup (
-        new WaitCommand(0.5),
-        new ClawScore()
-        // Automatically calls scoreDone at end
-      ),
-      new ParallelDeadlineGroup (
-        new WaitCommand(0.5),
-        new ArmStow()
-      ),
+
+      // new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
+      // new WaitCommand(1.5),
+      // new ParallelDeadlineGroup (
+      //   new WaitCommand(0.5),
+      //   new ClawScore()
+      //   // Automatically calls scoreDone at end
+      // ),
+      // new ParallelDeadlineGroup (
+      //   new WaitCommand(0.5),
+      //   new ArmStow()
+      // ),
 
       // Drive over the charge station and exit the community
       new DriveToDistanceVision(3.94, false, 0.3, m_drive, m_photonVision),
-      new TurnToAngle(180, m_drive),
+      //new TurnToAngle(180, m_drive),
       new DriveToDistance(-1.3, m_drive),
       // Balance on the charge station
       new AutoBalancePID(m_drive),

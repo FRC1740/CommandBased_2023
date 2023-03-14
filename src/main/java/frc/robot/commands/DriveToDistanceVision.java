@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.constants.AutoConstants;
@@ -60,7 +62,7 @@ public class DriveToDistanceVision extends CommandBase {
   @Override
   public boolean isFinished() {
     // Eror = goal - current position
-    double distanceDelta = m_meters - m_vision.getDistanceToPose(m_initialPose);
+    double distanceDelta = m_meters - PhotonUtils.getDistanceToPose(m_drive.getEstimatedVisionPose(), m_initialPose);
     return (Math.abs(distanceDelta) < AutoConstants.kAutoDriveToleranceMeters);
   }    
 }

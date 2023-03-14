@@ -27,10 +27,13 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import frc.board.DriveTrainTab;
+import frc.constants.AutoConstants;
 import frc.constants.DriveConstants;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -386,5 +389,13 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftMotorFollower.burnFlash();
     m_rightMotorLeader.burnFlash();
     m_rightMotorFollower.burnFlash();
+  }
+
+  public double getAdjustedYComponentOfPose(double BlueYComponent){
+    if (DriverStation.getAlliance() == Alliance.Red){
+      return AutoConstants.kFieldWidthMeters - BlueYComponent;
+    } else {
+      return BlueYComponent;
+    }
   }
 }

@@ -19,7 +19,7 @@ public class ToggleGamePiece extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_robotShared.toggleGamePiece();;
+    m_robotShared.toggleGamePiece();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
