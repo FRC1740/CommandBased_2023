@@ -12,14 +12,17 @@ import frc.robot.commands.basic.ArmRotateRelative;
 import frc.robot.commands.basic.ClawScore;
 
 public class DunkScore extends SequentialCommandGroup {
-
+  private RobotShared m_robotShared;
+  
   /** Creates a new DunkScore. */
   public DunkScore() {
 
+    m_robotShared = RobotShared.getInstance();
+
     addCommands(
       new ParallelDeadlineGroup(
-        new WaitCommand(0.5),
-        new ArmRotateRelative(RobotShared.getInstance().calculateRelativeArmSetpoint())),
+        new WaitCommand(m_robotShared.calculateArmRotateRelativeDelay()),
+        new ArmRotateRelative(m_robotShared.calculateRelativeArmSetpoint())),
       new ClawScore());
   }
 
