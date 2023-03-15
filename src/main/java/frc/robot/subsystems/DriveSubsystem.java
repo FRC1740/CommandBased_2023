@@ -391,11 +391,11 @@ public class DriveSubsystem extends SubsystemBase {
     m_rightMotorFollower.burnFlash();
   }
 
-  public double getAdjustedYComponentOfPose(double BlueYComponent){
+  public Pose2d getAdjustedPose(Pose2d pose){
     if (DriverStation.getAlliance() == Alliance.Red){
-      return AutoConstants.kFieldWidthMeters - BlueYComponent;
+      return new Pose2d(AutoConstants.kFieldLengthMeters-pose.getX(),AutoConstants.kFieldWidthMeters - pose.getY(), pose.getRotation());
     } else {
-      return BlueYComponent;
+      return pose;
     }
   }
 }
