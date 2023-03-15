@@ -23,9 +23,9 @@ public class DriveToDistanceVision extends CommandBase {
   private double m_direction;
   private double m_power;
 
-  public DriveToDistanceVision(double meters, Boolean driveForward, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
+  public DriveToDistanceVision(double meters, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
     m_meters = meters;
-    m_direction = (driveForward) ? 1 : -1;
+    m_direction = Math.signum(meters);
     m_power = power;
     m_drive = drive;
     m_vision = vision;
@@ -40,16 +40,14 @@ public class DriveToDistanceVision extends CommandBase {
     m_initialHeading = m_drive.getEstimatedVisionPose().getRotation().getDegrees();
     m_initialPose = m_drive.getEstimatedVisionPose();
     // Goal = distance to travel + current position
-    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angleDelta = m_initialHeading - m_drive.getEstimatedVisionPose().getRotation().getDegrees();
-    //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
+    double angleDelta = m_drive.getEstimatedVisionPose().getRotation().getDegrees() - m_initialHeading;
     m_drive.simpleArcadeDrive(m_direction * m_power,
-      AutoConstants.kAngleCorrectionP * -angleDelta, false);
+      AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
@@ -61,7 +59,7 @@ public class DriveToDistanceVision extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // Eror = goal - current position
+    // Error = goal - current position
     double distanceDelta = m_meters - PhotonUtils.getDistanceToPose(m_drive.getEstimatedVisionPose(), m_initialPose);
     return (Math.abs(distanceDelta) < AutoConstants.kAutoDriveToleranceMeters);
   }    
