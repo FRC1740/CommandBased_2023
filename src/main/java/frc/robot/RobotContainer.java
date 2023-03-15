@@ -30,6 +30,7 @@ import frc.robot.commands.driver.DunkScore;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.DriveToDistanceVision;
 import frc.robot.commands.SequentialVisionAlign;
+import frc.robot.commands.TurnToAngle;
 // import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
 //import frc.robot.commands.DriveOnAndBalanceChargeStation;
@@ -185,7 +186,7 @@ public class RobotContainer {
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
     bind_autoBalance();
-    bind_DriveToDistanceVision();
+    bind_AutoTest1();
 
     bind_RC_ManualArm();
     bind_RC_AutoArm();
@@ -389,9 +390,9 @@ public class RobotContainer {
       .whileTrue(new AutoBalancePID(m_robotDrive));
   }
 
-  private void bind_DriveToDistanceVision(){
+  private void bind_AutoTest1(){
     m_driverController.rightStick()
-    .whileTrue(new TurnToAngleProfiled(90, m_robotDrive)); // (new DriveToDistanceVision(Units.InchesToMeters(-155.0), 0.2, m_robotDrive, m_photonVision));
+    .whileTrue(new TurnToAngle(180, m_robotDrive)); // (new DriveToDistanceVision(Units.InchesToMeters(-155.0), 0.2, m_robotDrive, m_photonVision));
   }
 
   private void bind_POVTest() {

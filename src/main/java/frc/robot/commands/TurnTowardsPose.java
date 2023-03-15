@@ -34,7 +34,7 @@ public class TurnTowardsPose extends PIDCommand {
         // Set reference to target
         0,
         // Pipe output to turn robot
-        output -> drive.simpleArcadeDrive(0, output, false),
+        output -> drive.simpleArcadeDrive(0, (Math.abs(output) > 0.5) ? 0.5 * Math.signum(output): output, false),
         // Require the drive
         drive);
 

@@ -7,8 +7,8 @@ public class AutoConstants {
     public static final double kStabilizationD = 0;
     //Less than .5 not .25 more than .01 .08 too high .0605 dead on
     public static final double kTurnP = 0.005;
-    public static final double kTurnI = 0.005;
-    public static final double kTurnD = 0.0;
+    public static final double kTurnI = 0.0005;
+    public static final double kTurnD = 0.0005;
 
     public static final double kMaxTurnRateDegPerS = 100;
     public static final double kMaxTurnAccelerationDegPerSSquared = 300;
@@ -26,7 +26,7 @@ public class AutoConstants {
     public static final double kAutoDriveI = 0;
     public static final double kAutoDriveD = 0;  
 
-    public static final double kTurnToleranceDeg = 5;
+    public static final double kTurnToleranceDeg = 10;
     public static final double kTurnRateToleranceDegPerS = 10; // degrees per second
 
     public static final double kAngleCorrectionP = .01; //coefficient for course correction in autoDrive commands
@@ -41,8 +41,9 @@ public class AutoConstants {
     public static final double kAutoDriveToleranceMeters = 0.05; // About 2 inches
     public static final double kPitchThresholdDegrees = 9.0;
 
-    //Field Width
+    //Field Width and Length
     public static final double kFieldWidthMeters = 8.02;
+    public static final double kFieldLengthMeters = 16.54;
     
     // Simple Balance strategy - stop immediately when seeing a high rate of rotation
     // While we are CLIMBING at ths drive motor power (adjust)
