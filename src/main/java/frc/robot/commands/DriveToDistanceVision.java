@@ -24,7 +24,7 @@ public class DriveToDistanceVision extends CommandBase {
   private double m_power;
 
   public DriveToDistanceVision(double meters, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
-    m_meters = meters;
+    m_meters = Math.abs(meters);
     m_direction = Math.signum(meters);
     m_power = power;
     m_drive = drive;

@@ -392,7 +392,7 @@ public class RobotContainer {
 
   private void bind_AutoTest1(){
     m_driverController.rightStick()
-    .whileTrue(new TurnToAngle(180, m_robotDrive)); // (new DriveToDistanceVision(Units.InchesToMeters(-155.0), 0.2, m_robotDrive, m_photonVision));
+    .whileTrue(new RB_2_Exit_Balance_Vision()); // (new DriveToDistanceVision(Units.InchesToMeters(-155.0), 0.2, m_robotDrive, m_photonVision));
   }
 
   private void bind_POVTest() {
