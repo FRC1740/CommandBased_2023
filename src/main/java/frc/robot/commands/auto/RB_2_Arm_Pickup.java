@@ -53,18 +53,18 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
       ),
 
       // Drive over the charge station and exit the community
-      new DriveToDistanceVision(Units.inchesToMeters(-155.0), 0.3, m_drive, m_photonVision),
+      new DriveToDistanceVision(Units.inchesToMeters(-155.0), false, 0.3, m_drive, m_photonVision),
 
       new TurnTowardsPose(gamePiecePose, m_drive, m_photonVision),
       // Prepare the arm to pickup a piece and drive to the piece
       new AutoArmRetrieveLow(),
-      new DriveTowardsPose(Units.inchesToMeters(69.0), 0.3, gamePiecePose, m_drive, m_photonVision),
+      new DriveTowardsPose(Units.inchesToMeters(69.0), true, 0.3, gamePiecePose, m_drive, m_photonVision),
 
       //stow the arm
       new ArmStow(),
 
       // return to the charge station and balance
-      new DriveTowardsPose(Units.inchesToMeters(-69.0), 0.5, returnBalancePose, m_drive, m_photonVision),
+      new DriveTowardsPose(Units.inchesToMeters(-69.0), false , 0.5, returnBalancePose, m_drive, m_photonVision),
       new DriveToDistance(Units.inchesToMeters(-40), m_drive),
       new AutoBalancePID(m_drive),
 

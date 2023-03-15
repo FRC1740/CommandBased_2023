@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.constants.AutoConstants;
@@ -21,9 +23,9 @@ public class DriveToDistanceVision extends CommandBase {
   private double m_direction;
   private double m_power;
 
-  public DriveToDistanceVision(double meters, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
+  public DriveToDistanceVision(double meters, Boolean driveForward, double power, DriveSubsystem drive, PhotonVisionSubsystem vision) {
     m_meters = meters;
-    m_direction = Math.signum(meters);
+    m_direction = (driveForward) ? 1 : -1;
     m_power = power;
     m_drive = drive;
     m_vision = vision;
@@ -45,8 +47,9 @@ public class DriveToDistanceVision extends CommandBase {
   @Override
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getEstimatedVisionPose().getRotation().getDegrees();
+    //double distanceDelta =  m_vision.getDistanceToPose(m_initialPose);
     m_drive.simpleArcadeDrive(m_direction * m_power,
-      AutoConstants.kAngleCorrectionP * angleDelta, false);
+      AutoConstants.kAngleCorrectionP * -angleDelta, false);
   }
 
   // Called once the command ends or is interrupted.
@@ -59,7 +62,7 @@ public class DriveToDistanceVision extends CommandBase {
   @Override
   public boolean isFinished() {
     // Eror = goal - current position
-    double distanceDelta = m_meters - m_vision.getDistanceToPose(m_initialPose);
+    double distanceDelta = m_meters - PhotonUtils.getDistanceToPose(m_drive.getEstimatedVisionPose(), m_initialPose);
     return (Math.abs(distanceDelta) < AutoConstants.kAutoDriveToleranceMeters);
   }    
 }

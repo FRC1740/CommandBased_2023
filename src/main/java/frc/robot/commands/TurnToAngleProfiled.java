@@ -33,7 +33,7 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
                 AutoConstants.kMaxTurnRateDegPerS,
                 AutoConstants.kMaxTurnAccelerationDegPerSSquared)),
         // Close loop on heading
-        drive::getHeading,
+        drive::getAngle,
         // Set reference to target
         targetAngleDegrees,
         // Pipe output to turn robot
@@ -42,7 +42,6 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
         drive);
 
     // Set the controller to be continuous (because it is an angle controller)
-    getController().enableContinuousInput(-180, 180);
     // Set the controller tolerance - the delta tolerance ensures the robot is stationary at the
     // setpoint before it is considered as having reached the reference
     getController()
@@ -56,6 +55,10 @@ public class TurnToAngleProfiled extends ProfiledPIDCommand {
   public void initialize() {
     super.initialize();
     m_drive.resetGyro();
+    getController().setPID(
+      m_driveTab.getTurnkP(),
+      m_driveTab.getTurnkI(),
+      m_driveTab.getTurnkD());
   }
 
   @Override

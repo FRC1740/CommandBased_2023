@@ -7,7 +7,7 @@ public class AutoConstants {
     public static final double kStabilizationD = 0;
     //Less than .5 not .25 more than .01 .08 too high .0605 dead on
     public static final double kTurnP = 0.005;
-    public static final double kTurnI = 0.00;
+    public static final double kTurnI = 0.005;
     public static final double kTurnD = 0.0;
 
     public static final double kMaxTurnRateDegPerS = 100;
@@ -40,6 +40,9 @@ public class AutoConstants {
     // Tolerances for Autonomous driving
     public static final double kAutoDriveToleranceMeters = 0.05; // About 2 inches
     public static final double kPitchThresholdDegrees = 9.0;
+
+    //Field Width
+    public static final double kFieldWidthMeters = 8.02;
     
     // Simple Balance strategy - stop immediately when seeing a high rate of rotation
     // While we are CLIMBING at ths drive motor power (adjust)
