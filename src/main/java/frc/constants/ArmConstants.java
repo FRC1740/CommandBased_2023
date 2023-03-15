@@ -38,7 +38,7 @@ public class ArmConstants {
     public static final double kArmRotateInputMultiplier = 0.2; //used to dampen joystick input
 
     // Auto limits and speeds
-    public static final double kStartingPosition      = 0.0f;
+    public static final double kStartingPosition      = 0.0;
     public static final double kStowedAngle           = 5.0;
     public static final float kMinSoftLimitAngle      = 0;
     public static final float kMaxSoftLimitAngle      = 173;
@@ -58,14 +58,14 @@ public class ArmConstants {
     }    
 
     // Cone
-    public static final double kConeHighAngle         = 85; // Was 77: Too high in practice match
+    public static final double kConeHighAngle         = 77; // Was 77: Too high in practice match
     public static final double kConeMidAngle          = 78;
     public static final double kConeLowAngle          = 140;
     public static final double kConeShelfAngle        = 87;
-    public static final double kConeFloorAngle        = 175;
+    public static final double kConeFloorAngle        = 165;
     public static final double kConeDunkAngle         = 5;
 
-    public static final double kConeHighPosition      = 28.5;
+    public static final double kConeHighPosition      = 27.5;
     public static final double kConeMidPosition       = 8.5;
     public static final double kConeLowPosition       = 0;
     public static final double kConeShelfPosition     = 7.5;

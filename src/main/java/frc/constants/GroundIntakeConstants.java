@@ -15,7 +15,7 @@ public class GroundIntakeConstants {
     public static final double kConeIntakeSpeed  = 0.9;
     public static final double kConeEjectSpeed   = -0.3;
     public static final double kCubeIntakeSpeed  = -0.5;
-    public static final double kCubeEjectSpeed   = 0.3;
+    public static final double kCubeEjectSpeed   = 1;//0.3;
     public static final double kConeGraspSpeed   =  kConeIntakeSpeed;
     public static final double kCubeGraspSpeed   =  kCubeIntakeSpeed;
 
