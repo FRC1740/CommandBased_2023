@@ -30,14 +30,21 @@ public class RobotTab {
 
     private RobotTab() {
         initShuffleboardTab();
-        setGamePiece(GamePiece.CUBE);
+        resetToDefault();
     }
-
+    
     public static RobotTab getInstance() {
         if(instance == null) {
             instance = new RobotTab();
         }
         return instance;
+    }
+    
+    private void resetToDefault() {
+        setBuildComputer(RobotProperties.getComputer());
+        setBuildTime(RobotProperties.getTime());
+        
+        setGamePiece(GamePiece.CUBE);
     }
 
     private void initShuffleboardTab() {
