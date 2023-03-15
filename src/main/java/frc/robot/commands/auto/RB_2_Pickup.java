@@ -4,6 +4,7 @@
 
 package frc.robot.commands.auto;
 
+import frc.constants.ArmConstants;
 import frc.robot.RobotShared;
 import frc.robot.commands.*;
 import frc.robot.commands.driver.*;
@@ -34,14 +35,14 @@ public class RB_2_Pickup extends SequentialCommandGroup {
       // Score the piece in the high position (Cube or Cone)
       // and stow the arm
       new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitCommand(1.5),
+      new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
-        new WaitCommand(0.5),
+        new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
         new DunkScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (
-        new WaitCommand(0.5),
+        new WaitCommand(ArmConstants.kArmStowDelay),
         new ArmStow()
       ),
 

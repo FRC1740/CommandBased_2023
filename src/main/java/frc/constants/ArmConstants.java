@@ -104,4 +104,16 @@ public class ArmConstants {
     public static final double kArmExtendTolerance = 1;
     public static final double kArmRotateTolerance = 5;
 
+    // Arm Auto Delays
+    public static final double kAutoArmScoreConeDelay = 1.5;
+    public static final double kAutoArmScoreCubeDelay = 1.5;
+            
+    public static final double kArmRotateRelativeConeDelay = 0.5;
+    public static final double kArmRotateRelativeCubeDelay = 0.5;
+
+    public static final double kDunkScoreConeDelay = 0.5;
+    public static final double kDunkScoreCubeDelay = 0.5;
+
+    public static final double kArmStowDelay = 0.5;
+
 }

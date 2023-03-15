@@ -201,6 +201,30 @@ public class RobotShared {
             return m_armTab.getCubeDunkAngle();
     }
 
+    public double calculateAutoArmScoreDelay() {
+        GamePiece piece = m_robotTab.getGamePiece();
+        if (piece == OIConstants.GamePiece.CONE)
+            return ArmConstants.kAutoArmScoreConeDelay;
+        else
+            return ArmConstants.kAutoArmScoreCubeDelay;
+    }
+
+    public double calculateArmRotateRelativeDelay() {
+        GamePiece piece = m_robotTab.getGamePiece();
+        if (piece == OIConstants.GamePiece.CONE)
+            return ArmConstants.kArmRotateRelativeConeDelay;
+        else
+            return ArmConstants.kArmRotateRelativeCubeDelay;
+    }
+
+    public double calculateDunkScoreDelay() {
+        GamePiece piece = m_robotTab.getGamePiece();
+        if (piece == OIConstants.GamePiece.CONE)
+            return ArmConstants.kDunkScoreConeDelay;
+        else
+            return ArmConstants.kDunkScoreCubeDelay;
+    }
+
     public void toggleGamePiece() {
         GamePiece newGamePiece = m_robotTab.toggleGamePiece();
         setGamePiece(newGamePiece);
