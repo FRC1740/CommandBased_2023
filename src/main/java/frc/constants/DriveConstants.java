@@ -56,4 +56,7 @@ public class DriveConstants {
     // Ignore filtering of forward input at low speed
     public static final double kMinVelocityForFilter  = 0.2;
 
+    public static final double kDrivePositiveRateLimit = 0.3;
+    public static final double kDriveNegativeRateLimit = 0.2;
+
 }

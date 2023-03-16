@@ -50,6 +50,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 // import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.filter.LinearFilter;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 
 public class DriveSubsystem extends SubsystemBase {
   /** Creates a new Drivetrain. */
@@ -76,8 +77,9 @@ public class DriveSubsystem extends SubsystemBase {
     String StraightTrajectoryJSON = "output/Straight.wpilib.json";
     Trajectory Straight = new Trajectory();
 
-    LinearFilter speedFilter;
+    // LinearFilter speedFilter;
     LinearFilter rotationFilter;
+    SlewRateLimiter speedLimiter;
 
     private DriveTrainTab m_DriveTrainTab;
 
@@ -123,8 +125,10 @@ public class DriveSubsystem extends SubsystemBase {
 
       m_DriveTrainTab = DriveTrainTab.getInstance();
       
-      speedFilter = LinearFilter.movingAverage(10);
+      // speedFilter = LinearFilter.movingAverage(10);
       rotationFilter = LinearFilter.movingAverage(3);
+      speedLimiter = new SlewRateLimiter(DriveConstants.kDrivePositiveRateLimit,
+          DriveConstants.kDriveNegativeRateLimit, 0);
 
       m_robotShared = RobotShared.getInstance();
       m_PhotonVision = m_robotShared.getPhotonVisionSubsystem();
@@ -152,11 +156,12 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRotationVelocityLow, DriveConstants.kRotationVelocityHigh,
       DriveConstants.kRotationBoostLow, DriveConstants.kRotationBoostHigh);
     
-    double f_fwd = speedFilter.calculate(fwd);
+    // double f_fwd = speedFilter.calculate(fwd);
     // Ignore filtering of input at low speeds
     // if (Math.abs(velocity) < DriveConstants.kMinVelocityForFilter) {
     //   f_fwd = fwd;
     // }
+    double f_fwd = speedLimiter.calculate(fwd);
     double f_rot = rotationFilter.calculate(rot * rotBoost * rotDeadzone);
     m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
