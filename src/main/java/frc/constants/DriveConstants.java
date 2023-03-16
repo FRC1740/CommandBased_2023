@@ -53,4 +53,7 @@ public class DriveConstants {
     public static final double kRotationBoostLow      = 0.40;
     public static final double kRotationBoostHigh     = 1.0;
 
+    // Ignore filtering of forward input at low speed
+    public static final double kMinVelocityForFilter  = 0.2;
+
 }
