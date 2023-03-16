@@ -153,6 +153,10 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRotationBoostLow, DriveConstants.kRotationBoostHigh);
     
     double f_fwd = speedFilter.calculate(fwd);
+    // Ignore filtering of input at low speeds
+    // if (Math.abs(velocity) < DriveConstants.kMinVelocityForFilter) {
+    //   f_fwd = fwd;
+    // }
     double f_rot = rotationFilter.calculate(rot * rotBoost * rotDeadzone);
     m_drive.arcadeDrive(f_fwd, f_rot, squaredInput);
   }
