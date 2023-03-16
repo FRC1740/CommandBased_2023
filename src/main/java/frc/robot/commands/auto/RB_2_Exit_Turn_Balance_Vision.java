@@ -5,36 +5,28 @@
 package frc.robot.commands.auto;
 
 import frc.constants.ArmConstants;
-import frc.constants.OIConstants.GamePiece;
 import frc.robot.RobotShared;
 import frc.robot.commands.*;
 import frc.robot.commands.driver.*;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 
 
-public class RB_2_Arm_Pickup extends SequentialCommandGroup {
-
+public class RB_2_Exit_Turn_Balance_Vision extends SequentialCommandGroup {
   private DriveSubsystem m_drive;
   private PhotonVisionSubsystem m_photonVision;
   private RobotShared m_robotShared;
-
-  public RB_2_Arm_Pickup(GamePiece piece) {
+  
+  public RB_2_Exit_Turn_Balance_Vision() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
     m_photonVision = m_robotShared.getPhotonVisionSubsystem();
-
-    Pose2d gamePiecePose = new Pose2d(7.07, 2.13, new Rotation2d()); // for blue side
-    Pose2d returnBalancePose = new Pose2d(5.4, 2.13, new Rotation2d());
 
     addCommands (
       new PrintCommand(getName() + " Started"),
@@ -54,20 +46,11 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
       ),
 
       // Drive over the charge station and exit the community
-      new DriveToDistanceVision(Units.inchesToMeters(-155.0), 0.3, m_drive, m_photonVision),
-
-      new TurnTowardsPose(m_drive.getAdjustedPose(gamePiecePose), m_drive, m_photonVision),
-      new InstantCommand(() -> m_robotShared.setGamePiece(piece)),
-      // Prepare the arm to pickup a piece and drive to the piece
-      new AutoArmRetrieveLow(),
-      new DriveTowardsPose(Units.inchesToMeters(69.0), 0.3, m_drive.getAdjustedPose(gamePiecePose), m_drive, m_photonVision),
-
-      //stow the arm
-      new ArmStow(),
-
-      // return to the charge station and balance
-      new DriveTowardsPose(Units.inchesToMeters(-69.0), 0.5, m_drive.getAdjustedPose(returnBalancePose), m_drive, m_photonVision),
-      new DriveToDistance(Units.inchesToMeters(-40.0), m_drive),
+      new DriveToDistanceVision(Units.inchesToMeters(-150), 0.2, m_drive, m_photonVision),
+      new WaitCommand(0.5),
+      new TurnToAngle(180, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-79.0), m_drive),
+      // Balance on the charge station
       new AutoBalancePID(m_drive),
 
       new PrintCommand(getName() + " Finished")

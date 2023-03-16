@@ -186,14 +186,13 @@ public class RobotContainer {
     // bind_LedModeTest();
     // bind_LedSubsystemTest();
     bind_autoBalance();
-    bind_AutoTest1();
 
     bind_RC_ManualArm();
     bind_RC_AutoArm();
     bind_RC_GamePiece();
     bind_RC_RearIntake();
 
-    // bind_Auto_Tests();
+    bind_Auto_Tests();
   }
 
   // expected to be temporary
@@ -201,25 +200,25 @@ public class RobotContainer {
     // Currently none of these are in use
 
     new POVButton(m_driverController.getHID(), 0)
-      .onTrue(new RB_1());
+      .whileTrue(new RB_2_Exit_Turn_Balance_Vision());
 
     new POVButton(m_driverController.getHID(), 90)
-      .onTrue(new RB_2());
+      .whileTrue(new RB_2_Arm_Pickup(m_gamePiece));
 
-    new POVButton(m_driverController.getHID(), 180)
-      .onTrue(new RB_2_Pickup());
+    // new POVButton(m_driverController.getHID(), 180)
+    //   .onTrue(new RB_2_Pickup());
 
-    new POVButton(m_driverController.getHID(), 270)
-      .onTrue(new RB_2_Exit_Balance());
+    // new POVButton(m_driverController.getHID(), 270)
+    //   .onTrue(new RB_2_Exit_Balance());
 
-    m_driverController.leftBumper()
-      .onTrue(new RB_3());
+    // m_driverController.leftBumper()
+    //   .onTrue(new RB_3());
   
-    m_driverController.x()
-      .onTrue(new RB_1_Claw_Ready());
+    // m_driverController.x()
+    //   .onTrue(new RB_1_Claw_Ready());
 
     m_driverController.rightStick()
-      .onTrue(new RB_3_Claw_Ready());
+      .whileTrue(new RB_2_Exit_Balance_Vision());
 
       }
 
@@ -388,11 +387,6 @@ public class RobotContainer {
   private void bind_autoBalance(){
     m_driverController.rightBumper()
       .whileTrue(new AutoBalancePID(m_robotDrive));
-  }
-
-  private void bind_AutoTest1(){
-    m_driverController.rightStick()
-    .whileTrue(new RB_2_Exit_Balance_Vision()); // (new DriveToDistanceVision(Units.InchesToMeters(-155.0), 0.2, m_robotDrive, m_photonVision));
   }
 
   private void bind_POVTest() {
