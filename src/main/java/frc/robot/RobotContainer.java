@@ -263,8 +263,8 @@ public class RobotContainer {
     // ArmScore 
     m_codriverController.leftTrigger()
       .whileTrue(
-        // new RunCommand(() -> m_claw.score())
-        new DunkScore())
+        new RunCommand(() -> m_claw.score()))
+        // new DunkScore())
       .onFalse(new InstantCommand(() -> m_claw.scoreDone()));
   }
 

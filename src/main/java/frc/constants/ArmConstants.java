@@ -58,7 +58,7 @@ public class ArmConstants {
     }    
 
     // Cone
-    public static final double kConeHighAngle         = 77; // Was 77: Too high in practice match
+    public static final double kConeHighAngle         = 82; // Was 77: Too high in practice match
     public static final double kConeMidAngle          = 78;
     public static final double kConeLowAngle          = 140;
     public static final double kConeShelfAngle        = 87;
@@ -108,8 +108,8 @@ public class ArmConstants {
     public static final double kAutoArmScoreConeDelay = 1.5;
     public static final double kAutoArmScoreCubeDelay = 1.5;
             
-    public static final double kArmRotateRelativeConeDelay = 0.5;
-    public static final double kArmRotateRelativeCubeDelay = 0.5;
+    public static final double kArmRotateRelativeConeDelay = 0;
+    public static final double kArmRotateRelativeCubeDelay = 0;
 
     public static final double kDunkScoreConeDelay = 0.5;
     public static final double kDunkScoreCubeDelay = 0.5;
