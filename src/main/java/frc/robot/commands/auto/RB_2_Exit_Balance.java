@@ -37,7 +37,7 @@ public class RB_2_Exit_Balance extends SequentialCommandGroup {
       new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
         new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
-        new DunkScore()
+        new ClawScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (
