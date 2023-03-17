@@ -35,7 +35,7 @@ public class RB_1 extends SequentialCommandGroup {
       new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
         new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
-        new DunkScore()
+        new ClawScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (
