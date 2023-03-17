@@ -48,7 +48,8 @@ public class RB_2_Exit_Balance_Vision extends SequentialCommandGroup {
       ),
 
       // Drive over the charge station and exit the community
-      new DriveToDistanceVision(Units.inchesToMeters(-156), 0.3, m_drive, m_photonVision),
+      //new DriveToDistanceVision(Units.inchesToMeters(-156), 0.3, m_drive, m_photonVision),
+      new DriveToDistance(Units.inchesToMeters(-156), 0.3, m_drive),
       new WaitCommand(0.5),
       //new TurnToAngle(180, m_drive),
       new DriveToDistance(Units.inchesToMeters(79.0), m_drive),

@@ -15,10 +15,21 @@ public class DriveToDistance extends CommandBase {
   private double m_meters;
   private double m_goal;
   private double m_initialHeading;
+  private double m_power;
+
+  public DriveToDistance(double meters, double power,DriveSubsystem drive) {
+    m_meters = meters;
+    m_drive = drive;
+    m_power = power;
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_drive);
+  }
 
   public DriveToDistance(double meters, DriveSubsystem drive) {
     m_meters = meters;
     m_drive = drive;
+    m_power = 0.5;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_drive);
@@ -37,7 +48,7 @@ public class DriveToDistance extends CommandBase {
   public void execute() {
     double angleDelta = m_initialHeading - m_drive.getAngle();
     double distanceDelta = m_goal - m_drive.getAverageEncoderMeters();
-    m_drive.simpleArcadeDrive(Math.signum(distanceDelta) * AutoConstants.kDriveToDistancePower,
+    m_drive.simpleArcadeDrive(Math.signum(distanceDelta) * m_power,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }
 

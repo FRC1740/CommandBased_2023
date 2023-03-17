@@ -4,7 +4,12 @@
 
 package frc.robot.commands;
 
+import org.photonvision.PhotonUtils;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -43,7 +48,12 @@ public class DriveTowardsPose extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double angleDelta = m_drive.getEstimatedVisionPose().getRotation().getDegrees() - m_initialPose.getRotation().plus(m_vision.getYawToPose(m_targetPose)).getDegrees();
+    double angleDelta = (m_direction==1) ?   //Angle delta, if direction is forward robot targets pose normally, if backwwards robot heading is reversed
+    PhotonUtils.getYawToPose(m_drive.getEstimatedVisionPose(), m_targetPose).getDegrees() : 
+    (PhotonUtils.getYawToPose(m_drive.getEstimatedVisionPose()
+    .transformBy(new Transform2d(new Translation2d(), new Rotation2d(180))), 
+    m_targetPose).getDegrees());
+
     m_drive.simpleArcadeDrive(m_direction * m_power,
       AutoConstants.kAngleCorrectionP * angleDelta, false);
   }

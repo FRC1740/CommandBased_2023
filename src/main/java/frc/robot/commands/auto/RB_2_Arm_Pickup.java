@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.commands.basic.ClawScore;
 import edu.wpi.first.math.util.Units;
 
 
@@ -45,7 +46,7 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
       new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
         new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
-        new DunkScore()
+        new ClawScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (
@@ -54,7 +55,7 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
       ),
 
       // Drive over the charge station and exit the community
-      new DriveToDistanceVision(Units.inchesToMeters(-155.0), 0.3, m_drive, m_photonVision),
+      new DriveToDistanceVision(Units.inchesToMeters(-156.0), 0.3, m_drive, m_photonVision),
 
       new TurnTowardsPose(m_drive.getAdjustedPose(gamePiecePose), m_drive, m_photonVision),
       new InstantCommand(() -> m_robotShared.setGamePiece(piece)),
