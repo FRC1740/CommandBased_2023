@@ -375,8 +375,9 @@ public class RobotContainer {
 
     // IntakeGrasp
     m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_groundIntake.grasp()))
-      .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
+    //   .onTrue(new InstantCommand(() -> m_groundIntake.grasp()))
+    //   .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
+      .onTrue(new RB_2_Arm_Pickup(OIConstants.GamePiece.CUBE));
 
     // IntakeScore
     m_driverController.b()

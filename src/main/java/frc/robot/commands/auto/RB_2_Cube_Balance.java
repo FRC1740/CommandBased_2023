@@ -9,6 +9,7 @@ import frc.constants.OIConstants.GamePiece;
 import frc.robot.RobotShared;
 import frc.robot.commands.*;
 import frc.robot.commands.driver.*;
+import frc.robot.commands.basic.*;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -22,13 +23,13 @@ import frc.robot.commands.basic.ClawScore;
 import edu.wpi.first.math.util.Units;
 
 
-public class RB_2_Arm_Pickup extends SequentialCommandGroup {
+public class RB_2_Cube_Balance extends SequentialCommandGroup {
 
   private DriveSubsystem m_drive;
   private PhotonVisionSubsystem m_photonVision;
   private RobotShared m_robotShared;
 
-  public RB_2_Arm_Pickup(GamePiece piece) {
+  public RB_2_Cube_Balance(GamePiece piece) {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
@@ -46,6 +47,7 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
       new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
         new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
+
         new ClawScore()
         // Automatically calls scoreDone at end
       ),
@@ -54,21 +56,22 @@ public class RB_2_Arm_Pickup extends SequentialCommandGroup {
         new ArmStow()
       ),
 
+      new IntakeDeploy(),
+      new DriveToDistance(Units.inchesToMeters(-174), 0.3, m_drive),
+      new WaitCommand(.25), // FIXME: guestimate time
+      new TurnToAngle(180, m_drive),
+      new IntakeStow(),
+      new DriveToDistance(Units.inchesToMeters(-75), 0.3, m_drive),
+
+      new ParallelDeadlineGroup (
+        new DriveToDistance(Units.inchesToMeters(-12), 0.3, m_drive),
+        // Yeet the cube
+        new IntakeEject()
+      ),
+      new IntakeStop(),
       // Drive over the charge station and exit the community
-      new DriveToDistanceVision(Units.inchesToMeters(-156.0), 0.3, m_drive, m_photonVision),
-
-      new TurnTowardsPose(m_drive.getAdjustedPose(gamePiecePose), m_drive, m_photonVision),
-      new InstantCommand(() -> m_robotShared.setGamePiece(piece)),
-      // Prepare the arm to pickup a piece and drive to the piece
-      new AutoArmRetrieveLow(),
-      new DriveTowardsPose(Units.inchesToMeters(69.0), 0.3, m_drive.getAdjustedPose(gamePiecePose), m_drive, m_photonVision),
-
-      //stow the arm
-      new ArmStow(),
-
-      // return to the charge station and balance
-      new DriveTowardsPose(Units.inchesToMeters(-69.0), 0.5, m_drive.getAdjustedPose(returnBalancePose), m_drive, m_photonVision),
-      new DriveToDistance(Units.inchesToMeters(-40.0), m_drive),
+      new WaitCommand(0.25),
+      // Balance on the charge station
       new AutoBalancePID(m_drive),
 
       new PrintCommand(getName() + " Finished")
