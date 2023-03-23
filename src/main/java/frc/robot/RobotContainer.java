@@ -31,6 +31,7 @@ import frc.robot.commands.driver.AutoArmScoreMedium;
 import frc.robot.commands.driver.DunkScore;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.DriveToDistanceVision;
+import frc.robot.commands.LimelightAssistedDrive;
 import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.TurnToAngle;
 // import frc.robot.commands.SubStationSideAuto;
@@ -462,7 +463,7 @@ public class RobotContainer {
 
   private void bind_Limelight() {
     m_driverController.leftBumper()
-      .onTrue(new SequentialVisionAlign(m_robotDrive, m_limelight));
+      .whileTrue(new LimelightAssistedDrive());
   }
 
   private void bind_HalfSpeed() {
