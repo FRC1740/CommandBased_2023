@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.board.ArmTab;
 import frc.board.AutonomousTab;
@@ -215,8 +216,9 @@ public class RobotContainer {
     // m_driverController.leftBumper()
     //   .onTrue(new RB_3());
   
-    // m_driverController.x()
-    //   .onTrue(new RB_1_Claw_Ready());
+    PathPlannerTrajectory shortStraightPath = PathPlanner.loadPath("Short_Straight_Path", new PathConstraints(3, 3));
+    m_driverController.x()
+      .whileTrue(m_robotDrive.FollowPath(shortStraightPath, true));
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());

@@ -246,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   public Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(getHeading());
+    return Rotation2d.fromDegrees(-getHeading());
   }
 
   public DifferentialDriveKinematics getDriveKinematics(){
@@ -314,17 +314,18 @@ public class DriveSubsystem extends SubsystemBase {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
           this.resetPoseEstimation(trajectory.getInitialPose());
+          this.resetOdometry(trajectory.getInitialPose());
         }
       }),
       new PPRamseteCommand(
         trajectory, 
-        this::getEstimatedVisionPose,
+        this::getPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kDriveKinematics,
         this::getWheelSpeeds,
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
         this::tankDriveVolts,
         false,
         this)
@@ -368,7 +369,6 @@ public class DriveSubsystem extends SubsystemBase {
     resetEncoders();
     resetGyro();
     resetPoseEstimation(getTrajectory(straightishTrajectoryJSON).getInitialPose());
-
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
   }
