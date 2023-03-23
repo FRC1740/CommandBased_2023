@@ -324,8 +324,8 @@ public class DriveSubsystem extends SubsystemBase {
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kDriveKinematics,
         this::getWheelSpeeds,
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
         this::tankDriveVolts,
         false,
         this)
