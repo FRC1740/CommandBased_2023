@@ -12,11 +12,13 @@ public class IntakeGrasp extends CommandBase {
 
   private GroundIntakeSubsystem m_intake;
   private RobotShared m_robotShared;
+  private double m_graspSpeed;
 
   /** Creates a new IntakeGrasp. */
-  public IntakeGrasp() {
+  public IntakeGrasp(double graspSpeed) {
     m_robotShared = RobotShared.getInstance();
     m_intake = m_robotShared.getGroundIntakeSubsystem();
+    m_graspSpeed = graspSpeed;
     addRequirements(m_intake);
   }
 
@@ -27,7 +29,7 @@ public class IntakeGrasp extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.grasp();
+    m_intake.grasp(m_graspSpeed);
   }
 
   // Called once the command ends or is interrupted.

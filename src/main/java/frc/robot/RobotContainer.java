@@ -18,6 +18,7 @@ import frc.board.VisionTab;
 import frc.constants.ArmConstants;
 import frc.constants.ClawConstants;
 import frc.constants.DriveConstants;
+import frc.constants.GroundIntakeConstants;
 import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
@@ -370,7 +371,7 @@ public class RobotContainer {
     // IntakeRetrieve
     m_driverController.a()
       // Operator must also stow the arm first!!
-      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy(GroundIntakeConstants.kCubeIntakeSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     // IntakeGrasp
@@ -381,7 +382,7 @@ public class RobotContainer {
 
     // IntakeScore
     m_driverController.b()
-      .whileTrue(new RunCommand(() -> m_groundIntake.eject()))
+      .whileTrue(new RunCommand(() -> m_groundIntake.eject(GroundIntakeConstants.kCubeEjectSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
   }
 
@@ -449,11 +450,11 @@ public class RobotContainer {
   private void bind_GroundIntakeTest() {
     m_driverController.rightBumper()
       // This command must also stow the arm first!!
-      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy(GroundIntakeConstants.kCubeIntakeSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     m_driverController.leftBumper()
-      .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
+      .onTrue(new InstantCommand(() -> m_groundIntake.eject(GroundIntakeConstants.kCubeEjectSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
   }
 

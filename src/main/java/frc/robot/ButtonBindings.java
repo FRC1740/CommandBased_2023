@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.board.ArmTab;
 import frc.constants.ArmConstants;
+import frc.constants.GroundIntakeConstants;
 import frc.constants.ArmConstants.AutoMode;
 import frc.robot.commands.AutoBalancePID;
 import frc.robot.commands.DriveToDistance;
@@ -99,15 +100,15 @@ public class ButtonBindings {
         Trigger driver_DPadLeft = new POVButton(controller.getHID(), 270);
 
         // IntakeRetrieve
-        driver_B.onTrue(new IntakeDeploy())
+        driver_B.onTrue(new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed))
             .onFalse(new IntakeStow());
 
         // IntakeGrasp
-        driver_A.onTrue(new IntakeGrasp())
+        driver_A.onTrue(new IntakeGrasp(GroundIntakeConstants.kCubeGraspSpeed))
             .onFalse(new IntakeStop());
 
         // IntakeScore
-        driver_Y.whileTrue(new IntakeEject())
+        driver_Y.whileTrue(new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed))
             .onFalse(new IntakeStop());
 
         // GamePieceToggle
@@ -258,11 +259,11 @@ public class ButtonBindings {
 
       m_driverController.rightBumper()
         // This command must also stow the arm first!!
-        .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+        .onTrue(new InstantCommand(() -> m_groundIntake.deploy(GroundIntakeConstants.kCubeIntakeSpeed)))
         .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
   
       m_driverController.leftBumper()
-        .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
+        .onTrue(new InstantCommand(() -> m_groundIntake.eject(GroundIntakeConstants.kCubeEjectSpeed)))
         .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
     }
   

@@ -12,11 +12,13 @@ public class IntakeEject extends CommandBase {
 
   private GroundIntakeSubsystem m_intake;
   private RobotShared m_robotShared;
+  private double m_ejectSpeed;
 
   /** Creates a new IntakeEject. */
-  public IntakeEject() {
+  public IntakeEject(double ejectSpeed) {
     m_robotShared = RobotShared.getInstance();
     m_intake = m_robotShared.getGroundIntakeSubsystem();
+    m_ejectSpeed = ejectSpeed;
     addRequirements(m_intake);
   }
 
@@ -27,7 +29,7 @@ public class IntakeEject extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.eject();
+    m_intake.eject(m_ejectSpeed);
   }
 
   // Called once the command ends or is interrupted.

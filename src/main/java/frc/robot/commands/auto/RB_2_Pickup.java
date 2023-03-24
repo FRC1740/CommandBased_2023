@@ -5,6 +5,7 @@
 package frc.robot.commands.auto;
 
 import frc.constants.ArmConstants;
+import frc.constants.GroundIntakeConstants;
 import frc.robot.RobotShared;
 import frc.robot.commands.*;
 import frc.robot.commands.driver.*;
@@ -50,7 +51,7 @@ public class RB_2_Pickup extends SequentialCommandGroup {
       new DriveToDistance(Units.inchesToMeters(-95.575), m_drive),
 
       // Prepare the intake to pickup a piece and drive to the piece
-      new IntakeDeploy(),
+      new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed),
       new DriveToDistance(Units.inchesToMeters(-83.125), m_drive),
 
       // pickup the piece and stow the intake
