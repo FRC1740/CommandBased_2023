@@ -57,11 +57,11 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
       ),
 
       new IntakeDeploy(),
-      new DriveToDistance(Units.inchesToMeters(-174), 0.3, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-188), 0.3, m_drive),
       new WaitCommand(.25), // FIXME: guestimate time
-      new TurnToAngle(180, m_drive),
       new IntakeStow(),
-      new DriveToDistance(Units.inchesToMeters(-75), 0.3, m_drive),
+      new TurnToAngle(180, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-89), 0.3, m_drive),
 
       new ParallelDeadlineGroup (
         new DriveToDistance(Units.inchesToMeters(-12), 0.3, m_drive),
