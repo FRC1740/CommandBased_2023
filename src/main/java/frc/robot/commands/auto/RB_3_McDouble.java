@@ -6,6 +6,7 @@ package frc.robot.commands.auto;
 
 import frc.robot.RobotShared;
 import frc.constants.ArmConstants;
+import frc.constants.GroundIntakeConstants;
 import frc.constants.ArmConstants.AutoMode;
 
 import frc.robot.commands.*;
@@ -56,7 +57,7 @@ public class RB_3_McDouble extends SequentialCommandGroup {
       ),
 
       // Prepare to intake a cube
-      new IntakeDeploy(),
+      new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed),
 
       // Drive out of the community and park in front of piece
       new DriveToDistance(Units.inchesToMeters(-140), m_drive),
@@ -74,7 +75,7 @@ public class RB_3_McDouble extends SequentialCommandGroup {
       new DriveToDistance(Units.inchesToMeters(-136), .37, m_drive),
       new ParallelDeadlineGroup(
         new WaitCommand(.5),
-        new IntakeEject()
+        new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed)
       ),
       new IntakeStop(),
       new PrintCommand(getName() + " Finished")

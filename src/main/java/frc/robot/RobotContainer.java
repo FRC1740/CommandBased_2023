@@ -204,7 +204,7 @@ public class RobotContainer {
       .whileTrue(new RB_2_Exit_Turn_Balance_Vision());
 
     new POVButton(m_driverController.getHID(), 90)
-      .whileTrue(new RB_2_Cube_Balance(m_gamePiece));
+      .whileTrue(new RB_2_Cube_Balance());
 
     // new POVButton(m_driverController.getHID(), 180)
     //   .onTrue(new RB_2_Pickup());
@@ -376,9 +376,9 @@ public class RobotContainer {
 
     // IntakeGrasp
     m_driverController.y()
-    //   .onTrue(new InstantCommand(() -> m_groundIntake.grasp()))
-    //   .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
-      .onTrue(new RB_2_Cube_Balance(OIConstants.GamePiece.CUBE));
+      .onTrue(new InstantCommand(() -> m_groundIntake.grasp(GroundIntakeConstants.kCubeGraspSpeed)))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
+      // .onTrue(new RB_2_Cube_Balance(OIConstants.GamePiece.CUBE));
 
     // IntakeScore
     m_driverController.b()

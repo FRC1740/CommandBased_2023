@@ -30,7 +30,7 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
   private PhotonVisionSubsystem m_photonVision;
   private RobotShared m_robotShared;
 
-  public RB_2_Cube_Balance(GamePiece piece) {
+  public RB_2_Cube_Balance() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
