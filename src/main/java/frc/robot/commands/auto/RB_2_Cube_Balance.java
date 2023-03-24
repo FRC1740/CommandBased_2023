@@ -5,6 +5,7 @@
 package frc.robot.commands.auto;
 
 import frc.constants.ArmConstants;
+import frc.constants.GroundIntakeConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.RobotShared;
 import frc.robot.commands.*;
@@ -29,7 +30,7 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
   private PhotonVisionSubsystem m_photonVision;
   private RobotShared m_robotShared;
 
-  public RB_2_Cube_Balance(GamePiece piece) {
+  public RB_2_Cube_Balance() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
@@ -56,8 +57,8 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
         new ArmStow()
       ),
 
-      new IntakeDeploy(),
-      new DriveToDistance(Units.inchesToMeters(-188), 0.3, m_drive),
+      new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed),
+      new DriveToDistance(Units.inchesToMeters(-174), 0.3, m_drive),
       new WaitCommand(.25), // FIXME: guestimate time
       new IntakeStow(),
       new TurnToAngle(180, m_drive),
@@ -66,7 +67,7 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
       new ParallelDeadlineGroup (
         new DriveToDistance(Units.inchesToMeters(-12), 0.3, m_drive),
         // Yeet the cube
-        new IntakeEject()
+        new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed)
       ),
       new IntakeStop(),
       // Drive over the charge station and exit the community

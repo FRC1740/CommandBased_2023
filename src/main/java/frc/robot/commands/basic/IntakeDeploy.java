@@ -12,11 +12,13 @@ public class IntakeDeploy extends CommandBase {
 
   private GroundIntakeSubsystem m_intake;
   private RobotShared m_robotShared;
+  private double m_deploySpeed;
 
   /** Creates a new IntakeDeploy. */
-  public IntakeDeploy() {
+  public IntakeDeploy(double deploySpeed) {
     m_robotShared = RobotShared.getInstance();
     m_intake = m_robotShared.getGroundIntakeSubsystem();
+    m_deploySpeed = deploySpeed;
     addRequirements(m_intake);
   }
 
@@ -27,7 +29,7 @@ public class IntakeDeploy extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_intake.deploy();
+    m_intake.deploy(m_deploySpeed);
   }
 
   // Called once the command ends or is interrupted.

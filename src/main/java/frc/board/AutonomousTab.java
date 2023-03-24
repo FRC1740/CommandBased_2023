@@ -5,7 +5,6 @@
 package frc.board;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -42,10 +41,9 @@ public class AutonomousTab {
 
         m_AutoChooser = new SendableChooser<Command>();
         m_AutoChooser.addOption("RB_1", new RB_1());
-        m_AutoChooser.addOption("RB_1_Claw_Ready", new RB_1_McDouble());
+        m_AutoChooser.addOption("RB_1_McDouble", new RB_1_McDouble());
         m_AutoChooser.addOption("RB_2", new RB_2());
-        m_AutoChooser.addOption("RB_2_Exit_Balance", new RB_2_Exit_Balance_Vision());
-        m_AutoChooser.addOption("RB_2_Pickup", new RB_2_Pickup());
+        m_AutoChooser.addOption("RB_2_Cube_Balance", new RB_2_Cube_Balance());
         m_AutoChooser.addOption("RB_3", new RB_3());
         m_AutoChooser.addOption("RB_3_Claw_Ready", new RB_3_McDouble());
     

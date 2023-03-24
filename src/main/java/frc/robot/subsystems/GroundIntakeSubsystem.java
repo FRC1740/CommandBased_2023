@@ -43,13 +43,14 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     m_gamePiece = OIConstants.kDefaultGamePiece;
 }
 
-  public void deploy() {
+  public void deploy(double speed) {
     m_intakeSolenoid.set(kForward);
     // if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(GroundIntakeConstants.kCubeIntakeSpeed);
+    // setIntakeSpeed(GroundIntakeConstants.kCubeIntakeSpeed);
     // } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
     //   setIntakeSpeed(GroundIntakeConstants.kConeIntakeSpeed);
     // }   
+    setIntakeSpeed(speed);
   }
 
   public void stow() {
@@ -57,20 +58,22 @@ public class GroundIntakeSubsystem extends SubsystemBase {
     stopIntake();
   }
 
-  public void grasp() {
+  public void grasp(double speed) {
     // if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(GroundIntakeConstants.kCubeGraspSpeed);
+    // setIntakeSpeed(GroundIntakeConstants.kCubeGraspSpeed);
     // } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
     //   setIntakeSpeed(GroundIntakeConstants.kConeGraspSpeed);
-    // }   
+    // }  
+    setIntakeSpeed(speed);
   }
 
-  public void eject() {
+  public void eject(double speed) {
     // if (m_gamePiece == OIConstants.GamePiece.CUBE) {
-      setIntakeSpeed(GroundIntakeConstants.kCubeEjectSpeed);
+    // setIntakeSpeed(GroundIntakeConstants.kCubeEjectSpeed);
     // } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
     //   setIntakeSpeed(GroundIntakeConstants.kConeEjectSpeed);
     // }   
+    setIntakeSpeed(speed);
   }
 
   public double getIntakeVelocity() {

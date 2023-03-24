@@ -18,6 +18,7 @@ import frc.board.VisionTab;
 import frc.constants.ArmConstants;
 import frc.constants.ClawConstants;
 import frc.constants.DriveConstants;
+import frc.constants.GroundIntakeConstants;
 import frc.constants.OIConstants;
 import frc.constants.OIConstants.GamePiece;
 import frc.robot.commands.AutoBalancePID;
@@ -203,7 +204,7 @@ public class RobotContainer {
       .whileTrue(new RB_2_Exit_Turn_Balance_Vision());
 
     new POVButton(m_driverController.getHID(), 90)
-      .whileTrue(new RB_2_Cube_Balance(m_gamePiece));
+      .whileTrue(new RB_2_Cube_Balance());
 
     // new POVButton(m_driverController.getHID(), 180)
     //   .onTrue(new RB_2_Pickup());
@@ -370,18 +371,18 @@ public class RobotContainer {
     // IntakeRetrieve
     m_driverController.a()
       // Operator must also stow the arm first!!
-      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy(GroundIntakeConstants.kCubeIntakeSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     // IntakeGrasp
     m_driverController.y()
-    //   .onTrue(new InstantCommand(() -> m_groundIntake.grasp()))
-    //   .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
-      .onTrue(new RB_2_Cube_Balance(OIConstants.GamePiece.CUBE));
+      .onTrue(new InstantCommand(() -> m_groundIntake.grasp(GroundIntakeConstants.kCubeGraspSpeed)))
+      .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
+      // .onTrue(new RB_2_Cube_Balance(OIConstants.GamePiece.CUBE));
 
     // IntakeScore
     m_driverController.b()
-      .whileTrue(new RunCommand(() -> m_groundIntake.eject()))
+      .whileTrue(new RunCommand(() -> m_groundIntake.eject(GroundIntakeConstants.kCubeEjectSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
   }
 
@@ -449,11 +450,11 @@ public class RobotContainer {
   private void bind_GroundIntakeTest() {
     m_driverController.rightBumper()
       // This command must also stow the arm first!!
-      .onTrue(new InstantCommand(() -> m_groundIntake.deploy()))
+      .onTrue(new InstantCommand(() -> m_groundIntake.deploy(GroundIntakeConstants.kCubeIntakeSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     m_driverController.leftBumper()
-      .onTrue(new InstantCommand(() -> m_groundIntake.eject()))
+      .onTrue(new InstantCommand(() -> m_groundIntake.eject(GroundIntakeConstants.kCubeEjectSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
   }
 
