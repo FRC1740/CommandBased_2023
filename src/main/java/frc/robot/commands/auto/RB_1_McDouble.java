@@ -25,13 +25,13 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.math.util.Units;
 
 
-public class RB_1_Claw_Ready extends SequentialCommandGroup {
+public class RB_1_McDouble extends SequentialCommandGroup {
   private DriveSubsystem m_drive;
   private RobotShared m_robotShared;
   private ArmProfiledPIDSubsystem m_arm;
   private TelescopePIDSubsystem m_telescope;
 
-  public RB_1_Claw_Ready() {
+  public RB_1_McDouble() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
@@ -47,7 +47,7 @@ public class RB_1_Claw_Ready extends SequentialCommandGroup {
       new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
         new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
-        new DunkScore()
+        new ClawScore()
         // Automatically calls scoreDone at end
       ),
       new ParallelDeadlineGroup (
@@ -55,17 +55,28 @@ public class RB_1_Claw_Ready extends SequentialCommandGroup {
         new ArmStow()
       ),
 
-      // Drive out of the community and park in front of piece
-      new DriveToDistance(Units.inchesToMeters(-155.875), m_drive),
-      new TurnToAngle(-166.883, m_drive),
-      // new DriveToDistance(Units.inchesToMeters(20.0), m_drive),
-      
-      // Position arm
-      new InstantCommand(() -> m_telescope.setSetpoint(m_robotShared.calculateTeleSetpoint(AutoMode.FLOOR))),
-      new InstantCommand(() -> m_arm.setGoal(m_robotShared.calculateArmSetpoint(AutoMode.FLOOR))),
-      new WaitUntilCommand(m_arm::atGoal),
-      new WaitUntilCommand(m_telescope::atSetpoint),
+      // Prepare to intake a cube
+      new IntakeDeploy(),
 
+      // Drive out of the community and park in front of piece
+      new DriveToDistance(Units.inchesToMeters(-140), m_drive),
+      new WaitCommand(.25), // Pause to avoid jerkiness
+      new TurnToAngle(13.217, m_drive), // Angle to gamepiece
+      new WaitCommand(.25), // Pause to avoid jerkiness
+      new DriveToDistance(Units.inchesToMeters(-46), 0.25, m_drive),
+      new WaitCommand(.25), // Pause to avoid jerkiness
+      new IntakeStow(),
+      // // Reverse the previous path
+      new DriveToDistance(Units.inchesToMeters(46), 0.25, m_drive),
+      new WaitCommand(.25), // Pause to avoid jerkiness
+      new TurnToAngle(163, m_drive), // 180 - 13.217 & an overshoot fudge factor
+      new WaitCommand(.25), // Pause to avoid jerkiness
+      new DriveToDistance(Units.inchesToMeters(-136), .37, m_drive),
+      new ParallelDeadlineGroup(
+        new WaitCommand(.5),
+        new IntakeEject()
+      ),
+      new IntakeStop(),
       new PrintCommand(getName() + " Finished")
     );
 

@@ -70,12 +70,12 @@ public class CommandTab {
             .withProperties(Map.of("Number of columns", "2", "Label position", "LEFT"));
         
         autoCommandLayout.add("Station 1", new RB_1());
-        autoCommandLayout.add("Station 1 - Claw Ready", new RB_1_Claw_Ready());
+        autoCommandLayout.add("Station 1 - Claw Ready", new RB_1_McDouble());
         autoCommandLayout.add("Station 2", new RB_2());
         autoCommandLayout.add("Station 2 - Exit Balance", new RB_2_Exit_Balance());
         autoCommandLayout.add("Station 2 - Pickup", new RB_2_Pickup());
         autoCommandLayout.add("Station 3", new RB_3());
-        autoCommandLayout.add("Station 3 - Claw Ready", new RB_3_Claw_Ready());
+        autoCommandLayout.add("Station 3 - Claw Ready", new RB_3_McDouble());
     }
 
 }

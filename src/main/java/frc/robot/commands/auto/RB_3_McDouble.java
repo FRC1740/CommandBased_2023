@@ -25,13 +25,13 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.math.util.Units;
 
 
-public class RB_3_Claw_Ready extends SequentialCommandGroup {
+public class RB_3_McDouble extends SequentialCommandGroup {
   private DriveSubsystem m_drive;
   private RobotShared m_robotShared;
   private ArmProfiledPIDSubsystem m_arm;
   private TelescopePIDSubsystem m_telescope;
 
-  public RB_3_Claw_Ready() {
+  public RB_3_McDouble() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
