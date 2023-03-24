@@ -45,11 +45,11 @@ public class GroundIntakeSubsystem extends SubsystemBase {
 
   public void deploy() {
     m_intakeSolenoid.set(kForward);
-    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+    // if (m_gamePiece == OIConstants.GamePiece.CUBE) {
       setIntakeSpeed(GroundIntakeConstants.kCubeIntakeSpeed);
-    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      setIntakeSpeed(GroundIntakeConstants.kConeIntakeSpeed);
-    }   
+    // } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+    //   setIntakeSpeed(GroundIntakeConstants.kConeIntakeSpeed);
+    // }   
   }
 
   public void stow() {
@@ -58,19 +58,19 @@ public class GroundIntakeSubsystem extends SubsystemBase {
   }
 
   public void grasp() {
-    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+    // if (m_gamePiece == OIConstants.GamePiece.CUBE) {
       setIntakeSpeed(GroundIntakeConstants.kCubeGraspSpeed);
-    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      setIntakeSpeed(GroundIntakeConstants.kConeGraspSpeed);
-    }   
+    // } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+    //   setIntakeSpeed(GroundIntakeConstants.kConeGraspSpeed);
+    // }   
   }
 
   public void eject() {
-    if (m_gamePiece == OIConstants.GamePiece.CUBE) {
+    // if (m_gamePiece == OIConstants.GamePiece.CUBE) {
       setIntakeSpeed(GroundIntakeConstants.kCubeEjectSpeed);
-    } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
-      setIntakeSpeed(GroundIntakeConstants.kConeEjectSpeed);
-    }   
+    // } else if (m_gamePiece == OIConstants.GamePiece.CONE) {
+    //   setIntakeSpeed(GroundIntakeConstants.kConeEjectSpeed);
+    // }   
   }
 
   public double getIntakeVelocity() {
