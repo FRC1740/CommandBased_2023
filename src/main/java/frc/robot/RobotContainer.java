@@ -217,9 +217,10 @@ public class RobotContainer {
     // m_driverController.leftBumper()
     //   .onTrue(new RB_3());
   
-    PathPlannerTrajectory shortStraightPath = PathPlanner.loadPath("Short_Straight_Path", new PathConstraints(3, 3));
+    PathPlannerTrajectory more_curvy_path = PathPlanner.loadPath("Curvy Path", new PathConstraints(1, 1));
+
     m_driverController.x()
-      .whileTrue(m_robotDrive.FollowPath(shortStraightPath, true));
+      .whileTrue(m_robotDrive.FollowPath(more_curvy_path, true));
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());
