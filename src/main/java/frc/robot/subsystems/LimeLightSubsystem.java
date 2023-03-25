@@ -27,6 +27,7 @@ public class LimeLightSubsystem extends SubsystemBase {
 
   public void enableVisionProcessing(){
     m_LimeLightTable.setCamMode(0);
+    m_LimeLightTable.setPipeline(1);
     m_LimeLightTable.setLedMode(3);
     System.out.println("Vision processing enabled");
   }

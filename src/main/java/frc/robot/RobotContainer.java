@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
 import frc.board.ArmTab;
 import frc.board.AutonomousTab;
@@ -30,6 +31,7 @@ import frc.robot.commands.driver.AutoArmScoreMedium;
 import frc.robot.commands.driver.DunkScore;
 import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.DriveToDistanceVision;
+import frc.robot.commands.LimelightAssistedDrive;
 import frc.robot.commands.SequentialVisionAlign;
 import frc.robot.commands.TurnToAngle;
 // import frc.robot.commands.SubStationSideAuto;
@@ -215,8 +217,10 @@ public class RobotContainer {
     // m_driverController.leftBumper()
     //   .onTrue(new RB_3());
   
-    // m_driverController.x()
-    //   .onTrue(new RB_1_Claw_Ready());
+    PathPlannerTrajectory more_curvy_path = PathPlanner.loadPath("Curvy Path", new PathConstraints(1, 1));
+
+    m_driverController.x()
+      .whileTrue(m_robotDrive.FollowPath(more_curvy_path, true));
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());
@@ -460,7 +464,7 @@ public class RobotContainer {
 
   private void bind_Limelight() {
     m_driverController.leftBumper()
-      .onTrue(new SequentialVisionAlign(m_robotDrive, m_limelight));
+      .whileTrue(new LimelightAssistedDrive());
   }
 
   private void bind_HalfSpeed() {

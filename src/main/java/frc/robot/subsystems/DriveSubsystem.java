@@ -202,6 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_DriveTrainTab.setRightEncoder(getAverageRightEncoders());
     m_DriveTrainTab.setIMU_ZAngle(getAngle());
     m_DriveTrainTab.setIMU_PitchAngle(getPitch());
+    m_DriveTrainTab.setRobotPose(getPose());
   }
 
   public Pose2d getPose(){
@@ -217,8 +218,6 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose){
-    resetGyro();
-    resetEncoders();
     m_odometry.resetPosition(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
 
@@ -233,7 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
       EstimatedRobotPose visionPose = result.get();
       m_PoseEstimator.addVisionMeasurement(visionPose.estimatedPose.toPose2d(), visionPose.timestampSeconds);
     }
-    m_DriveTrainTab.setRobotPose(m_PoseEstimator.getEstimatedPosition());
+    //m_DriveTrainTab.setRobotPose(m_PoseEstimator.getEstimatedPosition());
   }
 
   public double getAngle() {
@@ -246,7 +245,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   public Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(getHeading());
+    return m_gyro.getRotation2d();
   }
 
   public DifferentialDriveKinematics getDriveKinematics(){
@@ -314,11 +313,12 @@ public class DriveSubsystem extends SubsystemBase {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
           this.resetPoseEstimation(trajectory.getInitialPose());
+          this.resetOdometry(trajectory.getInitialPose());
         }
       }),
       new PPRamseteCommand(
         trajectory, 
-        this::getEstimatedVisionPose,
+        this::getPose,
         new RamseteController(),
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kDriveKinematics,
@@ -368,7 +368,6 @@ public class DriveSubsystem extends SubsystemBase {
     resetEncoders();
     resetGyro();
     resetPoseEstimation(getTrajectory(straightishTrajectoryJSON).getInitialPose());
-
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
   }
