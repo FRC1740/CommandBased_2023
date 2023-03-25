@@ -190,6 +190,8 @@ public class RobotContainer {
     // bind_LedSubsystemTest();
     bind_autoBalance();
 
+    bind_constant_speed_drive();
+
     bind_RC_ManualArm();
     bind_RC_AutoArm();
     bind_RC_GamePiece();
@@ -227,6 +229,13 @@ public class RobotContainer {
 
       }
 
+  private void bind_constant_speed_drive(){
+    m_driverController.rightBumper()
+    .whileTrue(new RunCommand(() -> m_robotDrive.arcadeDrive(DriveConstants.kConstantSpeedDrive, m_driverController.getLeftX(), false), m_robotDrive));
+
+    m_driverController.leftBumper()
+    .whileTrue(new RunCommand(() -> m_robotDrive.arcadeDrive(-DriveConstants.kConstantSpeedDrive, m_driverController.getLeftX(), false), m_robotDrive));
+  }
   // See the Robot Control documents for the spec
   private void bind_RC_ManualArm() {
     // ManualArmUpDown
@@ -356,11 +365,11 @@ public class RobotContainer {
 
   private void bind_RC_GamePiece() {
     // Driver
-    m_driverController.back()
-      .onTrue(new InstantCommand(() -> setGamePieceCone()));
+    // m_driverController.back()
+    //   .onTrue(new InstantCommand(() -> setGamePieceCone()));
 
-    m_driverController.start()
-      .onTrue(new InstantCommand(() -> setGamePieceCube()));
+    // m_driverController.start()
+    //   .onTrue(new InstantCommand(() -> setGamePieceCube()));
 
     // Codriver
     m_codriverController.back()
@@ -391,7 +400,7 @@ public class RobotContainer {
   }
 
   private void bind_autoBalance(){
-    m_driverController.rightBumper()
+    m_driverController.start()
       .whileTrue(new AutoBalancePID(m_robotDrive));
   }
 
@@ -463,7 +472,7 @@ public class RobotContainer {
   }
 
   private void bind_Limelight() {
-    m_driverController.leftBumper()
+    m_driverController.back()
       .whileTrue(new LimelightAssistedDrive());
   }
 

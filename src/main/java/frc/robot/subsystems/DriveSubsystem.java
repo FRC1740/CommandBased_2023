@@ -245,7 +245,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   public Rotation2d getRotation2d(){
-    return m_gyro.getRotation2d();
+    return Rotation2d.fromDegrees(-m_gyro.getAngle());
   }
 
   public DifferentialDriveKinematics getDriveKinematics(){
