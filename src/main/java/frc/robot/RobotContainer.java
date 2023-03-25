@@ -388,7 +388,7 @@ public class RobotContainer {
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     // IntakeGrasp
-    m_driverController.y()
+      m_driverController.y()
       .onTrue(new InstantCommand(() -> m_groundIntake.grasp(GroundIntakeConstants.kCubeGraspSpeed)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
       // .onTrue(new RB_2_Cube_Balance(OIConstants.GamePiece.CUBE));
@@ -605,7 +605,11 @@ public class RobotContainer {
 
   // Return the command to run in autonomous
   public Command getAutonomousCommand() {
-      return m_AutonomousTab.getAutonomousCommand();
+      Command autonomousCommand = m_AutonomousTab.getAutonomousCommand();
+      if (autonomousCommand == null) {
+        autonomousCommand = new RB_1();
+      }
+      return autonomousCommand;
   }
 
   public void disabledInit() {
