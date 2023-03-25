@@ -344,12 +344,12 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
-  public Command getPathWeaverCommand() {
-    // Create a voltage constraint to ensure we don't accelerate too fast
+  public Command getPathWeaverCommand(boolean isFirstPath) {
 
+Trajectory trajectory = getTrajectory(StraightTrajectoryJSON);
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            getTrajectory(straightishTrajectoryJSON),
+            trajectory,
             this::getEstimatedVisionPose,
             new RamseteController(),
             new SimpleMotorFeedforward(
@@ -364,12 +364,17 @@ public class DriveSubsystem extends SubsystemBase {
             this::tankDriveVolts,
             this);
 
-    // Reset odometry to the starting pose of the trajectory.
-    resetEncoders();
-    resetGyro();
-    resetPoseEstimation(getTrajectory(straightishTrajectoryJSON).getInitialPose());
     // Run path following command, then stop at the end.
-    return ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        //Reset odometry for the first path ran during auto
+        if(isFirstPath){
+          this.resetPoseEstimation(trajectory.getInitialPose());
+          this.resetOdometry(trajectory.getInitialPose());
+        }
+      }
+    ),
+    ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)));
   }
 
 // public Command getManualTrajectoryCommand(){

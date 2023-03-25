@@ -222,7 +222,7 @@ public class RobotContainer {
     PathPlannerTrajectory more_curvy_path = PathPlanner.loadPath("Curvy Path", new PathConstraints(1, 1));
 
     m_driverController.x()
-      .whileTrue(m_robotDrive.FollowPath(more_curvy_path, true));
+      .whileTrue(m_robotDrive.getPathWeaverCommand(true));
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());
@@ -485,7 +485,7 @@ public class RobotContainer {
 
   private void bind_PathWeaver() {
     m_driverController.x()
-      .onTrue(m_robotDrive.getPathWeaverCommand());
+      .onTrue(m_robotDrive.getPathWeaverCommand(true));
   }
 
   /* ***************** CO-Driver Contols ************ */
