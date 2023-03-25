@@ -290,7 +290,7 @@ public class ButtonBindings {
       DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
       m_driverController.x()
-        .onTrue(m_robotDrive.getPathWeaverCommand());
+        .onTrue(m_robotDrive.getPathWeaverCommand(true));
     }
   
     /* ***************** CO-Driver Contols ************ */
