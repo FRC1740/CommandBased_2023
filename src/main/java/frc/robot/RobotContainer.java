@@ -219,10 +219,10 @@ public class RobotContainer {
     // m_driverController.leftBumper()
     //   .onTrue(new RB_3());
   
-    PathPlannerTrajectory more_curvy_path = PathPlanner.loadPath("Curvy Path", new PathConstraints(1, 1));
+    PathPlannerTrajectory Right_Node_to_GamePiece = PathPlanner.loadPath("Right Node to GamePiece", new PathConstraints(3, 3), true);
 
     m_driverController.x()
-      .whileTrue(m_robotDrive.getPathWeaverCommand(true));
+      .whileTrue(m_robotDrive.FollowPath(Right_Node_to_GamePiece, true));
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());
@@ -233,7 +233,7 @@ public class RobotContainer {
     m_driverController.rightBumper()
     .whileTrue(new RunCommand(() -> m_robotDrive.arcadeDrive(DriveConstants.kConstantSpeedDrive, m_driverController.getLeftX(), false), m_robotDrive));
 
-    m_driverController.leftBumper()
+    m_driverController.back()
     .whileTrue(new RunCommand(() -> m_robotDrive.arcadeDrive(-DriveConstants.kConstantSpeedDrive, m_driverController.getLeftX(), false), m_robotDrive));
   }
   // See the Robot Control documents for the spec
@@ -388,8 +388,8 @@ public class RobotContainer {
       .onFalse(new InstantCommand(() -> m_groundIntake.stow()));
 
     // IntakeGrasp
-      m_driverController.y()
-      .onTrue(new InstantCommand(() -> m_groundIntake.grasp(GroundIntakeConstants.kCubeGraspSpeed)))
+    m_driverController.y()
+      .onTrue(new InstantCommand(() -> m_groundIntake.eject(GroundIntakeConstants.kCubeEjectSpeedLow)))
       .onFalse(new InstantCommand(() -> m_groundIntake.stopIntake()));
       // .onTrue(new RB_2_Cube_Balance(OIConstants.GamePiece.CUBE));
 
@@ -472,7 +472,7 @@ public class RobotContainer {
   }
 
   private void bind_Limelight() {
-    m_driverController.back()
+    m_driverController.leftBumper()
       .whileTrue(new LimelightAssistedDrive());
   }
 

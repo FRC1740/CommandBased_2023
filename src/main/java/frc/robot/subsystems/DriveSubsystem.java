@@ -175,7 +175,7 @@ public class DriveSubsystem extends SubsystemBase {
   * @param leftVolts the commanded left output
   * @param rightVolts the commanded right output
   */
-  public void tankDriveVolts(double leftVolts, double rightVolts){
+  public void tankDriveVolts(double rightVolts, double leftVolts){ //right has to to on the left and left volts on the right(second parameter)
     m_leftMotorLeader.setVoltage(leftVolts);
     m_rightMotorLeader.setVoltage(rightVolts);
     m_drive.feed();
@@ -218,6 +218,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose){
+    resetGyro();
     m_odometry.resetPosition(getRotation2d(), getLeftEncoderMeters(), getRightEncoderMeters(), pose);
   }
 
@@ -245,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   public Rotation2d getRotation2d(){
-    return Rotation2d.fromDegrees(-m_gyro.getAngle());
+    return m_gyro.getRotation2d();
   }
 
   public DifferentialDriveKinematics getDriveKinematics(){
@@ -346,7 +347,8 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command getPathWeaverCommand(boolean isFirstPath) {
 
-Trajectory trajectory = getTrajectory(StraightTrajectoryJSON);
+Trajectory trajectory = getTrajectory(straightishTrajectoryJSON);
+    m_DriveTrainTab.setTrajectory(trajectory);
     RamseteCommand ramseteCommand =
         new RamseteCommand(
             trajectory,
