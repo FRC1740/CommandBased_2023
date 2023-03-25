@@ -45,7 +45,7 @@ public class AutonomousTab {
         m_AutoChooser.addOption("RB_2_Exit_Balance", new RB_2_Exit_Balance());
         m_AutoChooser.addOption("RB_2_Cube_Balance", new RB_2_Cube_Balance());
         m_AutoChooser.addOption("RB_3", new RB_3());
-        m_AutoChooser.addOption("RB_3_Claw_Ready", new RB_3_McDouble());
+        m_AutoChooser.addOption("RB_3_McDouble", new RB_3_McDouble());
     
         m_sbt_Autonomous.add("Autonomous Command", m_AutoChooser)
             .withSize(2, 1)
