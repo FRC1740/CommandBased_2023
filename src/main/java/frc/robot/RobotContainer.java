@@ -483,10 +483,10 @@ public class RobotContainer {
       .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
   }
 
-  private void bind_PathWeaver() {
-    m_driverController.x()
-      .onTrue(m_robotDrive.getPathWeaverCommand(true));
-  }
+  // private void bind_PathWeaver() {
+  //   m_driverController.x()
+  //     .onTrue(m_robotDrive.getPathWeaverCommand(true));
+  // }
 
   /* ***************** CO-Driver Contols ************ */
   private void bind_CoAutoBalance() {

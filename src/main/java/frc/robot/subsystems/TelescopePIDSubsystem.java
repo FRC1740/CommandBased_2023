@@ -38,6 +38,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
     m_extensionMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
     // Initial setpoint for starting configuration (stowed, 0.0)
+    getController().setTolerance(ArmConstants.kArmExtendTolerance);
     setSetpoint(ArmConstants.kStowedPosition);
     
     m_ArmTab = ArmTab.getInstance();
@@ -93,8 +94,11 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   }
 
   // Returns true when telescope is at setpoint
-  public boolean atSetpoint() {
-    return (Math.abs(m_extensionEncoder.getPosition() - getSetpoint()) < ArmConstants.kArmExtendTolerance);
+  // public boolean atSetpoint() {
+  //   return (Math.abs(m_extensionEncoder.getPosition() - getSetpoint()) < ArmConstants.kArmExtendTolerance);
+  // }
+  public boolean atSetpoint(){
+    return getController().atSetpoint();
   }
 
   public void burnFlash() {
