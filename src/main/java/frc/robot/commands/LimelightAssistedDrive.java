@@ -41,7 +41,7 @@ public class LimelightAssistedDrive extends CommandBase {
   public void execute() {
     
     m_drive.simpleArcadeDrive(m_speedLimiter.calculate(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis()),
-     m_limelight.getXdeviation() * 0.02, false);
+     (m_limelight.getXdeviation()-3) * 0.02, false);
   }
 
   // Called once the command ends or is interrupted.
