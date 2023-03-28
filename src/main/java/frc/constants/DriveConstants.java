@@ -61,4 +61,7 @@ public class DriveConstants {
 
     public static final double kConstantSpeedDrive = 0.2;
 
+    //Limelight is offset a little from arm
+    public static final double kLimelightOffsetDegrees = -3;
+
 }
