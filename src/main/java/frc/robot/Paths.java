@@ -24,6 +24,7 @@ public class Paths {
     public PathPlannerTrajectory Blue_3_McDouble;
     public PathPlannerTrajectory Blue_3_McTriple;
     public PathPlannerTrajectory Blue_1_McTriple;
+    public PathPlannerTrajectory Blue_1_McDouble;
     public PathPlannerTrajectory Blue_3_McDouble_Combo_Meal;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt1;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt2;
@@ -34,6 +35,9 @@ public class Paths {
     public static HashMap<String, Command> eventMap = new HashMap<>();
     
     Paths(){
+    
+    Blue_1_McDouble = 
+    PathPlanner.loadPath("Blue 1 McDouble", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), true);
 
     Blue_3_McDouble = 
     PathPlanner.loadPath("Blue 3 McDouble", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), true);
@@ -60,8 +64,8 @@ public class Paths {
 
         eventMap.put("Intake Deploy", new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed));
         eventMap.put("Intake Stow", new IntakeStow());
-        eventMap.put("Eject Cube Low Speed", new IntakeEject(GroundIntakeConstants.kCubeEjectSpeedLow).withTimeout(1));
-        eventMap.put("Eject Cube High Speed", new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed).withTimeout(1));
+        eventMap.put("Eject Cube Low Speed", new IntakeEject(GroundIntakeConstants.kCubeEjectSpeedLow));
+        eventMap.put("Eject Cube High Speed", new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed));
     }
 
     public static HashMap<String, Command> getEventMap(){

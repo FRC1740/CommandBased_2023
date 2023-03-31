@@ -27,14 +27,14 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.math.util.Units;
 
 
-public class Blue_3_McDouble extends SequentialCommandGroup {
+public class Blue_1_McDouble extends SequentialCommandGroup {
   private DriveSubsystem m_drive;
   private RobotShared m_robotShared;
   private ArmProfiledPIDSubsystem m_arm;
   private TelescopePIDSubsystem m_telescope;
   private Paths m_paths;
 
-  public Blue_3_McDouble() {
+  public Blue_1_McDouble() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
@@ -59,7 +59,7 @@ public class Blue_3_McDouble extends SequentialCommandGroup {
         new ArmStow()
       ),
 
-     m_drive.FollowPathWithEvents(m_paths.Blue_3_McDouble, true)
+     m_drive.FollowPathWithEvents(m_paths.Blue_1_McDouble, true)
     );
 
   }
