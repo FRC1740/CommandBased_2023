@@ -31,13 +31,13 @@ public class DriveConstants {
     public static final double ks = 0.19103;
     public static final double kv = 2.0984; 
     public static final double ka = 0.87711; 
-    public static final double kPDriveVel = 0.70858;
+    public static final double kPDriveVel = 0.70858*1.5;
 
-    public static final double kTrackWidthMeters = Units.inchesToMeters(18); //22in. for testbot, 18 in. for actual robot
+    public static final double kTrackWidthMeters = 0.50947; //22in. for testbot, 18 in. for actual robot, 0.50947 obtained from sysid
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
 
-    public static final double kMaxSpeedMetersPerSecond = 1;
-    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+    public static final double kMaxSpeedMetersPerSecond = 2;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 2;
 
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;

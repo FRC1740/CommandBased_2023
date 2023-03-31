@@ -25,6 +25,9 @@ public class Paths {
     public PathPlannerTrajectory Blue_3_McTriple;
     public PathPlannerTrajectory Blue_1_McTriple;
     public PathPlannerTrajectory Blue_3_McDouble_Combo_Meal;
+    public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt1;
+    public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt2;
+    public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt3;
 
 
     //Event map
@@ -43,6 +46,17 @@ public class Paths {
 
     Blue_3_McDouble_Combo_Meal =
     PathPlanner.loadPath("Blue 3 McDouble Combo Meal", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), true);
+
+    Blue_3_McDouble_Deluxe_pt1 = 
+    PathPlanner.loadPath("Blue 3 McDouble Deluxe pt1", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), true);
+
+    Blue_3_McDouble_Deluxe_pt2 = 
+    PathPlanner.loadPath("Blue 3 McDouble Deluxe pt2", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), false);
+
+    Blue_3_McDouble_Deluxe_pt3 = 
+    PathPlanner.loadPath("Blue 3 McDouble Deluxe pt3", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), false);
+
+    
 
         eventMap.put("Intake Deploy", new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed));
         eventMap.put("Intake Stow", new IntakeStow());

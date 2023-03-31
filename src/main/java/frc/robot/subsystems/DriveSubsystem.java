@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
 import com.kauailabs.navx.frc.AHRS;
-
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPRamseteCommand;
@@ -264,6 +264,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getRawGyroX(){
+    
     return m_gyro.getRawGyroX();
   }
 
@@ -316,7 +317,7 @@ public class DriveSubsystem extends SubsystemBase {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
           this.resetPoseEstimation(trajectory.getInitialPose());
-          this.resetOdometry(trajectory.getInitialPose());
+          this.resetOdometry(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()).getInitialPose());
         }
       }),
       new PPRamseteCommand(
