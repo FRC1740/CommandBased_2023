@@ -72,6 +72,8 @@ public class ButtonBindings {
         // Configure default commands
         // Set the default drive command to split-stick arcade drivem_robotDrive
         m_robotDrive.setDefaultCommand(
+          
+        
             // "Mario-Cart" drive: Triggers are gas and brake. Right stick turns left/right
             // Triggers are Axis 2; RightStick X is axis 3
             // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
@@ -285,13 +287,13 @@ public class ButtonBindings {
         .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
     }
   
-    private void bind_PathWeaver() {
-      RobotShared robotShared = RobotShared.getInstance();
-      DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
+    // private void bind_PathWeaver() {
+    //   RobotShared robotShared = RobotShared.getInstance();
+    //   DriveSubsystem m_robotDrive = robotShared.getDriveSubsystem();
 
-      m_driverController.x()
-        .onTrue(m_robotDrive.getPathWeaverCommand(true));
-    }
+    // //   m_driverController.x()
+    // //     .onTrue(m_robotDrive.getPathWeaverCommand(true));
+    // // }
   
     /* ***************** CO-Driver Contols ************ */
     private void bind_CoAutoBalance() {

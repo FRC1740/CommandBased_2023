@@ -38,6 +38,10 @@ public class RobotShared {
     protected GroundIntakeSubsystem m_groundIntake = null;
     protected SignalLEDSubsystem m_signalLEDs = null;
 
+    //I dont know if this is how you're supposed to do this
+    protected Paths m_paths = null;
+
+
     protected final CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
     protected final CommandXboxController m_codriverController = new CommandXboxController(OIConstants.kCoDriverControllerPort);
 
@@ -110,6 +114,13 @@ public class RobotShared {
             m_signalLEDs = new SignalLEDSubsystem();
         }
         return m_signalLEDs;
+    }
+
+    public Paths getPaths(){
+        if(m_paths == null) {
+            m_paths = new Paths();
+        }
+        return m_paths;
     }
 
     public CommandXboxController getDriverController() {

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.Paths;
 import frc.robot.RobotShared;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,8 +23,9 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
 import com.kauailabs.navx.frc.AHRS;
-
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
 import com.pathplanner.lib.commands.PPRamseteCommand;
 
 import frc.board.DriveTrainTab;
@@ -262,6 +264,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getRawGyroX(){
+    
     return m_gyro.getRawGyroX();
   }
 
@@ -308,13 +311,13 @@ public class DriveSubsystem extends SubsystemBase {
   }
   
   public Command FollowPath(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
-    m_DriveTrainTab.setTrajectory(trajectory);
+    m_DriveTrainTab.setTrajectory(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()));
     return new SequentialCommandGroup(
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
           this.resetPoseEstimation(trajectory.getInitialPose());
-          this.resetOdometry(trajectory.getInitialPose());
+          this.resetOdometry(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()).getInitialPose());
         }
       }),
       new PPRamseteCommand(
@@ -327,57 +330,60 @@ public class DriveSubsystem extends SubsystemBase {
         new PIDController(DriveConstants.kPDriveVel, 0, 0),
         new PIDController(DriveConstants.kPDriveVel, 0, 0),
         this::tankDriveVolts,
-        false,
+        true,
         this)
     );
   }
 
-  public Trajectory getTrajectory(String TrajectoryJSON){
+  public Command FollowPathWithEvents(PathPlannerTrajectory path, boolean isFirstPath) {
+    return new FollowPathWithEvents(FollowPath(path, isFirstPath), path.getMarkers(), Paths.getEventMap());
+  }
+//   public Trajectory getTrajectory(String TrajectoryJSON){
     
-    try {
-      Path TrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(TrajectoryJSON);
-      return TrajectoryUtil.fromPathweaverJson(TrajectoryPath);
+//     try {
+//       Path TrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(TrajectoryJSON);
+//       return TrajectoryUtil.fromPathweaverJson(TrajectoryPath);
 
-   }catch (IOException ex) {
-      DriverStation.reportError("Unable to open trajectory: " + circlePathTrajectoryJSON, ex.getStackTrace());
-      return null;
-   }
+//    }catch (IOException ex) {
+//       DriverStation.reportError("Unable to open trajectory: " + circlePathTrajectoryJSON, ex.getStackTrace());
+//       return null;
+//    }
 
-  }
+//   }
 
-  public Command getPathWeaverCommand(boolean isFirstPath) {
+//   public Command getPathWeaverCommand(boolean isFirstPath) {
 
-Trajectory trajectory = getTrajectory(straightishTrajectoryJSON);
-    m_DriveTrainTab.setTrajectory(trajectory);
-    RamseteCommand ramseteCommand =
-        new RamseteCommand(
-            trajectory,
-            this::getEstimatedVisionPose,
-            new RamseteController(),
-            new SimpleMotorFeedforward(
-                DriveConstants.ks,
-                DriveConstants.kv,
-                DriveConstants.ka),
-             DriveConstants.kDriveKinematics,
-            this::getWheelSpeeds,
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            new PIDController(DriveConstants.kPDriveVel, 0, 0),
-            // RamseteCommand passes volts to the callback
-            this::tankDriveVolts,
-            this);
+// Trajectory trajectory = getTrajectory(straightishTrajectoryJSON);
+//     m_DriveTrainTab.setTrajectory(trajectory);
+//     RamseteCommand ramseteCommand =
+//         new RamseteCommand(
+//             trajectory,
+//             this::getEstimatedVisionPose,
+//             new RamseteController(),
+//             new SimpleMotorFeedforward(
+//                 DriveConstants.ks,
+//                 DriveConstants.kv,
+//                 DriveConstants.ka),
+//              DriveConstants.kDriveKinematics,
+//             this::getWheelSpeeds,
+//             new PIDController(DriveConstants.kPDriveVel, 0, 0),
+//             new PIDController(DriveConstants.kPDriveVel, 0, 0),
+//             // RamseteCommand passes volts to the callback
+//             this::tankDriveVolts,
+//             this);
 
-    // Run path following command, then stop at the end.
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> {
-        //Reset odometry for the first path ran during auto
-        if(isFirstPath){
-          this.resetPoseEstimation(trajectory.getInitialPose());
-          this.resetOdometry(trajectory.getInitialPose());
-        }
-      }
-    ),
-    ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)));
-  }
+//     // Run path following command, then stop at the end.
+//     return new SequentialCommandGroup(
+//       new InstantCommand(() -> {
+//         //Reset odometry for the first path ran during auto
+//         if(isFirstPath){
+//           this.resetPoseEstimation(trajectory.getInitialPose());
+//           this.resetOdometry(trajectory.getInitialPose());
+//         }
+//       }
+//     ),
+//     ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)));
+//   }
 
 // public Command getManualTrajectoryCommand(){
 //   DifferentialDriveVoltageConstraint autoVoltageConstraint = 

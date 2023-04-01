@@ -88,6 +88,8 @@ public class RobotContainer {
   protected GroundIntakeSubsystem m_groundIntake;
   private SignalLEDSubsystem m_signalLEDs;
 
+  private Paths m_paths;
+
   private CommandXboxController m_driverController;
   private CommandXboxController m_codriverController;
 
@@ -138,6 +140,7 @@ public class RobotContainer {
     // New ------------------------------------------------------------------------------------------
     m_robotShared = RobotShared.getInstance();
 
+    m_paths = m_robotShared.getPaths();
     m_robotDrive = m_robotShared.getDriveSubsystem();
     m_limelight = m_robotShared.getLimeLightSubsystem();
     m_photonVision = m_robotShared.getPhotonVisionSubsystem();
@@ -219,10 +222,10 @@ public class RobotContainer {
     // m_driverController.leftBumper()
     //   .onTrue(new RB_3());
   
-    PathPlannerTrajectory Right_Node_to_GamePiece = PathPlanner.loadPath("Right Node to GamePiece", new PathConstraints(3, 3), true);
 
     m_driverController.x()
-      .whileTrue(m_robotDrive.FollowPath(Right_Node_to_GamePiece, true));
+      //.whileTrue(m_robotDrive.FollowPathWithEvents(m_paths.Blue_1_McDouble, true));
+      .whileTrue(new Blue_1_McDouble());
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());
@@ -483,10 +486,10 @@ public class RobotContainer {
       .onFalse(new InstantCommand(() -> m_robotDrive.setMaxOutput(1)));
   }
 
-  private void bind_PathWeaver() {
-    m_driverController.x()
-      .onTrue(m_robotDrive.getPathWeaverCommand(true));
-  }
+  // private void bind_PathWeaver() {
+  //   m_driverController.x()
+  //     .onTrue(m_robotDrive.getPathWeaverCommand(true));
+  // }
 
   /* ***************** CO-Driver Contols ************ */
   private void bind_CoAutoBalance() {

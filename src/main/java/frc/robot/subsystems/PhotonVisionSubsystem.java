@@ -29,8 +29,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PhotonVisionSubsystem extends SubsystemBase {
   /** Creates a new PhotonVision. */
-  PhotonCamera m_rearCam = new PhotonCamera("rearCam");
-  PhotonCamera m_frontCam = new PhotonCamera("frontCam");
+  //PhotonCamera m_rearCam = new PhotonCamera("rearCam");
+  PhotonCamera m_frontCam = new PhotonCamera("OV9281");
   Transform3d robotToRearCam = new Transform3d(
     new Translation3d(Units.inchesToMeters(16), 0, 0), 
     new Rotation3d(0,0,0));

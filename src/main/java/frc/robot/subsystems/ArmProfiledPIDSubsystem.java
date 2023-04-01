@@ -57,6 +57,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
         m_rotationFollower.enableSoftLimit(SoftLimitDirection.kReverse, true);
         m_rotationLeader.enableSoftLimit(SoftLimitDirection.kReverse, true);
 
+        getController().setTolerance(ArmConstants.kArmRotateTolerance);
         setGoal(ArmConstants.kStowedAngle);
 
         m_ArmTab = ArmTab.getInstance();
@@ -122,9 +123,12 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     return m_rotationEncoder.getPosition();
   }
 
+  // public boolean atGoal(){
+  //   return (m_rotationEncoder.getPosition() > m_PIDController.getGoal().position - ArmConstants.kArmRotateTolerance)
+  //    && (m_rotationEncoder.getPosition() < m_PIDController.getGoal().position + ArmConstants.kArmRotateTolerance);
+  // }
   public boolean atGoal(){
-    return (m_rotationEncoder.getPosition() > m_PIDController.getGoal().position - ArmConstants.kArmRotateTolerance)
-     && (m_rotationEncoder.getPosition() < m_PIDController.getGoal().position + ArmConstants.kArmRotateTolerance);
+    return getController().atGoal();
   }
 
   public void burnFlash() {

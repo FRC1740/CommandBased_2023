@@ -124,7 +124,8 @@ public class DriveTrainTab {
         m_nte_IMU_PitchAngle = m_sbt_DriveTrain.addPersistent("IMU Pitch", 0.0)
             .withSize(2,1).withPosition(4,3).getEntry();
 
-        m_sbt_DriveTrain.add(m_Field);
+        m_sbt_DriveTrain.add(m_Field)
+            .withSize(4, 2).withPosition(5, 0);
 
         // Create widgets for PID Controllers
         // Auto Balance
