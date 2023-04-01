@@ -99,12 +99,39 @@
     },
     {
       "anchorPoint": {
-        "x": 1.800184002478631,
-        "y": 0.494801978504976
+        "x": 1.793224407045612,
+        "y": 0.4955073429069717
       },
       "prevControl": {
-        "x": 2.6023418767283384,
-        "y": 0.4948019785049761
+        "x": 2.595382281295322,
+        "y": 0.4955073429069718
+      },
+      "nextControl": {
+        "x": 2.595382281295322,
+        "y": 0.4955073429069718
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "Eject Cube Low Speed"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.1056812879637405,
+        "y": 1.418312077890532
+      },
+      "prevControl": {
+        "x": 5.057274665131572,
+        "y": 0.7211299029584973
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -113,9 +140,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "Eject Cube Low Speed"
-        ],
+        "names": [],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0

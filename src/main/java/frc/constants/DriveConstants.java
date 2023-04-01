@@ -28,10 +28,10 @@ public class DriveConstants {
     public static final double kEncoderDistancePerPulse = DRIVE_POSITION_CONVERSION_FACTOR / (double)kEncoderCPR; 
 
     //sysid constants
-    public static final double ks = 0.19103;
-    public static final double kv = 2.0984; 
-    public static final double ka = 0.87711; 
-    public static final double kPDriveVel = 0.70858;
+    public static final double ks = 0.18988;
+    public static final double kv = 2.1164; 
+    public static final double ka = 0.81625; 
+    public static final double kPDriveVel = 0.58781;
 
     public static final double kTrackWidthMeters = 0.50947; //22in. for testbot, 18 in. for actual robot, 0.50947 obtained from sysid
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
@@ -47,10 +47,10 @@ public class DriveConstants {
 
     // Used for Arcade driver input modifications (Kyle's option 2)
     // Decreases rotation sensitivity at low speeds
-    public static final double kRotationDeadzone      = 0.2;
-    public static final double kRotationVelocityLow   = kRotationDeadzone;
+    public static final double kRotationDeadzone      = 0.13;
+    public static final double kRotationVelocityLow   = 0;//kRotationDeadzone;
     public static final double kRotationVelocityHigh  = 0.70;
-    public static final double kRotationBoostLow      = 0.40;
+    public static final double kRotationBoostLow      = 0.35;
     public static final double kRotationBoostHigh     = 1.0;
 
     // Ignore filtering of forward input at low speed

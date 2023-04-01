@@ -149,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
     // Implement Kyle's option 2 for rotation modification
     // Motor voltages are the best proxy we have for velocity [-1, 1]
-    double velocity = (m_leftMotorLeader.get() - m_rightMotorLeader.get()) / 2.0;
+    double velocity = (m_leftMotorLeader.get() + m_rightMotorLeader.get()) / 2.0;
     double rotDeadzone = Math.abs(rot) < DriveConstants.kRotationDeadzone? 0.0 : 1.0;
     double rotBoost = mapRange(Math.abs(velocity),
       DriveConstants.kRotationVelocityLow, DriveConstants.kRotationVelocityHigh,
@@ -353,8 +353,8 @@ public class DriveSubsystem extends SubsystemBase {
         new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
         DriveConstants.kDriveKinematics,
         this::getWheelSpeeds,
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
-        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
         this::tankDriveVolts,
         true,
         this)

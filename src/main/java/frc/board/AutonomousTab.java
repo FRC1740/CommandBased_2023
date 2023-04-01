@@ -42,12 +42,13 @@ public class AutonomousTab {
         m_AutoChooser = new SendableChooser<Command>();
         m_AutoChooser.addOption("RB_1", new RB_1());
         m_AutoChooser.addOption("RB_1_McDouble", new RB_1_McDouble());
-        m_AutoChooser.addOption("RB_2_Exit_Balance", new RB_2_Exit_Balance());
+        m_AutoChooser.addOption("RB_2_Exit_Balance", new RB_2_Exit_Balance_Vision());
         m_AutoChooser.addOption("RB_2_Cube_Balance", new RB_2_Cube_Balance());
         m_AutoChooser.addOption("RB_3", new RB_3());
         m_AutoChooser.addOption("RB_3_McDouble", new RB_3_McDouble());
         m_AutoChooser.addOption("Cable_Protector_McDouble", new Blue_3_McDouble());
         m_AutoChooser.addOption("Substation_McDouble", new Blue_1_McDouble());
+        m_AutoChooser.addOption("Cube Balance", new Cube_Balance());
         
     
         m_sbt_Autonomous.add("Autonomous Command", m_AutoChooser)
