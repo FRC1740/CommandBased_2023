@@ -14,6 +14,7 @@ import frc.robot.commands.*;
 import frc.robot.commands.basic.*;
 import frc.robot.commands.driver.*;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 import frc.robot.subsystems.TelescopePIDSubsystem;
 
@@ -32,6 +33,7 @@ public class Blue_3_McDouble_Deluxe extends SequentialCommandGroup {
   private RobotShared m_robotShared;
   private ArmProfiledPIDSubsystem m_arm;
   private TelescopePIDSubsystem m_telescope;
+  private PhotonVisionSubsystem m_photonVision;
   private Paths m_paths;
 
   public Blue_3_McDouble_Deluxe() {
@@ -40,6 +42,7 @@ public class Blue_3_McDouble_Deluxe extends SequentialCommandGroup {
     m_drive = m_robotShared.getDriveSubsystem();
     m_arm = m_robotShared.getArmProfiledPIDSubsystem();
     m_telescope = m_robotShared.getTelescopePIDSubsystem();
+    m_photonVision = m_robotShared.getPhotonVisionSubsystem();
     m_paths = m_robotShared.getPaths();
 
     addCommands (
@@ -48,8 +51,7 @@ public class Blue_3_McDouble_Deluxe extends SequentialCommandGroup {
       // Score the piece in the high position (Cube or Cone)
       // and stow the arm
       new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitUntilCommand(m_arm::atGoal).withTimeout(2),
-      new WaitUntilCommand(m_telescope::atSetpoint).withTimeout(2), //Maybe this is a better way of doing it instead of waiting for a certain number of seconds
+      new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
       new ParallelDeadlineGroup (
         new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
         new ClawScore()
@@ -68,14 +70,17 @@ public class Blue_3_McDouble_Deluxe extends SequentialCommandGroup {
      new ArmStow(),
      new ClawRollerStop(),
      new TurnToAngle(180, m_drive),
-     m_drive.FollowPath(m_paths.Blue_3_McDouble_Deluxe_pt3, false),
-     new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-     new WaitUntilCommand(m_arm::atGoal).withTimeout(2),
-     new WaitUntilCommand(m_telescope::atSetpoint).withTimeout(2), //Maybe this is a better way of doing it instead of waiting for a certain number of seconds
-     new ParallelDeadlineGroup (
-       new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
-       new ClawScore())
-       // Automatically calls scoreDone at end
+     m_drive.FollowPathVision(m_paths.Blue_3_McDouble_Deluxe_pt3, false),
+     
+     new AprilTagAlign(m_drive, m_photonVision),
+
+      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
+      new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
+      new ParallelDeadlineGroup (
+        new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
+        new ClawScore()
+        // Automatically calls scoreDone at end
+      )
     );
     
   }
