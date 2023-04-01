@@ -49,7 +49,7 @@ public class TurnToAngle extends PIDCommand {
   @Override
   public void initialize() {
     super.initialize();
-    m_drive.resetGyro();
+    //m_drive.resetGyro();
     getController().setPID(
       m_driveTab.getTurnkP(),
       m_driveTab.getTurnkI(),

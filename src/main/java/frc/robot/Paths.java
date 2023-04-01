@@ -29,7 +29,6 @@ public class Paths {
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt1;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt2;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt3;
-
     public PathPlannerTrajectory Cube_Balance;
 
 
@@ -64,6 +63,7 @@ public class Paths {
 
     Cube_Balance = 
     PathPlanner.loadPath("Cube Balance", new PathConstraints(1, 1), true);
+
 
         eventMap.put("Intake Deploy", new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed));
         eventMap.put("Intake Stow", new IntakeStow());
