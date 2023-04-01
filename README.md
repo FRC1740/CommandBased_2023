@@ -50,6 +50,14 @@ FRC Robot 2023 Java Code: Command-Based framework
 ### Command Groups
 * AutoDriveSequential: DriveToDistance (onto ramp); AutoBalancePID
 
+### Paths
+* McDouble: Score one piece high, score one low
+* McTriple: Score one piece high, score two low
+* McDouble Combo Meal: Score one piece high, score one low, balance
+* McDouble Deluxe: Score two pieces high 
+
+*Automatic mirroring for Alliance color, Blue 1 works for Red 3, Red 1 for Blue 3
+
 ## Gradle Note:
 
 In order to capture some compile-time data, we have modified the build.gradle file. Wpilib season updates may overwrite build.gradle. If this happens, you'll need to add the following to the end:
