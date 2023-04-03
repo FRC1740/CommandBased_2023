@@ -24,16 +24,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.886284559505072,
-        "y": 0.6596691513979827
+        "x": 6.740039006824739,
+        "y": 0.843110920210196
       },
       "prevControl": {
-        "x": 6.554239257870462,
-        "y": 0.3586520768766414
+        "x": 6.2262135815341075,
+        "y": 0.7488276424116511
       },
       "nextControl": {
-        "x": 7.499716467773548,
-        "y": 1.2157784459309824
+        "x": 7.722846740271356,
+        "y": 1.0234490856536311
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -49,16 +49,41 @@
     },
     {
       "anchorPoint": {
-        "x": 5.860449597536751,
-        "y": 1.364469261871566
+        "x": 6.162486634471086,
+        "y": 1.5512027312264227
       },
       "prevControl": {
-        "x": 6.975066425569533,
-        "y": 1.8455277840322772
+        "x": 7.202315478682269,
+        "y": 2.17773601032956
       },
       "nextControl": {
-        "x": 5.01194884659608,
-        "y": 0.9982640270015881
+        "x": 5.0643283091515245,
+        "y": 0.8895238978614781
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.259789672235822,
+        "y": 0.4797542045957458
+      },
+      "prevControl": {
+        "x": 4.938068081194387,
+        "y": 0.48525604693130825
+      },
+      "nextControl": {
+        "x": 3.8322186551339437,
+        "y": 0.4762859704719993
       },
       "holonomicAngle": 0,
       "isReversal": false,
@@ -195,8 +220,8 @@
       }
     }
   ],
-  "maxVelocity": 3.0,
-  "maxAcceleration": 3.0,
+  "maxVelocity": 2.0,
+  "maxAcceleration": 2.0,
   "isReversed": true,
   "markers": [
     {
@@ -218,13 +243,13 @@
       ]
     },
     {
-      "position": 4.204225852272723,
+      "position": 5.191477272727273,
       "names": [
         "Intake Deploy"
       ]
     },
     {
-      "position": 5.014346590909084,
+      "position": 6.430397727272723,
       "names": [
         "Intake Stow"
       ]
@@ -233,6 +258,18 @@
       "position": 6.594815340909083,
       "names": [
         "Eject Cube High Speed"
+      ]
+    },
+    {
+      "position": 7.846306818181791,
+      "names": [
+        "Eject Cube High Speed"
+      ]
+    },
+    {
+      "position": 3.9957386363636282,
+      "names": [
+        "Eject Cube Low Speed"
       ]
     }
   ]

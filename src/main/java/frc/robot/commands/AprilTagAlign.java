@@ -28,7 +28,7 @@ public class AprilTagAlign extends PIDCommand {
         // This should return the setpoint (can also be a constant)
         0,
         // This uses the output
-        output -> {drive.arcadeDrive(0, -output, false);
+        output -> {drive.simpleArcadeDrive(0, -output, false);
           // Use the output here
         });
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,6 +38,6 @@ public class AprilTagAlign extends PIDCommand {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return getController().atSetpoint();
   }
 }

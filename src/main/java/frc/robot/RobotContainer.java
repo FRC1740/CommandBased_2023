@@ -224,8 +224,9 @@ public class RobotContainer {
   
 
     m_driverController.x()
-      //.whileTrue(m_robotDrive.FollowPathWithEvents(m_paths.Blue_1_McDouble, true));
-      .whileTrue(new Blue_1_McDouble());
+      //.whileTrue(m_robotDrive.FollowPathWithEvents(m_paths.Blue_3_McTriple, true));
+      .whileTrue(new Blue_3_McDouble_Deluxe());
+
 
     m_driverController.rightStick()
       .whileTrue(new RB_2_Exit_Balance_Vision());

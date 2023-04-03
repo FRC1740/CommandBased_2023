@@ -7,6 +7,7 @@ public class AutoConstants {
     public static final double kStabilizationD = 0;
     //Less than .5 not .25 more than .01 .08 too high .0605 dead on
     public static final double kTurnP = 0.005;
+    
     public static final double kTurnI = 0.0005;
     public static final double kTurnD = 0.0005;
 

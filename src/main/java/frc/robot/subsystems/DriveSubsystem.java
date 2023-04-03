@@ -16,8 +16,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
-import java.io.IOException;
-import java.nio.file.Path;
+
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -32,7 +31,6 @@ import frc.board.DriveTrainTab;
 import frc.constants.AutoConstants;
 import frc.constants.DriveConstants;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
@@ -49,7 +47,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 // import edu.wpi.first.math.trajectory.TrajectoryConfig;
 // import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 // import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.math.filter.LinearFilter;
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -152,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void arcadeDrive(double fwd, double rot, boolean squaredInput) {
     // Implement Kyle's option 2 for rotation modification
     // Motor voltages are the best proxy we have for velocity [-1, 1]
-    double velocity = (m_leftMotorLeader.get() - m_rightMotorLeader.get()) / 2.0;
+    double velocity = (m_leftMotorLeader.get() + m_rightMotorLeader.get()) / 2.0;
     double rotDeadzone = Math.abs(rot) < DriveConstants.kRotationDeadzone? 0.0 : 1.0;
     double rotBoost = mapRange(Math.abs(velocity),
       DriveConstants.kRotationVelocityLow, DriveConstants.kRotationVelocityHigh,
@@ -316,7 +313,7 @@ public class DriveSubsystem extends SubsystemBase {
       new InstantCommand(() -> {
         //Reset odometry for the first path ran during auto
         if(isFirstPath){
-          this.resetPoseEstimation(trajectory.getInitialPose());
+          this.resetPoseEstimation(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()).getInitialPose());
           this.resetOdometry(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()).getInitialPose());
         }
       }),
@@ -337,6 +334,31 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command FollowPathWithEvents(PathPlannerTrajectory path, boolean isFirstPath) {
     return new FollowPathWithEvents(FollowPath(path, isFirstPath), path.getMarkers(), Paths.getEventMap());
+  }
+
+  public Command FollowPathVision(PathPlannerTrajectory trajectory, boolean isFirstPath) { // FIXME: COMMANDS SHOULD NOT BE INSTANTIATED INSIDE A SUBSYSTEM!!!
+    m_DriveTrainTab.setTrajectory(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()));
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> {
+        //Reset odometry for the first path ran during auto
+        if(isFirstPath){
+          this.resetPoseEstimation(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()).getInitialPose());
+          this.resetOdometry(PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance()).getInitialPose());
+        }
+      }),
+      new PPRamseteCommand(
+        trajectory, 
+        this::getEstimatedVisionPose,
+        new RamseteController(),
+        new SimpleMotorFeedforward(DriveConstants.ks, DriveConstants.kv, DriveConstants.ka),
+        DriveConstants.kDriveKinematics,
+        this::getWheelSpeeds,
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
+        new PIDController(DriveConstants.kPDriveVel*0, 0, 0),
+        this::tankDriveVolts,
+        true,
+        this)
+    );
   }
 //   public Trajectory getTrajectory(String TrajectoryJSON){
     

@@ -29,6 +29,7 @@ public class Paths {
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt1;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt2;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt3;
+    public PathPlannerTrajectory Cube_Balance;
 
 
     //Event map
@@ -58,9 +59,11 @@ public class Paths {
     PathPlanner.loadPath("Blue 3 McDouble Deluxe pt2", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), false);
 
     Blue_3_McDouble_Deluxe_pt3 = 
-    PathPlanner.loadPath("Blue 3 McDouble Deluxe pt3", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), false);
+    PathPlanner.loadPath("Blue 3 Mcdouble Deluxe pt3", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), false);
 
-    
+    Cube_Balance = 
+    PathPlanner.loadPath("Cube Balance", new PathConstraints(1, 1), true);
+
 
         eventMap.put("Intake Deploy", new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed));
         eventMap.put("Intake Stow", new IntakeStow());

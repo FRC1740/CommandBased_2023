@@ -14,8 +14,6 @@ import frc.robot.commands.*;
 import frc.robot.commands.basic.*;
 import frc.robot.commands.driver.*;
 import frc.robot.subsystems.DriveSubsystem;
-
-import frc.robot.subsystems.PhotonVisionSubsystem;
 import frc.robot.subsystems.ArmProfiledPIDSubsystem;
 import frc.robot.subsystems.TelescopePIDSubsystem;
 
@@ -29,21 +27,19 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.math.util.Units;
 
 
-public class Blue_3_McDouble_Deluxe extends SequentialCommandGroup {
+public class Cube_Balance extends SequentialCommandGroup {
   private DriveSubsystem m_drive;
   private RobotShared m_robotShared;
   private ArmProfiledPIDSubsystem m_arm;
   private TelescopePIDSubsystem m_telescope;
-  private PhotonVisionSubsystem m_photonVision;
   private Paths m_paths;
 
-  public Blue_3_McDouble_Deluxe() {
+  public Cube_Balance() {
 
     m_robotShared = RobotShared.getInstance();
     m_drive = m_robotShared.getDriveSubsystem();
     m_arm = m_robotShared.getArmProfiledPIDSubsystem();
     m_telescope = m_robotShared.getTelescopePIDSubsystem();
-    m_photonVision = m_robotShared.getPhotonVisionSubsystem();
     m_paths = m_robotShared.getPaths();
 
     addCommands (
@@ -63,26 +59,9 @@ public class Blue_3_McDouble_Deluxe extends SequentialCommandGroup {
         new ArmStow()
       ),
 
-     m_drive.FollowPath(m_paths.Blue_3_McDouble_Deluxe_pt1, true),
-     new TurnToAngle(180, m_drive),
-     new ToggleGamePiece(),
-     new AutoArmRetrieveLow(),
-     m_drive.FollowPath(m_paths.Blue_3_McDouble_Deluxe_pt2, false),
-     new ArmStow(),
-     new ClawRollerStop(),
-     new TurnToAngle(180, m_drive),
-     m_drive.FollowPathVision(m_paths.Blue_3_McDouble_Deluxe_pt3, false),
-     
-     new AprilTagAlign(m_drive, m_photonVision),
-
-      new AutoArmScoreHigh(), // Move Arm & Telescope to high node position
-      new WaitCommand(m_robotShared.calculateAutoArmScoreDelay()),
-      new ParallelDeadlineGroup (
-        new WaitCommand(m_robotShared.calculateDunkScoreDelay()),
-        new ClawScore()
-        // Automatically calls scoreDone at end
-      )
+     m_drive.FollowPathWithEvents(m_paths.Cube_Balance, true),
+     new AutoBalancePID(m_drive)
     );
-    
+
   }
 }
