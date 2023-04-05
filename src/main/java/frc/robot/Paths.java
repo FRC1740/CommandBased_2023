@@ -16,6 +16,8 @@ import frc.constants.GroundIntakeConstants;
 import frc.robot.commands.basic.IntakeDeploy;
 import frc.robot.commands.basic.IntakeEject;
 import frc.robot.commands.basic.IntakeStow;
+import frc.robot.commands.driver.ArmStowHold;
+import frc.robot.commands.driver.AutoArmRetrieveLow;
 
 /** Add your docs here. */
 public class Paths {
@@ -30,6 +32,7 @@ public class Paths {
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt2;
     public PathPlannerTrajectory Blue_3_McDouble_Deluxe_pt3;
     public PathPlannerTrajectory Cube_Balance;
+    public PathPlannerTrajectory Blue_1_McDouble_Deluxe;
 
 
     //Event map
@@ -64,11 +67,16 @@ public class Paths {
     Cube_Balance = 
     PathPlanner.loadPath("Cube Balance", new PathConstraints(1, 1), true);
 
+    Blue_1_McDouble_Deluxe = 
+    PathPlanner.loadPath("Blue 1 McDouble Deluxe", new PathConstraints(DriveConstants.kMaxSpeedMetersPerSecond, DriveConstants.kMaxAccelerationMetersPerSecondSquared), true);
+
 
         eventMap.put("Intake Deploy", new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed));
         eventMap.put("Intake Stow", new IntakeStow());
         eventMap.put("Eject Cube Low Speed", new IntakeEject(GroundIntakeConstants.kCubeEjectSpeedLow));
         eventMap.put("Eject Cube High Speed", new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed));
+        eventMap.put("Arm Floor Pickup", new AutoArmRetrieveLow());
+        eventMap.put("Arm Stow", new ArmStowHold());
     }
 
     public static HashMap<String, Command> getEventMap(){

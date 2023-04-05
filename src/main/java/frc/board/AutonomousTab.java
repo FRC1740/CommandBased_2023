@@ -49,6 +49,7 @@ public class AutonomousTab {
         m_AutoChooser.addOption("Cable_Protector_McDouble", new Blue_3_McDouble());
         m_AutoChooser.addOption("Substation_McDouble", new Blue_1_McDouble());
         m_AutoChooser.addOption("Cube Balance", new Cube_Balance());
+        m_AutoChooser.addOption("Substation McDouble Deluxe", new Blue_1_McDouble_Deluxe());
 
         
     
