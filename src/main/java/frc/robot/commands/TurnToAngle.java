@@ -32,7 +32,7 @@ public class TurnToAngle extends PIDCommand {
         // Set reference to target
         targetAngleDegrees, //I think this may be better instead of resetting gyro in initialize
         // Pipe output to turn robot
-        output -> drive.simpleArcadeDrive(0, (Math.abs(output) > 0.5) ? 0.5 * Math.signum(output): output, false), //Should set a max output of 0.5
+        output -> drive.simpleArcadeDrive(0, (Math.abs(output) > 0.7) ? 0.7 * Math.signum(output): output, false), //Should set a max output of 0.5
         // Require the drive
         drive);
 
@@ -49,7 +49,7 @@ public class TurnToAngle extends PIDCommand {
   @Override
   public void initialize() {
     super.initialize();
-    //m_drive.resetGyro();
+    m_drive.resetGyro();
     getController().setPID(
       m_driveTab.getTurnkP(),
       m_driveTab.getTurnkI(),

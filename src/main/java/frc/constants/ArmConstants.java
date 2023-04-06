@@ -44,7 +44,7 @@ public class ArmConstants {
     public static final float kMaxSoftLimitAngle      = 173;
     public static final double kStowedPosition        = 1.0;
     public static final float kMinSoftLimitPosition   = 0;
-    public static final float kMaxSoftLimitPosition   = 30;
+    public static final float kMaxSoftLimitPosition   = 28;
 
     public static final double kExtensionPowerScalar = 0.7;
 
@@ -69,7 +69,7 @@ public class ArmConstants {
     public static final double kConeMidPosition       = 8.5;
     public static final double kConeLowPosition       = 0;
     public static final double kConeShelfPosition     = 7.5;
-    public static final double kConeFloorPosition     = 7;
+    public static final double kConeFloorPosition     = 3;
 
     // Cube
     public static final double kCubeHighAngle         = 89;

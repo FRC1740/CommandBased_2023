@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.commands.basic.ClawScore;
 import edu.wpi.first.math.util.Units;
 
 
@@ -58,23 +57,25 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
       ),
 
       new IntakeDeploy(GroundIntakeConstants.kCubeIntakeSpeed),
-      new DriveToDistance(Units.inchesToMeters(-174), 0.3, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-198), 0.4, m_drive),
       new WaitCommand(.25), // FIXME: guestimate time
       new IntakeStow(),
       new TurnToAngle(180, m_drive),
-      new DriveToDistance(Units.inchesToMeters(-89), 0.3, m_drive),
+      // new DriveToDistance(Units.inchesToMeters(-90), 0.3, m_drive),
 
-      new ParallelDeadlineGroup (
-        new DriveToDistance(Units.inchesToMeters(-12), 0.3, m_drive),
-        // Yeet the cube
-        new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed)
-      ),
+      // new ParallelDeadlineGroup (
+      //   new DriveToDistance(Units.inchesToMeters(-6), 0.15, m_drive),
+      //   // Yeet the cube
+      //   new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed)
+      // ),
+      // new IntakeStop(),
+      // // Drive over the charge station and exit the community
+      // // new WaitCommand(0.25),
+      // // Balance on the charge station
+      // new AutoBalancePID(m_drive),
+
+      new DriveOnAndBalanceChargeStationShootCube(false, m_drive),
       new IntakeStop(),
-      // Drive over the charge station and exit the community
-      new WaitCommand(0.25),
-      // Balance on the charge station
-      new AutoBalancePID(m_drive),
-
       new PrintCommand(getName() + " Finished")
     );
 
