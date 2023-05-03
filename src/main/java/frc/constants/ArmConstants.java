@@ -69,14 +69,14 @@ public class ArmConstants {
     public static final double kConeMidPosition       = 8.5;
     public static final double kConeLowPosition       = 0;
     public static final double kConeShelfPosition     = 7.5;
-    public static final double kConeFloorPosition     = 3;
+    public static final double kConeFloorPosition     = 5;
 
     // Cube
     public static final double kCubeHighAngle         = 89;
     public static final double kCubeMidAngle          = 95;
     public static final double kCubeLowAngle          = 142;
     public static final double kCubeShelfAngle        = 87;
-    public static final double kCubeFloorAngle        = 170;
+    public static final double kCubeFloorAngle        = 167;
     public static final double kCubeDunkAngle         = 0;
 
     public static final double kCubeHighPosition      = 19.0;

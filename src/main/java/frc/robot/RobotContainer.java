@@ -33,6 +33,7 @@ import frc.robot.commands.DriveToDistance;
 import frc.robot.commands.DriveToDistanceVision;
 import frc.robot.commands.LimelightAssistedDrive;
 import frc.robot.commands.SequentialVisionAlign;
+import frc.robot.commands.SimpleBalanceV2;
 import frc.robot.commands.TurnToAngle;
 // import frc.robot.commands.SubStationSideAuto;
 //import frc.robot.commands.SequentialVisionAlign;
@@ -210,8 +211,8 @@ public class RobotContainer {
     new POVButton(m_driverController.getHID(), 0)
       .whileTrue(new RB_2_Exit_Turn_Balance_Vision());
 
-    new POVButton(m_driverController.getHID(), 90)
-      .whileTrue(new RB_2_Cube_Balance());
+    // new POVButton(m_driverController.getHID(), 90)
+    //   .whileTrue(new SimpleBalanceV2());
 
     // new POVButton(m_driverController.getHID(), 180)
     //   .onTrue(new RB_2_Pickup());

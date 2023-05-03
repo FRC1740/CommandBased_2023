@@ -44,6 +44,6 @@ public class SimpleBalanceV2 extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(m_drive.getRawGyroX()) > AutoConstants.kSimpleBalanceTippingRateThreshold;
+    return (Math.abs(m_drive.getRawGyroX()) > AutoConstants.kSimpleBalanceTippingRateThreshold) && (Math.signum(m_drive.getRawGyroX()) == -Math.signum(m_drive.getPitch()));
   }
 }

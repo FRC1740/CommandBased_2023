@@ -59,7 +59,7 @@ public class DriveConstants {
     public static final double kDrivePositiveRateLimit = 2;
     public static final double kDriveNegativeRateLimit = -1.75;
 
-    public static final double kConstantSpeedDrive = 0.2;
+    public static final double kConstantSpeedDrive = 0.35;
 
     //Limelight is offset a little from arm
     public static final double kLimelightOffsetDegrees = -3;

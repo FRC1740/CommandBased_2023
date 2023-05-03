@@ -14,6 +14,7 @@ import frc.robot.commands.basic.*;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.PhotonVisionSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -61,22 +62,22 @@ public class RB_2_Cube_Balance extends SequentialCommandGroup {
       new WaitCommand(.25), // FIXME: guestimate time
       new IntakeStow(),
       new TurnToAngle(180, m_drive),
-      // new DriveToDistance(Units.inchesToMeters(-90), 0.3, m_drive),
-
-      // new ParallelDeadlineGroup (
-      //   new DriveToDistance(Units.inchesToMeters(-6), 0.15, m_drive),
-      //   // Yeet the cube
-      //   new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed)
-      // ),
-      // new IntakeStop(),
-      // // Drive over the charge station and exit the community
-      // // new WaitCommand(0.25),
-      // // Balance on the charge station
-      // new AutoBalancePID(m_drive),
-
-      new DriveOnAndBalanceChargeStationShootCube(false, m_drive),
+      new DriveToDistance(Units.inchesToMeters(-118), 0.4, m_drive),
+      
+      new ParallelDeadlineGroup (
+        new DriveToDistance(Units.inchesToMeters(-12), 0.15, m_drive),
+        // Yeet the cube
+        new IntakeEject(GroundIntakeConstants.kCubeEjectSpeed)
+      ),
       new IntakeStop(),
-      new PrintCommand(getName() + " Finished")
+      // Drive over the charge station and exit the community
+      new WaitCommand(0.1),
+      // Balance on the charge station
+      new AutoBalancePIDLowPower(m_drive)
+
+      // new DriveOnAndBalanceChargeStationShootCube(false, m_drive),
+      // new IntakeStop(),
+      // new PrintCommand(getName() + " Finished")
     );
 
   }
