@@ -48,7 +48,7 @@ public class AutoConstants {
     
     // Simple Balance strategy - stop immediately when seeing a high rate of rotation
     // While we are CLIMBING at ths drive motor power (adjust)
-    public static final double kSimpleBalanceClimbingPower = 0.25;
+    public static final double kSimpleBalanceClimbingPower = 0.1;
     // We exceed this angle (something reasonable within 0-15 degrees)
     public static final double kSimpleBalanceClimbThreshold = 9.0;
     // For this number of cycles (maybe a second or two)
@@ -56,7 +56,7 @@ public class AutoConstants {
     // Then we switch to TIPPING at this drive motor power (adjust)
     public static final double kSimpleBalanceTippingPower = 0.1;
     // Counting the number of times we exceed this rotation rate (degrees/second)
-    public static final double kSimpleBalanceTippingRateThreshold = 10.0;
+    public static final double kSimpleBalanceTippingRateThreshold = 1.0;
     // When we reach this number, maybe for 100ms (5 cycles)
     public static final int kSimpleBalanceTipppingCount = 5;
     // Then we can stop

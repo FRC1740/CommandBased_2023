@@ -33,7 +33,7 @@ public class DriveConstants {
     public static final double ka = 0.81625; 
     public static final double kPDriveVel = 0.58781;
 
-    public static final double kTrackWidthMeters = 0.50947; //22in. for testbot, 18 in. for actual robot, 0.50947 obtained from sysid
+    public static final double kTrackWidthMeters = 0.53; //22in. for testbot, 18 in. for actual robot, 0.50947 obtained from sysid
     public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
 
     public static final double kMaxSpeedMetersPerSecond = 2;
@@ -50,7 +50,7 @@ public class DriveConstants {
     public static final double kRotationDeadzone      = 0.13;
     public static final double kRotationVelocityLow   = 0;//kRotationDeadzone;
     public static final double kRotationVelocityHigh  = 0.70;
-    public static final double kRotationBoostLow      = 0.35;
+    public static final double kRotationBoostLow      = 0.50;
     public static final double kRotationBoostHigh     = 1.0;
 
     // Ignore filtering of forward input at low speed
@@ -59,7 +59,7 @@ public class DriveConstants {
     public static final double kDrivePositiveRateLimit = 2;
     public static final double kDriveNegativeRateLimit = -1.75;
 
-    public static final double kConstantSpeedDrive = 0.2;
+    public static final double kConstantSpeedDrive = 0.35;
 
     //Limelight is offset a little from arm
     public static final double kLimelightOffsetDegrees = -3;

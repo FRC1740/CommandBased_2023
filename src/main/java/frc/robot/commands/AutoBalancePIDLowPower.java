@@ -11,7 +11,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.board.DriveTrainTab;
 import frc.constants.AutoConstants;
 
-public class AutoBalancePID extends ProfiledPIDCommand {
+public class AutoBalancePIDLowPower extends ProfiledPIDCommand {
   /** Creates a new AutoBalancePID.
    * Assumes starting Roll is greater than the tolerance for atGoal()
    */
@@ -20,12 +20,12 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   private static double m_headingDelta;
   private DriveTrainTab m_driveTab;
 
-  public AutoBalancePID(DriveSubsystem drive) {
+  public AutoBalancePIDLowPower(DriveSubsystem drive) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            AutoConstants.kBalanceP,
+            0.006,
             AutoConstants.kBalanceI,
             AutoConstants.kBalanceD,
             // The motion profile constraints
@@ -67,10 +67,10 @@ public class AutoBalancePID extends ProfiledPIDCommand {
   }
 
   public void execute() {
-    getController().setPID(
-      m_driveTab.getAutoBalancekP(),
-      m_driveTab.getAutoBalancekI(),
-      m_driveTab.getAutoBalancekD());
+    // getController().setPID(
+    //   m_driveTab.getAutoBalancekP(),
+    //   m_driveTab.getAutoBalancekI(),
+    //   m_driveTab.getAutoBalancekD());
     super.execute();
     m_headingDelta = m_initialHeading - m_drive.getAngle();
   }

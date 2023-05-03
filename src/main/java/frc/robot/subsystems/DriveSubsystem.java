@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
@@ -202,6 +204,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_DriveTrainTab.setIMU_ZAngle(getAngle());
     m_DriveTrainTab.setIMU_PitchAngle(getPitch());
     m_DriveTrainTab.setRobotPose(getPose());
+
+    //SmartDashboard.putNumber("Raw gyro x", getRawGyroX());
   }
 
   public Pose2d getPose(){
