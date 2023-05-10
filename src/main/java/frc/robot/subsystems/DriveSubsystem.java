@@ -170,6 +170,21 @@ public class DriveSubsystem extends SubsystemBase {
   public void simpleArcadeDrive(double fwd, double rot, boolean squaredInput) {
     m_drive.arcadeDrive(fwd, rot, squaredInput);
   }
+
+  public void curvyDrive(double fwd, double rot){
+    boolean turnInPlace;
+    double scaledRotation;
+      if(Math.abs(fwd) < DriveConstants.kTurnInPlaceThreshold){
+        turnInPlace = true;
+        scaledRotation = rot * 0.4; //scales down the input rotation when turning in place
+      } else {
+        turnInPlace = false;
+        scaledRotation = rot;
+      }
+  
+      m_drive.curvatureDrive(speedLimiter.calculate(fwd), scaledRotation, turnInPlace);
+    }
+
   /**
   *    * Controls the left and right sides of the drive directly with voltages.
   *
