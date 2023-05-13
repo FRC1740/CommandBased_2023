@@ -71,7 +71,7 @@ public class ArmProfiledPIDSubsystem extends ProfiledPIDSubsystem {
     m_PIDController.setPID(m_ArmTab.getRotkP(),
                           m_ArmTab.getRotkI(), 
                           m_ArmTab.getRotkD());
-    
+    m_ArmTab.setArmAngleSetpoint(m_PIDController.getSetpoint().position);
    }
   
   public double getArmRotationDegrees() {  

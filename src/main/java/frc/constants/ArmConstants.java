@@ -58,14 +58,14 @@ public class ArmConstants {
     }    
 
     // Cone
-    public static final double kConeHighAngle         = 82; // Was 77: Too high in practice match
-    public static final double kConeMidAngle          = 78;
+    public static final double kConeHighAngle         = 80; // Was 77: Too high in practice match
+    public static final double kConeMidAngle          = 85;
     public static final double kConeLowAngle          = 140;
     public static final double kConeShelfAngle        = 87;
     public static final double kConeFloorAngle        = 165;
     public static final double kConeDunkAngle         = 5;
 
-    public static final double kConeHighPosition      = 27.5;
+    public static final double kConeHighPosition      = 28;
     public static final double kConeMidPosition       = 8.5;
     public static final double kConeLowPosition       = 0;
     public static final double kConeShelfPosition     = 7.5;
@@ -86,7 +86,7 @@ public class ArmConstants {
     public static final double kCubeFloorPosition     = 0;
 
 
-    public static final double rotatePDefault = 0.12149;
+    public static final double rotatePDefault = 0.15;
     public static final double rotateIDefault = 0.0;
     public static final double rotateDDefault = 0.039139*2*0;
 

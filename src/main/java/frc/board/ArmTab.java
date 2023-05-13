@@ -326,6 +326,10 @@ public class ArmTab {
     public void setArmAngle(Double value) {
         m_nte_ArmAngle.setDouble(value);
     }
+
+    public void setArmAngleSetpoint(Double value){
+        m_nte_ArmAngleSetpoint.setDouble(value);
+    }
   
     // Getters for Arm angle setpoints
     // Cone
