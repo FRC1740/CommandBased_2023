@@ -176,10 +176,10 @@ public class DriveSubsystem extends SubsystemBase {
     double scaledRotation;
       if(Math.abs(fwd) < DriveConstants.kTurnInPlaceThreshold){
         turnInPlace = true;
-        scaledRotation = rot * 0.4; //scales down the input rotation when turning in place
+        scaledRotation = rot * 0.6; //scales down the input rotation when turning in place
       } else {
         turnInPlace = false;
-        scaledRotation = rot;
+        scaledRotation = Math.pow(rot, 2) * Math.signum(rot);
       }
   
       m_drive.curvatureDrive(speedLimiter.calculate(fwd), scaledRotation, turnInPlace);

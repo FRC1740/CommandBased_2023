@@ -24,6 +24,7 @@ public class ArmTab {
     // Encoders/PID Feedback sensors
     GenericEntry m_nte_ArmExtension;
     GenericEntry m_nte_ArmAngle;
+    GenericEntry m_nte_ArmAngleSetpoint;
     
     // Cone
     GenericEntry m_nte_ConeHighAngle;
@@ -130,6 +131,14 @@ public class ArmTab {
             .withSize(3, 3)
             .withPosition(0, 0)
             .getEntry();
+
+        m_nte_ArmAngleSetpoint = m_sbt_Arm
+            .addPersistent("Current Arm Angle Setpoint", 0.0)
+            .withWidget(BuiltInWidgets.kGraph)
+            .withSize(3, 3)
+            .withPosition(10, 0)
+            .getEntry();
+
     
         // Create widgets for TARGET Arm Angle
         // Cone

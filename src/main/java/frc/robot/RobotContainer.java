@@ -130,8 +130,8 @@ public class RobotContainer {
       // Triggers are Axis 2; RightStick X is axis 3
       // Note the constants defined in the wpi XboxController class DO NOT MATCH the DS axes
       new RunCommand(() ->
-        m_robotDrive.arcadeDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
-        m_driverController.getLeftX(), false), m_robotDrive));
+        m_robotDrive.curvyDrive(m_driverController.getRightTriggerAxis() - m_driverController.getLeftTriggerAxis(),
+        m_driverController.getLeftX()), m_robotDrive));
     
     // Set the starting game piece
     m_AutonomousTab.setGamePiece(m_RobotTab.getGamePiece());
