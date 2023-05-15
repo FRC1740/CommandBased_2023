@@ -64,4 +64,6 @@ public class DriveConstants {
     //Limelight is offset a little from arm
     public static final double kLimelightOffsetDegrees = -3;
 
+    //inputs less than this value will enable turn in place for curvy drive
+    public static final double kTurnInPlaceThreshold = 0.03;
 }
