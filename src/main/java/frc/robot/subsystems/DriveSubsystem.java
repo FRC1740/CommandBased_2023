@@ -176,7 +176,7 @@ public class DriveSubsystem extends SubsystemBase {
     double scaledRotation;
       if(Math.abs(fwd) < DriveConstants.kTurnInPlaceThreshold){
         turnInPlace = true;
-        scaledRotation = rot * 0.6; //scales down the input rotation when turning in place
+        scaledRotation = Math.pow(rot, 2) * Math.signum(rot) * 0.6; //scales down the input rotation when turning in place
       } else {
         turnInPlace = false;
         scaledRotation = Math.pow(rot, 2) * Math.signum(rot);

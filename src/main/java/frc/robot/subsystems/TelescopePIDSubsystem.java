@@ -79,7 +79,7 @@ public class TelescopePIDSubsystem extends PIDSubsystem {
   }
 
   public void manualTelescope(double analogInput) {
-    double adjustedSpeed = analogInput * ArmConstants.kArmExtendInputMultiplier;
+    double adjustedSpeed = -analogInput * ArmConstants.kArmExtendInputMultiplier;
     disable();
     if (Math.abs(analogInput) > ArmConstants.kArmExtendDeadzone) {
       m_extensionMotor.set(adjustedSpeed);
